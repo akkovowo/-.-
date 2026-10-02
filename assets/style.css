@@ -646,3 +646,45 @@ body.in-catalog .minicart{bottom:calc(16px + env(safe-area-inset-bottom))}
 /* auto-scrolling row must not fight scroll-snap; soft fade at both edges */
 .track.auto{scroll-snap-type:none;scroll-behavior:auto;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%)}
 @media(max-width:760px){.pager{height:34px}.pg{width:36px}}
+
+/* =============== smoothness pass =============== */
+/* system fonts only: no webfont swap, no layout shift */
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI Variable Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+/* no content jump when a modal removes the scrollbar */
+html{scrollbar-gutter:stable}
+/* header: collapsing the brand row happens on an out-of-flow layer, page below never moves */
+.head{height:0;margin:0 auto var(--hh,128px)}
+.head .bar{position:absolute;left:0;right:0;top:0}
+.mega{top:calc(var(--bh,106px) + 8px)}
+/* background glow: cheap radial fades instead of animated blur filters */
+.orbs i{filter:none;will-change:transform;border-radius:50%}
+.o1{background:radial-gradient(circle,rgba(246,71,71,.9) 0,rgba(246,71,71,0) 68%)}
+.o2{background:radial-gradient(circle,rgba(255,154,77,.9) 0,rgba(255,154,77,0) 68%)}
+.o3{background:radial-gradient(circle,rgba(246,71,71,.9) 0,rgba(246,71,71,0) 68%)}
+.o4{background:radial-gradient(circle,rgba(255,154,77,.9) 0,rgba(255,154,77,0) 68%)}
+.o5{background:radial-gradient(circle,rgba(246,71,71,.9) 0,rgba(246,71,71,0) 68%)}
+/* many small glass surfaces: solid translucent fill instead of live backdrop blur (big scroll-perf win, same look on a pale page) */
+.tile,.promo,.slide,.foot-card,.toolbar,.pager,.hero-pill,.help-btn,.cookie,.pq-img,.info-b{backdrop-filter:none;-webkit-backdrop-filter:none}
+.tile,.promo{background:rgba(255,255,255,.82)}
+.slide.s-red{background:rgba(255,226,223,.92)}.slide.s-blue{background:rgba(224,234,255,.92)}.slide.s-sand{background:rgba(255,236,214,.92)}
+.foot-card,.toolbar{background:rgba(255,255,255,.8)}
+.pager,.hero-pill{background:rgba(255,255,255,.9)}
+.help-btn,.cookie{background:rgba(255,255,255,.92)}
+.glass{contain:layout paint}
+.modal-card.glass,.mega.glass,.minicart.glass,.bar.glass,.glass.results{contain:none}
+/* white photo backgrounds vanish on the light cards */
+img.rm{mix-blend-mode:multiply;filter:none!important}
+.card .img{position:relative}
+.card .img:has(img.rm)::before{content:"";position:absolute;left:24%;right:24%;bottom:8px;height:14px;border-radius:50%;background:rgba(30,40,80,.2);filter:blur(9px)}
+.pq-img:has(img.rm){position:relative}
+/* view transitions */
+.view-in{animation:viewIn .5s var(--ease) both}
+@keyframes viewIn{from{opacity:0;transform:translateY(12px)}}
+/* never animate layout-affecting properties on scroll-driven elements */
+.card,.tile,.promo,.slide{backface-visibility:hidden}
+/* opaque plates behind photos so multiply-blended white backgrounds disappear completely */
+.rel{background:#fbfbfd}
+.ci-img{background:#eceff7}
+.pq-img{background:#eceff7}
+.results{background:rgba(255,255,255,.97)}
+.results .sr:hover{background:#f1f2f6}

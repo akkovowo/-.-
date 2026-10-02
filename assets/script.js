@@ -48,6 +48,7 @@
   const feat = n => FEATURED.find(p => p.n === n);
   const imgSrc = p => p.local ? LOCAL + p.local : REMOTE + p.img;
   const link = p => 'https://jjstore.ru/' + p.url;
+  const rm = p => p.local ? '' : ' class="rm"';
   const catUrl = slug => 'https://jjstore.ru/' + slug;
   const isVariant = s => /^[\d.,\s]*(gb|tb|гб|тб|mm|мм|мл|"|дюйм)/i.test(cats[s][0].trim());
   const visKids = s => (kids[s] || []).filter(k => !isVariant(k) && catCount[k]);
@@ -64,7 +65,7 @@
     <article class="card" data-id="${esc(p.id)}">
       ${o.isNew ? '<span class="badge-new">Новинка</span>' : ''}
       <button class="heart ${wish.has(p.id) ? 'on' : ''}" data-act="wish" data-id="${esc(p.id)}" aria-label="В закладки">${ICON.heart}</button>
-      <button class="img" data-act="view" data-id="${esc(p.id)}" aria-label="Быстрый просмотр"><img src="${esc(imgSrc(p))}" alt="${esc(p.name)}" loading="lazy"></button>
+      <button class="img" data-act="view" data-id="${esc(p.id)}" aria-label="Быстрый просмотр"><img${rm(p)} src="${esc(imgSrc(p))}" alt="${esc(p.name)}" loading="lazy"></button>
       <h4 data-act="view" data-id="${esc(p.id)}">${esc(p.name)}</h4>
       <div class="price">${fmt(p.price)}</div>
       <div class="slot" data-id="${esc(p.id)}"></div>
@@ -88,8 +89,10 @@
   const totalQty = () => Object.values(cart).reduce((s, n) => s + n, 0);
   const totalSum = () => Object.entries(cart).reduce((s, [id, n]) => s + (byId.get(id)?.price || 0) * n, 0);
   const stepper = id => `<div class="step" data-id="${esc(id)}"><button data-act="dec" aria-label="Меньше">−</button><b>${qtyOf(id)}</b><button data-act="inc" aria-label="Больше">+</button></div>`;
-  const syncSlots = () => $$('.slot').forEach(s => {
-    const id = s.dataset.id, n = qtyOf(id);
+  const syncSlots = only => $$('.slot').forEach(s => {
+    const id = s.dataset.id; if (only && id !== only) return;
+    const n = qtyOf(id), has = !!s.querySelector('.step');
+    if (n && has) { s.querySelector('.step b').textContent = n; return; }          // just update the number
     s.innerHTML = n ? stepper(id) : `<button class="buy" data-act="inc" data-id="${esc(id)}">В корзину</button>`;
   });
   const syncHearts = () => $$('[data-act="wish"]').forEach(b => b.classList.toggle('on', wish.has(b.dataset.id)));
@@ -103,14 +106,14 @@
   $('#openWish').onclick = () => { renderWish(); openModal(wModal); };
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModals(); hideMega(); } });
 
-  function renderCart() {
+  function renderCart(only) {
     const ids = Object.keys(cart).filter(id => byId.get(id));
     const qty = totalQty(), box = $('#cartItems');
     cartModal.classList.toggle('is-empty', !ids.length);
     box.innerHTML = ids.length ? ids.map(id => {
       const p = byId.get(id);
       return `<article class="ci" data-id="${esc(id)}">
-        <button class="ci-img" data-act="view" data-id="${esc(id)}"><img src="${esc(imgSrc(p))}" alt=""></button>
+        <button class="ci-img" data-act="view" data-id="${esc(id)}"><img${rm(p)} src="${esc(imgSrc(p))}" alt=""></button>
         <div class="ci-main"><b>${esc(p.name)}</b><small>${fmt(p.price)} за шт.</small>
           <div class="ci-row">${stepper(id)}<span class="ci-sum">${fmt(p.price * qtyOf(id))}</span></div></div>
         <button class="ci-del" data-act="del" aria-label="Удалить" title="Удалить">${ICON.trash}</button>
@@ -123,14 +126,14 @@
     $('#cartTotal').textContent = fmt(totalSum());
     $('#cartMeta').textContent = qty ? `${qty} ${plural(qty, 'товар', 'товара', 'товаров')}` : '';
     const c = $('#cartCount'); c.textContent = qty; c.classList.toggle('on', qty > 0);
-    syncSlots(); syncMini();
+    syncSlots(only); syncMini();
   }
   function renderWish() {
     const ids = [...wish].filter(id => byId.get(id)), box = $('#wishItems');
     box.innerHTML = ids.length ? ids.map(id => {
       const p = byId.get(id);
       return `<article class="ci" data-id="${esc(id)}">
-        <button class="ci-img" data-act="view" data-id="${esc(id)}"><img src="${esc(imgSrc(p))}" alt=""></button>
+        <button class="ci-img" data-act="view" data-id="${esc(id)}"><img${rm(p)} src="${esc(imgSrc(p))}" alt=""></button>
         <div class="ci-main"><b>${esc(p.name)}</b><small>${fmt(p.price)}</small>
           <div class="ci-row"><div class="slot" data-id="${esc(id)}"></div></div></div>
         <button class="ci-del" data-act="wish" data-id="${esc(id)}" aria-label="Убрать из закладок" title="Убрать из закладок">${ICON.trash}</button>
@@ -153,7 +156,7 @@
     $('#pBody').innerHTML = `
       <button class="m-x pq-x" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
       <div class="pq-grid">
-        <div class="pq-img"><img src="${esc(imgSrc(p))}" alt="${esc(p.name)}"></div>
+        <div class="pq-img"><img${rm(p)} src="${esc(imgSrc(p))}" alt="${esc(p.name)}"></div>
         <div class="pq-info">
           <small class="pq-cat">${chain.map(c => esc(cats[c][0])).join(' · ') || 'Каталог'}</small>
           <h2>${esc(p.name)}</h2>
@@ -169,7 +172,7 @@
           <a class="pq-ext" href="${esc(link(p))}" target="_blank" rel="noopener">Страница товара на jjstore.ru ${ICON.ext}</a>
         </div>
       </div>
-      ${rel.length ? `<div class="pq-rel"><b>Ещё в этой категории</b><div class="rel-row">${rel.map(r => `<button class="rel" data-act="view" data-id="${esc(r.id)}"><img src="${esc(imgSrc(r))}" alt="" loading="lazy"><span>${esc(r.name)}</span><em>${fmt(r.price)}</em></button>`).join('')}</div></div>` : ''}`;
+      ${rel.length ? `<div class="pq-rel"><b>Ещё в этой категории</b><div class="rel-row">${rel.map(r => `<button class="rel" data-act="view" data-id="${esc(r.id)}"><img${rm(r)} src="${esc(imgSrc(r))}" alt="" loading="lazy"><span>${esc(r.name)}</span><em>${fmt(r.price)}</em></button>`).join('')}</div></div>` : ''}`;
     syncSlots(); openModal(pModal);
   }
 
@@ -193,8 +196,7 @@
         if (wModal.classList.contains('on')) renderWish();
         return;
       }
-      saveCart(); renderCart();
-      if (wModal.classList.contains('on')) syncSlots();
+      saveCart(); renderCart(id);
       return;
     }
     /* internal navigation for category links */
@@ -301,6 +303,7 @@
   let CS = null;   // catalog state
   function showCatalog(route) {
     home.hidden = true; catalog.hidden = false; document.body.classList.add('in-catalog');
+    catalog.classList.remove('view-in'); void catalog.offsetWidth; catalog.classList.add('view-in');
     hideMega();
     const isSearch = route.q != null;
     const slug = route.cat;
@@ -324,7 +327,7 @@
       <div class="more-wrap"><button class="btn-more" id="catMore">Показать ещё</button></div>`;
     renderCatGrid(true);
     document.title = `${title} — JJstore`;
-    scrollTo(0, 0);
+    scrollTo({ top: 0, behavior: 'instant' });
   }
   function filtered() {
     const min = parseInt(CS.min.replace(/\D/g, ''), 10) || 0, max = parseInt(CS.max.replace(/\D/g, ''), 10) || Infinity;
@@ -354,7 +357,8 @@
     if (e.target.id === 'pMin' || e.target.id === 'pMax') { CS.min = $('#pMin').value; CS.max = $('#pMax').value; clearTimeout(ft); ft = setTimeout(() => renderCatGrid(true), 220); }
   });
   function showHome() {
-    catalog.hidden = true; home.hidden = false; document.body.classList.remove('in-catalog'); document.title = 'JJstore — оригинальная техника в Воронеже';
+    catalog.hidden = true; home.hidden = false; document.body.classList.remove('in-catalog');
+    home.classList.remove('view-in'); void home.offsetWidth; home.classList.add('view-in'); document.title = 'JJstore — оригинальная техника в Воронеже';
     window.dispatchEvent(new Event('homeshown'));
   }
   function route() {
@@ -402,7 +406,7 @@
     if (!q) { showSugg(); return; }
     const found = searchProducts(q), top = found.slice(0, 6);
     res.innerHTML = top.length
-      ? top.map(p => `<button class="sr" data-act="view" data-id="${esc(p.id)}"><img src="${esc(imgSrc(p))}" alt="" loading="lazy"><b>${esc(p.name)}</b><span>${fmt(p.price)}</span></button>`).join('') +
+      ? top.map(p => `<button class="sr" data-act="view" data-id="${esc(p.id)}"><img${rm(p)} src="${esc(imgSrc(p))}" alt="" loading="lazy"><b>${esc(p.name)}</b><span>${fmt(p.price)}</span></button>`).join('') +
         `<a class="sr-all" href="#/s/${encodeURIComponent(q)}">Все результаты · ${found.length}${ICON.chev}</a>`
       : '<em>Ничего не найдено</em>';
     res.classList.add('on');
@@ -462,9 +466,11 @@
     nav.addEventListener('pointerleave', () => { ind.style.opacity = 0; });
   })();
 
-  /* header condenses on scroll down, expands on scroll up */
+  /* header condenses on scroll down, expands on scroll up (flow height is reserved, so nothing jumps) */
   (function () {
     const head = $('#head'); let y = scrollY, ticking = false;
+    const measure = () => { if (head.classList.contains('compact')) return; const h = head.firstElementChild.offsetHeight; if (h) { head.style.setProperty('--bh', h + 'px'); head.style.setProperty('--hh', (h + 22) + 'px'); } };
+    measure(); addEventListener('resize', measure); addEventListener('load', measure); setTimeout(measure, 400);
     addEventListener('scroll', () => {
       if (ticking) return; ticking = true;
       requestAnimationFrame(() => {
