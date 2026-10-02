@@ -3,286 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b0709">
-<title>JJStore — оригинальная техника Apple, Samsung, DJI, Dyson в Воронеже</title>
-<meta name="description" content="JJStore — маркетплейс оригинальной техники в Воронеже: Apple, Samsung, Xiaomi, DJI, JBL, GoPro, Dyson. Дешевле всех, качественный сервис.">
+<title>ДжейДжей | JJstore — оригинальная техника в Воронеже</title>
+<meta name="description" content="JJstore — маркетплейс оригинальной продукции Apple, Samsung, Xiaomi, DJI, JBL, GoPro, Dyson в Воронеже.">
 <link rel="icon" href="assets/brand/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-<!-- SVG filter: liquid refraction for glass -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <filter id="liquid" x="-10%" y="-10%" width="120%" height="120%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="4" result="n"/>
-    <feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
-
-<!-- Aurora background -->
-<div class="aurora" aria-hidden="true">
-  <i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="blob b4"></i>
-  <div class="grain"></div>
-</div>
-<div class="spot" id="spot" aria-hidden="true"></div>
-
-<!-- Top info bar -->
-<div class="topbar glass-thin">
-  <span>📍 г. Воронеж, ул. Театральная, 19</span>
-  <span class="dot"></span>
-  <span>Оригинал · Гарантия · Дешевле всех</span>
-  <a href="tel:+74732380870" class="topbar-phone">+7 (473) 238-08-70</a>
+<div class="topbar wrap">
+  <span>Работаем с 11:00 до 20:00</span>
+  <span class="topbar-r">
+    <span>ул. Театральная, 19</span>
+    <a href="tel:+74732380870">+7 (473) 238-08-70</a>
+  </span>
 </div>
 
-<!-- Floating glass nav -->
-<header class="nav-wrap">
-  <nav class="nav glass" id="nav">
-    <a href="#top" class="logo"><img class="logo-mark" src="assets/brand/logo.png" alt=""><b>JJ</b>store</a>
-    <ul class="nav-links">
-      <li><a href="#categories">Каталог</a></li>
-      <li><a href="#hits">Хиты</a></li>
-      <li><a href="#why">Почему дёшево</a></li>
-      <li><a href="#services">Сервисы</a></li>
-      <li><a href="#contacts">Контакты</a></li>
-    </ul>
-    <div class="nav-actions">
-      <button class="icon-btn" id="openSearch" aria-label="Поиск (Ctrl+K)">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      </button>
-      <button class="icon-btn" id="openCart" aria-label="Корзина">
-        <svg viewBox="0 0 24 24"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
-        <span class="badge" id="cartCount">0</span>
-      </button>
-      <button class="icon-btn burger" id="burger" aria-label="Меню"><span></span><span></span></button>
+<header class="head glass-bar" id="head">
+  <div class="wrap head-row">
+    <a href="#" class="logo"><img src="assets/brand/logo.png" alt="JJstore"><span>ДжейДжей | JJstore</span></a>
+    <div class="search glass">
+      <input id="search" type="search" placeholder="Поиск по сайту" autocomplete="off">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <div class="results" id="results"></div>
     </div>
+    <div class="icons">
+      <a href="https://t.me/jjstor" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M21 4 3 11l5 2 2 6 3-4 5 4 3-15Z"/></svg></a>
+      <a href="https://vk.com/jjstoreru" target="_blank" rel="noopener" aria-label="VK"><svg viewBox="0 0 24 24"><path d="M4 7c.5 6 3.5 10 8 10h1v-3c2 .3 3 2 3.5 3H19c-.7-2-2-3.5-3.5-4 1.5-.7 3-2.300 3.500-6H16c-.5 2-2 3.500-3.500 3.700V7H11v5c-1.500-.5-3-2-3.500-5H4Z"/></svg></a>
+      <a href="https://www.instagram.com/jjstoreru" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.5"/></svg></a>
+      <button id="openCart" aria-label="Корзина"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><i class="badge" id="cartCount">0</i></button>
+    </div>
+  </div>
+  <nav class="wrap brands" aria-label="Бренды">
+      <a href="https://jjstore.ru/apple" target="_blank" rel="noopener">Apple</a>
+      <a href="https://jjstore.ru/samsung" target="_blank" rel="noopener">Samsung</a>
+      <a href="https://jjstore.ru/dyson" target="_blank" rel="noopener">Dyson</a>
+      <a href="https://jjstore.ru/android" target="_blank" rel="noopener">Android</a>
+      <a href="https://jjstore.ru/yandeks" target="_blank" rel="noopener">Яндекс</a>
+      <a href="https://jjstore.ru/sony" target="_blank" rel="noopener">Sony</a>
+      <a href="https://jjstore.ru/gamer" target="_blank" rel="noopener">Gamer</a>
+      <a href="https://jjstore.ru/dji" target="_blank" rel="noopener">DJI</a>
+      <a href="https://jjstore.ru/ubear" target="_blank" rel="noopener">uBear</a>
+      <a href="https://jjstore.ru/native-union" target="_blank" rel="noopener">Native Union</a>
+      <a href="https://jjstore.ru/aksessuary-3" target="_blank" rel="noopener">Аксессуары</a>
   </nav>
 </header>
 
-<!-- Mobile menu -->
-<div class="mobile-menu glass" id="mobileMenu">
-  <a href="#categories">Каталог</a><a href="#hits">Хиты</a><a href="#why">Почему дёшево</a>
-  <a href="#services">Сервисы</a><a href="#contacts">Контакты</a>
-</div>
+<main class="wrap">
 
-<main id="top">
+  <section class="wall" aria-label="Каталог">
+    <a class="tile glass" href="https://jjstore.ru/apple" target="_blank" rel="noopener"><img src="assets/cat/apple.png" alt="Apple" loading="lazy"><span>Apple</span></a>
+    <a class="tile glass" href="https://jjstore.ru/samsung" target="_blank" rel="noopener"><img src="assets/cat/samsung.png" alt="Samsung" loading="lazy"><span>Samsung</span></a>
+    <a class="tile glass" href="https://jjstore.ru/dyson" target="_blank" rel="noopener"><img src="assets/cat/dyson.png" alt="Dyson" loading="lazy"><span>Dyson</span></a>
+    <a class="tile glass" href="https://jjstore.ru/android" target="_blank" rel="noopener"><img src="assets/cat/android.png" alt="Android" loading="lazy"><span>Android</span></a>
+    <a class="tile glass" href="https://jjstore.ru/yandeks" target="_blank" rel="noopener"><img src="assets/cat/yandeks.png" alt="Яндекс" loading="lazy"><span>Яндекс</span></a>
+    <a class="tile glass" href="https://jjstore.ru/sony" target="_blank" rel="noopener"><img src="assets/cat/sony.png" alt="Sony" loading="lazy"><span>Sony</span></a>
+    <a class="tile glass" href="https://jjstore.ru/gamer" target="_blank" rel="noopener"><img src="assets/cat/gamer.png" alt="Gamer" loading="lazy"><span>Gamer</span></a>
+    <a class="tile glass" href="https://jjstore.ru/dji" target="_blank" rel="noopener"><img src="assets/cat/dji.png" alt="DJI" loading="lazy"><span>DJI</span></a>
+    <a class="tile glass" href="https://jjstore.ru/jbl" target="_blank" rel="noopener"><img src="assets/cat/jbl.png" alt="JBL" loading="lazy"><span>JBL</span></a>
+    <a class="tile glass" href="https://jjstore.ru/gopro" target="_blank" rel="noopener"><img src="assets/cat/gopro.png" alt="GoPro" loading="lazy"><span>GoPro</span></a>
+    <a class="tile glass" href="https://jjstore.ru/beats" target="_blank" rel="noopener"><img src="assets/cat/beats.png" alt="Beats" loading="lazy"><span>Beats</span></a>
+    <a class="tile glass" href="https://jjstore.ru/garmin" target="_blank" rel="noopener"><img src="assets/cat/garmin.png" alt="Garmin" loading="lazy"><span>Garmin</span></a>
+    <a class="tile glass" href="https://jjstore.ru/ubear" target="_blank" rel="noopener"><img src="assets/cat/ubear.png" alt="uBear" loading="lazy"><span>uBear</span></a>
+    <a class="tile glass" href="https://jjstore.ru/native-union" target="_blank" rel="noopener"><img src="assets/cat/native-union.png" alt="Native Union" loading="lazy"><span>Native Union</span></a>
+    <a class="tile glass" href="https://jjstore.ru/aksessuary-3" target="_blank" rel="noopener"><img src="assets/cat/aksessuary-3.png" alt="Аксессуары" loading="lazy"><span>Аксессуары</span></a>
+    <a class="tile glass" href="https://jjstore.ru/vlp" target="_blank" rel="noopener"><img src="assets/cat/vlp.png" alt="VLP" loading="lazy"><span>VLP</span></a>
+    <a class="tile glass" href="https://jjstore.ru/plaud" target="_blank" rel="noopener"><img src="assets/cat/plaud.png" alt="Plaud" loading="lazy"><span>Plaud</span></a>
+    <a class="tile glass" href="https://jjstore.ru/whoop" target="_blank" rel="noopener"><img src="assets/cat/whoop.png" alt="Whoop" loading="lazy"><span>Whoop</span></a>
+    <a class="tile glass" href="https://jjstore.ru/ray-ban" target="_blank" rel="noopener"><img src="assets/cat/ray-ban.png" alt="Ray-Ban" loading="lazy"><span>Ray-Ban</span></a>
+    <a class="tile glass" href="https://jjstore.ru/google-fit-pro" target="_blank" rel="noopener"><img src="assets/cat/google-fit-pro.png" alt="Google Fit Pro" loading="lazy"><span>Google Fit Pro</span></a>
+    <a class="tile glass" href="https://jjstore.ru/uslugi" target="_blank" rel="noopener"><img src="assets/cat/uslugi.png" alt="Услуги" loading="lazy"><span>Услуги</span></a>
+  </section>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-text reveal">
-    <span class="pill glass-thin"><i class="live"></i> Новое поступление · iPhone 17 Pro</span>
-    <h1>Техника будущего.<br><span class="grad">По цене сегодня.</span></h1>
-    <p class="lead">Оригинальные Apple, Samsung, DJI, Dyson и&nbsp;ещё 20+ брендов. Тысячи довольных клиентов в&nbsp;Воронеже — и&nbsp;цены, которые вы не&nbsp;найдёте у&nbsp;других.</p>
-    <div class="hero-cta">
-      <a href="#hits" class="btn primary">Смотреть хиты <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <a href="#why" class="btn glass-btn">Почему дёшево?</a>
-    </div>
-    <div class="stats">
-      <div><b data-count="5000">0</b><span>клиентов</span></div>
-      <div><b data-count="20">0</b><span>брендов</span></div>
-      <div><b data-count="100" data-suffix="%">0</b><span>оригинал</span></div>
-    </div>
-  </div>
+  <section class="quick">
+    <a class="glass" href="https://jjstore.ru/baraholka" target="_blank" rel="noopener">Почему дёшево?</a>
+    <a class="glass" href="https://jjstore.ru/trade-in" target="_blank" rel="noopener">Trade-in</a>
+    <a class="glass" href="https://jjstore.ru/remont" target="_blank" rel="noopener">Ремонт</a>
+    <a class="glass" href="https://jjstore.ru/delivery" target="_blank" rel="noopener">Оплата</a>
+  </section>
 
-  <div class="hero-visual reveal" id="heroVisual">
-    <div class="phone-glow"></div>
-    <img class="hero-phone" src="assets/img/apple/17pro/iphone-17-pro-deepblue-400x280.png" alt="iPhone 17 Pro" loading="eager">
-    <div class="float-card glass fc1">
-      <small>iPhone 17 Pro</small><b>от 98 990 ₽</b>
-      <span class="tag ok">В наличии</span>
-    </div>
-    <div class="float-card glass fc2">
-      <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
-      <div><b>Гарантия</b><small>официальная</small></div>
-    </div>
-    <div class="float-card glass fc3">
-      <svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
-      <div><b>Trade-in</b><small>выгодный обмен</small></div>
-    </div>
-  </div>
-</section>
-
-<!-- Marquee of brands -->
-<div class="marquee glass-thin reveal" aria-label="Бренды">
-  <div class="track">
-    <span>Apple</span><span>Samsung</span><span>Dyson</span><span>DJI</span><span>Sony</span><span>JBL</span><span>GoPro</span><span>Beats</span><span>Garmin</span><span>Xiaomi</span><span>Яндекс</span><span>Native Union</span><span>uBear</span><span>Ray-Ban</span><span>Whoop</span><span>Plaud</span>
-    <span>Apple</span><span>Samsung</span><span>Dyson</span><span>DJI</span><span>Sony</span><span>JBL</span><span>GoPro</span><span>Beats</span><span>Garmin</span><span>Xiaomi</span><span>Яндекс</span><span>Native Union</span><span>uBear</span><span>Ray-Ban</span><span>Whoop</span><span>Plaud</span>
-  </div>
-</div>
-
-<!-- CATEGORIES bento -->
-<section class="section" id="categories">
-  <div class="section-head reveal">
-    <h2>Каталог</h2>
-    <p>Выберите свой мир — всё оригинальное, всё в&nbsp;наличии.</p>
-  </div>
-  <div class="bento">
-    <a class="tile glass tilt big reveal" href="https://jjstore.ru/apple" target="_blank" rel="noopener">
-      <div class="tile-text"><small>Apple</small><h3>iPhone, AirPods,<br>Watch, MacBook</h3><span class="more">Открыть →</span></div>
-      <img src="assets/img/apple/18pro/iphone18proburgundy-200x200.png" alt="Apple" loading="lazy">
-    </a>
-    <a class="tile glass tilt reveal" href="https://jjstore.ru/samsung" target="_blank" rel="noopener">
-      <div class="tile-text"><small>Samsung</small><h3>Galaxy</h3></div>
-      <img src="assets/img/samsung/zfold6/galaxy_fold_6-200x200.png" alt="Samsung" loading="lazy">
-    </a>
-    <a class="tile glass tilt reveal" href="https://jjstore.ru/dyson" target="_blank" rel="noopener">
-      <div class="tile-text"><small>Dyson</small><h3>Стайлеры<br>и пылесосы</h3></div>
-      <img src="assets/img/dyson/multi-styleranddryercompletelongstrawberrybronzeblushpink/dysonmulti-styleranddryer1-200x200.png" alt="Dyson" loading="lazy">
-    </a>
-    <a class="tile glass tilt reveal" href="https://jjstore.ru/dji" target="_blank" rel="noopener">
-      <div class="tile-text"><small>DJI</small><h3>Дроны<br>и камеры</h3></div>
-      <img src="assets/img/kvadro111-200x200.png" alt="DJI" loading="lazy">
-    </a>
-    <a class="tile glass tilt wide reveal" href="https://jjstore.ru/sony" target="_blank" rel="noopener">
-      <div class="tile-text"><small>Sony · Gamer</small><h3>PlayStation 5 Pro<br>и VR</h3></div>
-      <img src="assets/img/sony/sonyplaystation/sony_playstation1-200x200.png" alt="Sony" loading="lazy">
-    </a>
-    <a class="tile glass tilt reveal" href="https://jjstore.ru/android" target="_blank" rel="noopener">
-      <div class="tile-text"><small>Android</small><h3>Pixel, Xiaomi,<br>OnePlus</h3></div>
-      <img src="assets/img/googlepixel/android-200x200-200x200.png" alt="Android" loading="lazy">
-    </a>
-    <a class="tile glass tilt reveal" href="https://jjstore.ru/yandeks" target="_blank" rel="noopener">
-      <div class="tile-text"><small>Яндекс</small><h3>Станции</h3></div>
-      <img src="assets/img/yandexxxx-200x200.png" alt="Яндекс" loading="lazy">
-    </a>
-    <a class="tile glass tilt reveal" href="https://jjstore.ru/aksessuary-3" target="_blank" rel="noopener">
-      <div class="tile-text"><small>Аксессуары</small><h3>Чехлы, зарядки,<br>Native Union</h3></div>
-      <img src="assets/img/acsessoriiii-200x200.png" alt="Аксессуары" loading="lazy">
-    </a>
-    <a class="tile glass tilt reveal" href="https://jjstore.ru/jbl" target="_blank" rel="noopener">
-      <div class="tile-text"><small>JBL · Beats</small><h3>Звук</h3></div>
-      <img src="assets/img/jbl29200-200x200.png" alt="JBL" loading="lazy">
-    </a>
-  </div>
-</section>
-
-<!-- HITS -->
-<section class="section" id="hits">
-  <div class="section-head reveal">
-    <h2>Хиты продаж</h2>
-    <p>То, что берут чаще всего. Цены актуальны на&nbsp;сайте магазина.</p>
-  </div>
-  <div class="filters reveal" id="filters">
-    <button class="chip active" data-f="all">Все</button>
-    <button class="chip" data-f="iphone">iPhone</button>
-    <button class="chip" data-f="airpods">AirPods</button>
-    <button class="chip" data-f="gaming">Gaming</button>
-    <button class="chip" data-f="acc">Аксессуары</button>
-  </div>
-  <div class="grid" id="productGrid"></div>
-</section>
-
-<!-- WHY CHEAP -->
-<section class="section" id="why">
-  <div class="section-head reveal">
-    <h2>Почему у&nbsp;нас дёшево?</h2>
-    <p>Мы не&nbsp;гонимся за мгновенной выгодой — поэтому нас советуют друзьям и&nbsp;близким.</p>
-  </div>
-  <div class="features">
-    <div class="feature glass tilt reveal">
-      <div class="f-ico"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4Z"/><path d="m9 12 2 2 4-4"/></svg></div>
-      <h3>100% оригинал</h3><p>Только оригинальная продукция Apple, Samsung, DJI, Dyson и&nbsp;других брендов.</p>
-    </div>
-    <div class="feature glass tilt reveal">
-      <div class="f-ico"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 4v5h-5"/></svg></div>
-      <h3>Trade-in</h3><p>Сдайте старое устройство и&nbsp;получите скидку на&nbsp;новое прямо в&nbsp;магазине.</p>
-    </div>
-    <div class="feature glass tilt reveal">
-      <div class="f-ico"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M3 10h18M7 15h3"/></svg></div>
-      <h3>Кредит и рассрочка</h3><p>Оформите покупку частями — быстро, без лишних документов.</p>
-    </div>
-    <div class="feature glass tilt reveal">
-      <div class="f-ico"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.2-.5-.5-2.2 2.2-2.8Z"/></svg></div>
-      <h3>Ремонт и сервис</h3><p>Собственный сервис, страхование техники и&nbsp;помощь после покупки.</p>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES / DELIVERY -->
-<section class="section" id="services">
-  <div class="split">
-    <div class="glass panel reveal">
-      <small class="eyebrow">Доставка и оплата</small>
-      <h3>Заберите сегодня.<br>Или привезём.</h3>
-      <ul class="checks">
-        <li>Самовывоз из магазина на Театральной, 19</li>
-        <li>Доставка по Воронежу и в другие города</li>
-        <li>Оплата картой, наличными, в кредит</li>
-        <li>Страхование и гарантия на всё</li>
-      </ul>
-      <a href="https://jjstore.ru/delivery" target="_blank" rel="noopener" class="btn glass-btn">Подробнее</a>
-    </div>
-    <div class="glass panel reveal accent">
-      <small class="eyebrow">Новости</small>
-      <h3>Что нового</h3>
-      <div class="news">
-        <a href="https://jjstore.ru/index.php?route=news_reviews/category&cat=1" target="_blank" rel="noopener"><span>3 ч назад</span>Microsoft представила аксессуары для Cyberpunk</a>
-        <a href="https://jjstore.ru/index.php?route=news_reviews/category&cat=1" target="_blank" rel="noopener"><span>7 ч назад</span>Новинка — беспроводные наушники MONITOR II</a>
-      </div>
-      <a href="https://jjstore.ru/index.php?route=news_reviews/category&cat=1" target="_blank" rel="noopener" class="btn glass-btn">Все новости</a>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACTS -->
-<section class="section" id="contacts">
-  <div class="cta glass reveal">
-    <div>
-      <h2>Приходите. Потрогайте.<br><span class="grad">Влюбитесь.</span></h2>
-      <p>г. Воронеж, ул. Театральная, 19<br><a href="tel:+74732380870">+7 (473) 238-08-70</a> · <a href="mailto:zakaz@jjstore.ru">zakaz@jjstore.ru</a></p>
-    </div>
-    <div class="socials">
-      <a class="icon-btn lg" href="https://t.me/jjstor" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M21 4 3 11l5 2 2 6 3-4 5 4 3-15Z"/></svg></a>
-      <a class="icon-btn lg" href="https://vk.com/jjstoreru" target="_blank" rel="noopener" aria-label="VK"><svg viewBox="0 0 24 24"><path d="M4 7c.5 6 3.5 10 8 10h1v-3c2 .3 3 2 3.5 3H19c-.7-2-2-3.500-3.500-4 1.500-.7 3-2.300 3.500-6h-2.500c-.5 2-2 3.500-3.500 3.700V7H11v5c-1.500-.5-3-2-3.500-5H4Z"/></svg></a>
-      <a class="icon-btn lg" href="https://www.instagram.com/jjstoreru" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.500"/><circle cx="17" cy="7" r=".5"/></svg></a>
-      <a class="btn primary" href="tel:+74732380870">Позвонить</a>
-    </div>
-  </div>
-</section>
+  <section class="products">
+    <button class="arrow prev" id="prev" aria-label="Назад"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button>
+    <div class="track" id="track"></div>
+    <button class="arrow next" id="next" aria-label="Вперёд"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+  </section>
 
 </main>
 
-<footer class="footer">
-  <div class="footer-links">
-    <a href="https://jjstore.ru/baraholka" target="_blank" rel="noopener">Почему дёшево?</a>
-    <a href="https://jjstore.ru/trade-in" target="_blank" rel="noopener">Trade-in</a>
-    <a href="https://jjstore.ru/kredit" target="_blank" rel="noopener">Кредит</a>
-    <a href="https://jjstore.ru/strahovanie" target="_blank" rel="noopener">Страхование</a>
-    <a href="https://jjstore.ru/dlya-smi-i-blogerov" target="_blank" rel="noopener">Для СМИ и блогеров</a>
-    <a href="https://jjstore.ru/politika-obrabotki-personalnyh-dannyh" target="_blank" rel="noopener">Политика ПДн</a>
+<footer class="foot">
+  <div class="wrap cols">
+    <div>
+      <h4>Каталог</h4>
+      <a href="https://jjstore.ru/apple" target="_blank" rel="noopener">Apple</a>
+      <a href="https://jjstore.ru/samsung" target="_blank" rel="noopener">Samsung</a>
+      <a href="https://jjstore.ru/dyson" target="_blank" rel="noopener">Dyson</a>
+      <a href="https://jjstore.ru/android" target="_blank" rel="noopener">Android</a>
+      <a href="https://jjstore.ru/yandeks" target="_blank" rel="noopener">Яндекс</a>
+      <a href="https://jjstore.ru/sony" target="_blank" rel="noopener">Sony</a>
+      <a href="https://jjstore.ru/gamer" target="_blank" rel="noopener">Gamer</a>
+      <a href="https://jjstore.ru/dji" target="_blank" rel="noopener">DJI</a>
+      <a href="https://jjstore.ru/ubear" target="_blank" rel="noopener">uBear</a>
+      <a href="https://jjstore.ru/native-union" target="_blank" rel="noopener">Native Union</a>
+      <a href="https://jjstore.ru/aksessuary-3" target="_blank" rel="noopener">Аксессуары</a>
+    </div>
+    <div>
+      <h4>Клиентам</h4>
+      <a href="https://jjstore.ru/baraholka" target="_blank" rel="noopener">Почему дешево?</a>
+      <a href="https://jjstore.ru/trade-in" target="_blank" rel="noopener">Trade-in</a>
+      <a href="https://jjstore.ru/kredit" target="_blank" rel="noopener">Кредит</a>
+      <a href="https://jjstore.ru/strahovanie" target="_blank" rel="noopener">Страхование</a>
+      <a href="https://jjstore.ru/dlya-smi-i-blogerov" target="_blank" rel="noopener">Для СМИ и блогеров</a>
+      <a href="https://jjstore.ru/politika-obrabotki-personalnyh-dannyh" target="_blank" rel="noopener">Политика обработки персональных данных</a>
+      <a href="https://jjstore.ru/kontakty" target="_blank" rel="noopener">Контакты</a>
+      <a href="https://jjstore.ru/o-magazine" target="_blank" rel="noopener">О магазине</a>
+      <a href="https://jjstore.ru/delivery" target="_blank" rel="noopener">Доставка и оплата</a>
+    </div>
+    <div>
+      <h4>Контакты</h4>
+      <a href="tel:+74732380870">+7 (473) 238-08-70</a>
+      <a href="mailto:zakaz@jjstore.ru">zakaz@jjstore.ru</a>
+      <span class="muted">г. Воронеж, Театральная, 19</span>
+    </div>
   </div>
-  <p>© JJStore · Воронеж · Редизайн в стиле Liquid Glass</p>
+  <div class="wrap copy">
+    <span>© 2008 - 2026 JJStore</span>
+    <span>Указанная стоимость товаров и условия их приобретения действительны по состоянию на текущую дату.</span>
+  </div>
 </footer>
 
-<!-- Bottom dock (mobile, iOS tab bar style) -->
-<div class="dock glass" aria-label="Быстрая навигация">
-  <a href="#top"><svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4v-9Z"/></svg><span>Главная</span></a>
-  <a href="#categories"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg><span>Каталог</span></a>
-  <a href="#hits"><svg viewBox="0 0 24 24"><path d="m12 3 2.700 5.600 6.100.9-4.400 4.300 1 6.100L12 17l-5.400 2.900 1-6.100L3.200 9.500l6.100-.9L12 3Z"/></svg><span>Хиты</span></a>
-  <a href="#contacts"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.500 1.500a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg><span>Связь</span></a>
-</div>
-
-<!-- Search overlay -->
-<div class="overlay" id="searchOverlay">
-  <div class="search-box glass">
-    <div class="search-input">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.500-3.500"/></svg>
-      <input id="searchInput" type="text" placeholder="Поиск: iPhone, AirPods, PlayStation…" autocomplete="off">
-      <kbd>Esc</kbd>
-    </div>
-    <div class="search-results" id="searchResults"></div>
-  </div>
-</div>
-
-<!-- Cart drawer -->
 <aside class="drawer glass" id="drawer" aria-label="Корзина">
-  <div class="drawer-head"><h3>Корзина</h3><button class="icon-btn" id="closeCart" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="drawer-head"><h3>Корзина</h3><button id="closeCart" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
   <div class="drawer-body" id="cartItems"></div>
   <div class="drawer-foot">
     <div class="total"><span>Итого</span><b id="cartTotal">0 ₽</b></div>
-    <a class="btn primary full" href="https://jjstore.ru/index.php?route=checkout/simplecheckout" target="_blank" rel="noopener">Оформить заказ</a>
+    <a class="btn" href="https://jjstore.ru/index.php?route=checkout/simplecheckout" target="_blank" rel="noopener">Оформить заказ</a>
   </div>
 </aside>
 <div class="scrim" id="scrim"></div>
