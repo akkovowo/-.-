@@ -1,0 +1,218 @@
+import struct
+from tr import *
+from tr2 import *
+
+# which operand fields are registers per op (indices into [op,A,B,C])
+REGF={'MOVE':'AB','LOADK':'A','LOADBOOL':'A','LOADNIL':'AB','GETUPVAL':'A','GETGLOBAL':'A','GETTABLE':'ABC','SETGLOBAL':'A',
+'SETUPVAL':'A','SETTABLE':'ABC','NEWTABLE':'A','SELF':'ABC','ADD':'ABC','SUB':'ABC','MUL':'ABC','DIV':'ABC','MOD':'ABC','POW':'ABC',
+'UNM':'AB','NOT':'AB','LEN':'AB','CONCAT':'ABC','JMP':'','EQ':'BC','LT':'BC','LE':'BC','TEST':'A','TESTSET':'AB','CALL':'A','TAILCALL':'A',
+'RETURN':'A','FORLOOP':'A','FORPREP':'A','TFORLOOP':'A','SETLIST':'A','CLOSE':'A','CLOSURE':'A','VARARG':'A'}
+OPNUM={n:i for i,n in enumerate(['MOVE','LOADK','LOADBOOL','LOADNIL','GETUPVAL','GETGLOBAL','GETTABLE','SETGLOBAL','SETUPVAL','SETTABLE','NEWTABLE','SELF','ADD','SUB','MUL','DIV','MOD','POW','UNM','NOT','LEN','CONCAT','JMP','EQ','LT','LE','TEST','TESTSET','CALL','TAILCALL','RETURN','FORLOOP','FORPREP','TFORLOOP','SETLIST','CLOSE','CLOSURE','VARARG'])}
+# ops where the 'extra' register range matters for CONCAT B..C already covered
+
+class Proto: pass
+
+def shift_ins(ins,loops):
+    op=ins[0]
+    fl=REGF.get(op,'')
+    for ch in fl:
+        i='ABC'.index(ch)+1
+        v=ins[i]
+        if isinstance(v,int):
+            ins[i]=v+2*sum(1 for a in loops if v>=a)
+
+def translate(F, kids):
+    import tr
+    tr.API['regs']=F.api_regs;tr.API['ups']=F.api_ups
+    """returns Proto (children unresolved ids in .kids)"""
+    cx=Ctx(F);cx.env={}
+    res=[]
+    for bi,(lab,stmts) in enumerate(F.blocks):
+        b=BT3(cx,F,lab,stmts)
+        out=b.run()
+        res.append((lab,b.info,out,b.top_out))
+    # ---- assemble
+    code=[]            # items: instr lists or ('LABEL',name)
+    stack=[]           # open loops
+    loopid=0
+    pend=[]
+    def push_lbl(name): code.append(['LABEL',0,0,0,name])
+    shiftstack=[]      # list of a values for tfor regions
+    def addins(ins):
+        ins.append(list(shiftstack))   # index5 = region list
+        code.append(ins)
+    byX={}
+    for bi,(lab,info,out,top) in enumerate(res):
+        # loop close?
+        while stack and lab==stack[-1]['X']:
+            L=stack.pop()
+            if L['kind']=='for':
+                push_lbl(('FL',L['id']))
+                ins=['FORLOOP',L['a']-1,0,0,('BS',L['id'])];addins(ins)
+            else:
+                shiftstack.pop()
+                push_lbl(('FL',L['id']))
+                ins=['TFORLOOP',L['a']-1,0,L['nv'],None];addins(ins)
+                ins2=['JMP',0,0,0,('BS',L['id'])];addins(ins2)
+        push_lbl(lab)
+        k=info[0] if info else None
+        if k in('POP',None,'PROLOGUE'):
+            for ins in out: addins(ins)
+        elif k=='FORPREP':
+            loopid+=1
+            L={'kind':'for','a':info[1],'id':loopid,'X':None};stack.append(L)
+            addins(['FORPREP',info[1]-1,0,0,('FL',loopid)])
+        elif k=='TFORPREP':
+            loopid+=1
+            L={'kind':'tfor','a':info[1],'id':loopid,'X':None};stack.append(L)
+            addins(['JMP',0,0,0,('FL',loopid)])
+        elif k=='FORHEAD':
+            L=stack[-1];assert L['kind']=='for' and L['X'] is None
+            L['X']=info[1]
+            code.append(['LABEL',0,0,0,('ALIAS',lab,('FL',L['id']))])
+            push_lbl(('BS',L['id']))
+        elif k=='TFOR':
+            L=stack[-1];assert L['kind']=='tfor' and L['X'] is None
+            L['X']=info[1];L['nv']=info[3]
+            code.append(['LABEL',0,0,0,('ALIAS',lab,('FL',L['id']))])
+            # body region begins: after this point
+            push_lbl(('BS',L['id']))
+            shiftstack.append(L['a'])
+            L['region']=len(shiftstack)
+        else: raise Unsupported('info '+str(info))
+    while stack:
+        raise Unsupported('unclosed loop')
+    # ---- resolve labels
+    def resolve(code):
+        labels={};aliases={}
+        real=[];pending=[]
+        for it in code:
+            if it[0]=='LABEL':
+                nm=it[4]
+                if isinstance(nm,tuple) and nm[0]=='ALIAS': aliases[nm[1]]=nm[2]
+                else: pending.append(nm)
+                continue
+            for nm in pending: labels[nm]=len(real)
+            pending=[]
+            real.append(it)
+        for nm in pending: labels[nm]=len(real)
+        for a,t in aliases.items(): labels[a]=labels[t]
+        return labels,real
+    # make sure function ends with RETURN
+    lastreal=[it for it in code if it[0]!='LABEL']
+    if True:
+        code.append(['RETURN',0,1,0,None,list(shiftstack)])
+    while True:
+        labels,real=resolve(code)
+        drop=[n for n,it in enumerate(real) if it[0]=='GOTO' and labels.get(it[4])==n+1]
+        if not drop: break
+        ids={id(real[n]) for n in drop}
+        code=[it for it in code if id(it) not in ids]
+    for it in real:
+        if it[0] in('GOTO','JMPN'): it[0]='JMP'
+    # ---- shift registers for tfor regions (original regs)
+    for it in real:
+        reg=it[-1]
+        if reg: shift_ins(it,reg)
+    # ---- constants / protos / final encoding
+    consts=[];cidx={}
+    def kidx(v):
+        key=(type(v).__name__,v)
+        if key not in cidx:
+            cidx[key]=len(consts);consts.append(v)
+        return cidx[key]
+    for it in real:
+        if it[0] in('GETTABLE','SETTABLE','SELF','ADD','SUB','MUL','DIV','MOD','POW','EQ','LT','LE'):
+            for fi in (2,3):
+                v=it[fi]
+                if isinstance(v,tuple) and v[0]=='K': kidx(v[1])
+    protos=[];pidx={}
+    final=[]
+    maxreg=cx.maxreg+1
+    for n,it in enumerate(real):
+        op,A,B,C,lbl=it[:5]
+        ins=[op,A,B,C]
+        for fi in (1,2,3):
+            if isinstance(ins[fi],tuple) and ins[fi][0]=='K':
+                ins[fi]=ins[fi][1] if False else ('K',ins[fi][1])
+        if lbl is not None and op in('JMP','FORLOOP','FORPREP') :
+            if lbl not in labels: raise Unsupported('label missing %s'%(lbl,))
+            ins[2 if False else 2]=0
+            tgt=labels[lbl]
+            ins[2]=tgt-(n+1)
+            if op in('FORLOOP','FORPREP'): ins[2]=tgt-(n+1)
+        if op=='JMP': ins=['JMP',0,ins[2],0]
+        final.append(ins)
+    # resolve B/C constants
+    out=[]
+    for n,ins in enumerate(final):
+        op,A,B,C=ins
+        if op in('LOADK','GETGLOBAL','SETGLOBAL'):
+            B=('KBX',kidx(B[1]))
+        if op=='CLOSURE':
+            cid=B[1]
+            if cid not in pidx: pidx[cid]=len(protos);protos.append(cid)
+            B=('KBX',pidx[cid])
+        out.append([op,A,B,C])
+    # RK operands
+    for ins in out:
+        op=ins[0]
+        if op in('GETTABLE','SETTABLE','SELF','ADD','SUB','MUL','DIV','MOD','POW','EQ','LT','LE'):
+            for fi in (2,3):
+                v=ins[fi]
+                if isinstance(v,tuple) and v[0]=='K':
+                    k=kidx(v[1])
+                    if k>255: raise Unsupported('K>255')
+                    ins[fi]=256+k
+        if op=='SETTABLE' and False: pass
+    P=Proto();P.id=F.id;P.code=out;P.consts=consts;P.kids=protos
+    P.nups=len(F.ups);P.nparams=cx.nparams;P.vararg=cx.vararg or any(i[0]=='VARARG' for i in out)
+    mx=max([cx.maxreg]+[ (i[1]+1) for i in out if isinstance(i[1],int)]+[ (i[3]+1) for i in out if i[0]=='CONCAT' ])
+    P.maxstack=min(250,mx+3)
+    return P
+
+def encode(P,kidp,child):
+    """binary Lua5.1 function"""
+    b=bytearray()
+    def i32(x): b.extend(struct.pack('<i',x))
+    def u8(x): b.append(x)
+    def string(s):
+        if s is None: b.extend(struct.pack('<Q',0));return
+        b.extend(struct.pack('<Q',len(s)+1));b.extend(s);b.append(0)
+    string(None);i32(0);i32(0)
+    u8(P.nups);u8(P.nparams);u8((VARFLAG if P.vararg else 0));u8(P.maxstack)
+    i32(len(P.code))
+    for ins in P.code:
+        op,A,B,C=ins
+        o=OPNUM[op]
+        if op in('LOADK','GETGLOBAL','SETGLOBAL','CLOSURE'):
+            w=o|(A<<6)|(B[1]<<14)
+        elif op in('JMP','FORLOOP','FORPREP'):
+            w=o|(A<<6)|((B+131071)<<14)
+        else:
+            if op=='TFORLOOP': pass
+            w=o|(A<<6)|((C if isinstance(C,int) else 0)<<14)|((B if isinstance(B,int) else 0)<<23)
+        i32(w & 0xffffffff) if False else b.extend(struct.pack('<I',w))
+    i32(len(P.consts))
+    for c in P.consts:
+        if c is None: u8(0)
+        elif c is True or c is False: u8(1);u8(1 if c else 0)
+        elif isinstance(c,(int,float)): u8(3);b.extend(struct.pack('<d',float(c)))
+        elif isinstance(c,bytes): u8(4);string(c)
+        else: raise Exception('const %r'%(c,))
+    i32(len(P.kids))
+    for cid in P.kids: b.extend(child(cid))
+    i32(0)   # lineinfo (stripped)
+    lv=getattr(P,'locvars',[])
+    i32(len(lv))
+    for (reg,name,st,en) in lv:
+        string(('@%d:%s'%(reg,name)).encode())
+        i32(st);i32(en)
+    un=getattr(P,'upnames',None)
+    if un:
+        i32(len(un))
+        for nm in un: string(nm.encode())
+    else: i32(0)
+    return bytes(b)
+VARFLAG=2
+HEADER=b'\x1bLua\x51\x00\x01\x04\x08\x04\x08\x00'
