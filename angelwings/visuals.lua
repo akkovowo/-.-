@@ -1,4 +1,4 @@
--- angelwings: раздел visuals (декомпилировано, имена восстановлены эвристикой)
+-- angelwings: раздел visuals (декомпилировано; имена восстановлены эвристикой)
 -- Локальные (vNN, ...) объявлены в angelwings_full.lua выше по файлу
 
 -- ===== блок 48 =====
@@ -16,11 +16,12 @@ do
   local v36_3 = function(arg1, arg2, arg3)
     local v3 = {}
     local v4 = 1
-    local v5 = {}
-    ;({})[1] = arg1[1]
-    ;({})[2] = arg1[2]
-    ;({})[3] = arg1[3]
-    ;({})[4] = arg1[4]
+    local v5 = {
+      arg1[1],
+      arg1[2],
+      arg1[3],
+      arg1[4]
+    }
     for _FORV_9_ = 1, 4 do
       v3[v4] = tonumber(("%.0f"):format(v5[_FORV_9_] + arg3 * (arg2[_FORV_9_] - arg1[_FORV_9_])))
       v4 = v4 + 1
@@ -182,6 +183,7 @@ do
   local event_bus_3 = v20_4.get_event_bus()
   local v47_9 = function(arg1, arg2, arg3, arg4, arg5)
     if aimbot_logs.show_on_screen:get() then
+      local prod = aimbot_logs.duration:get() * 0.5
       local sum = #v43_6 + 1
       v43_6[sum] = {
         text = arg5,
@@ -191,7 +193,7 @@ do
           arg3,
           arg4
         },
-        time = aimbot_logs.duration:get() * 0.5,
+        time = prod,
         alpha = 0
       }
       return sum
@@ -199,7 +201,7 @@ do
     return
   end
   local v48_7 = function(arg1, arg2, arg3, arg4)
-    local color, color_2 = v27_6.color(arg4)
+    local color, color_2 = v27_8.color(arg4)
     for _FORV_9_ = 1, color_2 do
       local v10 = color[_FORV_9_]
       local v11 = v10[1]
@@ -243,8 +245,8 @@ do
     return arg1
   end
   local v52_9 = function(arg1, arg2)
-    return (arg1:gsub("\a(%x%x%x%x%x%x)(%x%x)", function(arg1, arg2)
-      return "\a" .. arg1 .. string.format("%02x", tonumber(arg2, 16) * arg2)
+    return (arg1:gsub("\a(%x%x%x%x%x%x)(%x%x)", function(arg1, arg2_)
+      return "\a" .. arg1 .. string.format("%02x", tonumber(arg2_, 16) * arg2)
     end))
   end
   local v53_9 = function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
@@ -279,7 +281,7 @@ do
             v19 = len - _FORV_17_
             v19 = v19 < 6
           end
-          v18.alpha = v32_5.interp(v18.alpha, v19, 0.075)
+          v18.alpha = v32_6.interp(v18.alpha, v19, 0.075)
         end
         if not v19 then
           if 0 >= v18.alpha then
@@ -345,38 +347,34 @@ do
       v14 = damage_2 - damage > 10
       local v15
       v15 = v13 ~= v12
-      local v16 = string.format("hit ${%s}'s ${%s} for ${%d} dmg", player_name, v12, damage)
       do
-        local v18 = {}
-        table.insert(v18, string.format("hit: ${%s}", player_name))
+        local v16 = string.format("hit ${%s}'s ${%s} for ${%d} dmg", player_name, v12, damage)
+        table.insert({}, string.format("hit: ${%s}", player_name))
         if not v15 then
-          table.insert(v18, string.format("hb: ${%s}", v12))
+          table.insert({}, string.format("hb: ${%s}", v12))
         else
-          table.insert(v18, string.format("hb: ${%s}/%s", v12, v13))
+          table.insert({}, string.format("hb: ${%s}/%s", v12, v13))
         end
         if not v14 then
-          table.insert(v18, string.format("dmg: ${%d}", damage))
+          table.insert({}, string.format("dmg: ${%d}", damage))
         else
-          table.insert(v18, string.format("dmg: ${%d}/%d", damage, damage_2))
+          table.insert({}, string.format("dmg: ${%d}/%d", damage, damage_2))
         end
-        table.insert(v18, string.format("bt: ${%d}", v1.history))
-        table.insert(v18, string.format("hc: ${%d%%}", hit_chance))
+        table.insert({}, string.format("bt: ${%d}", v1.history))
+        table.insert({}, string.format("hc: ${%d%%}", hit_chance))
         if v1.safe then
-          table.insert(v18, "sp: ${on}")
+          table.insert({}, "sp: ${on}")
         end
         if health <= 0 then
-          table.insert(v18, "rph: ${0} (dead)")
+          table.insert({}, "rph: ${0} (dead)")
         else
-          table.insert(v18, string.format("rph: ${%d}", health))
+          table.insert({}, string.format("rph: ${%d}", health))
         end
-        do
-          local v17 = table.concat(v18, "  ")
-          v16 = v49_7(v16, v13_2.to_hex(v3, v4, v5, v6), "c8c8c8ff")
-          local v17_2 = v49_7(v17, v13_2.to_hex(v3, v4, v5, v6), "c8c8c8ff")
-        end
+        local v16_2 = v49_7(v16, v13_2.to_hex(v3, v4, v5, v6), "c8c8c8ff")
       end
-      v47_9(v3, v4, v5, v6, v16)
-      v48_7(255, 255, 255, v17_2)
+      local v17 = v49_7(table.concat({}, "  "), v13_2.to_hex(v3, v4, v5, v6), "c8c8c8ff")
+      v47_9(v3, v4, v5, v6, v16_2)
+      v48_7(255, 255, 255, v17)
     end
     return
   end
@@ -399,45 +397,40 @@ do
     v11 = v11 or "?"
     do
       local v12 = string.format("missed ${%s}'s ${%s} due to ${%s}", player_name, v11, reason)
-      do
-        local v14 = {}
-        table.insert(v14, string.format("missed: ${%s}", player_name))
-        table.insert(v14, string.format("hb: ${%s}", v11))
-        table.insert(v14, string.format("due: ${%s}", reason))
-        table.insert(v14, string.format("dmg: ${%d}", damage))
-        table.insert(v14, string.format("bt: ${%d}", v1.history))
-        table.insert(v14, string.format("hc: ${%d%%}", hit_chance))
-        if v1.safe then
-          table.insert(v14, "sp: ${on}")
-        end
-        if v1.aim.teleported then
-          table.insert(v14, "${LC}")
-        end
-        if v1.aim.interpolated then
-          table.insert(v14, "${IN}")
-        end
-        if v1.aim.extrapolated then
-          table.insert(v14, "${EX}")
-        end
-        do
-          local v13 = table.concat(v14, "  ")
-          v12 = v49_7(v12, v13_2.to_hex(v3, v4, v5, v6), "c8c8c8ff")
-          local v13_3 = v49_7(v13, v13_2.to_hex(v3, v4, v5, v6), "c8c8c8ff")
-        end
+      table.insert({}, string.format("missed: ${%s}", player_name))
+      table.insert({}, string.format("hb: ${%s}", v11))
+      table.insert({}, string.format("due: ${%s}", reason))
+      table.insert({}, string.format("dmg: ${%d}", damage))
+      table.insert({}, string.format("bt: ${%d}", v1.history))
+      table.insert({}, string.format("hc: ${%d%%}", hit_chance))
+      if v1.safe then
+        table.insert({}, "sp: ${on}")
       end
-      v47_9(v3, v4, v5, v6, v12)
-      v48_7(200, 200, 200, v13_3)
+      if v1.aim.teleported then
+        table.insert({}, "${LC}")
+      end
+      if v1.aim.interpolated then
+        table.insert({}, "${IN}")
+      end
+      if v1.aim.extrapolated then
+        table.insert({}, "${EX}")
+      end
+      local v12_2 = v49_7(v12, v13_2.to_hex(v3, v4, v5, v6), "c8c8c8ff")
     end
+    local v13 = v49_7(table.concat({}, "  "), v13_2.to_hex(v3, v4, v5, v6), "c8c8c8ff")
+    v47_9(v3, v4, v5, v6, v12_2)
+    v48_7(200, 200, 200, v13)
     return
   end
   local v57_8 = function(arg1)
+    local v1 = plist.get(arg1.target, "Override safe point")
     local diff = globals.tickcount() - arg1.tick
     local id = arg1.id
     local v4 = {}
     v4.aim = arg1
     do
       local v5
-      v5 = plist.get(arg1.target, "Override safe point") == "On"
+      v5 = v1 == "On"
       v4.safe = v5
     end
     v4.history = diff
@@ -459,25 +452,19 @@ do
       local dmg_health = arg1.dmg_health
       do
         local v13 = string.format("%s ${%s} for ${%d} dmg", v5, player_name, dmg_health)
-        do
-          local v15 = {}
-          table.insert(v15, string.format("harmed: ${%s}", player_name))
-          table.insert(v15, string.format("dmg: ${%d}", dmg_health))
-          if health <= 0 then
-            table.insert(v15, "rph: ${0} (dead)")
-          else
-            table.insert(v15, string.format("rph: ${%d}", health))
-          end
-          table.insert(v15, string.format("wep: ${%s}", weapon))
-          do
-            local v14 = table.concat(v15, "  ")
-            v13 = v49_7(v13, v13_2.to_hex(v6, v7, v8, v9), "c8c8c8ff")
-            local v14_2 = v49_7(v14, v13_2.to_hex(v6, v7, v8, v9), "c8c8c8ff")
-          end
+        table.insert({}, string.format("harmed: ${%s}", player_name))
+        table.insert({}, string.format("dmg: ${%d}", dmg_health))
+        if health <= 0 then
+          table.insert({}, "rph: ${0} (dead)")
+        else
+          table.insert({}, string.format("rph: ${%d}", health))
         end
-        v47_9(v6, v7, v8, v9, v13)
-        v48_7(255, 255, 255, v14_2)
+        table.insert({}, string.format("wep: ${%s}", weapon))
+        local v13_3 = v49_7(v13, v13_2.to_hex(v6, v7, v8, v9), "c8c8c8ff")
       end
+      local v14 = v49_7(table.concat({}, "  "), v13_2.to_hex(v6, v7, v8, v9), "c8c8c8ff")
+      v47_9(v6, v7, v8, v9, v13_3)
+      v48_7(255, 255, 255, v14)
       return
     end
     return
@@ -532,57 +519,76 @@ end
 -- ===== блок 57 =====
 do
   local watermarks = v29_4.visuals.watermarks
+  local v40_9
   do
     local v41_9 = string.format("\a%%s%s\a%%s.pink", v12.name:lower())
-    do
-      local v42_9 = string.format("build: \a%%s%s", v12.build:lower())
-      do
-        local v43_9 = string.format("user: \a%%s%s", v12.user)
-        do
-          local v44_12 = panorama.open()
-          do
-            local v46_6 = images.get_steam_avatar((function()
-              local my_persona_api = v44_12.MyPersonaAPI
-              if my_persona_api == nil then
-                return 0
-              end
-              local get_xuid = my_persona_api.GetXuid
-              return get_xuid()
-            end)(), 34)
-            local v40_9 = function()
-              local v0_2, v1, v2 = watermarks.color_corner:get()
-              local to_hex = v13_2.to_hex(v0_2, v1, v2, watermarks.color_corner:get())
-              local vec = vector(vector(client.screen_size()).x, 0)
-              local v37_5_2 = v37_5("b")
-              local format = string.format(v41_9, to_hex, (v13_2.to_hex(255, 255, 255, 255)))
-              local v37_5_3 = v37_5("")
-              local format_2 = string.format(v42_9, to_hex)
-              local v37_5_4 = v37_5("")
-              local format_3 = string.format(v43_9, to_hex)
-              local vec_2 = vector(renderer.measure_text(v37_5_2, format))
-              local vec_3 = vector(renderer.measure_text(v37_5_3, format_2))
-              local vec_4 = vector(renderer.measure_text(v37_5_4, format_3))
-              local sum = vector(3, 3) * 2 + vector(math.max(vec_2.x, vec_3.x, vec_4.x) + 34 + 5, math.max(vec_2.y + vec_3.y + vec_4.y, 34))
-              local sum_2 = sum + vector(10, 0)
-              local sum_3 = vec + vector(-37, (sum.y - 34) / 2)
-              renderer.gradient(vec.x - sum_2.x, vec.y, sum_2.x, sum_2.y, v0_2, v1, v2, 0, v0_2, v1, v2, 220, true)
-              v46_6:draw(sum_3.x, sum_3.y, 34, 34, 255, 255, 255, 255, "f")
-              local sum_4 = vec + vector(-sum.x + 3, 3)
-              renderer.text(sum_4.x, sum_4.y, 255, 255, 255, 255, v37_5_2, nil, format)
-              sum_4.y = sum_4.y + vec_2.y
-              renderer.text(sum_4.x, sum_4.y, 255, 255, 255, 255, v37_5_3, nil, format_2)
-              sum_4.y = sum_4.y + vec_3.y
-              renderer.text(sum_4.x, sum_4.y, 255, 255, 255, 255, v37_5_4, nil, format_3)
-              sum_4.y = sum_4.y + vec_4.y
-              return
-            end
-          end
-        end
+    local v42_9 = string.format("build: \a%%s%s", v12.build:lower())
+    local v43_9 = string.format("user: \a%%s%s", v12.user)
+    local v44_12 = panorama.open()
+    local v46_6 = images.get_steam_avatar((function()
+      local my_persona_api = v44_12.MyPersonaAPI
+      if my_persona_api == nil then
+        return 0
       end
+      local get_xuid = my_persona_api.GetXuid
+      return get_xuid()
+    end)(), 34)
+    function v40_9()
+      local v0_2, v1, v2, v3 = watermarks.color_corner:get()
+      local to_hex = v13_2.to_hex(v0_2, v1, v2, v3)
+      local to_hex_2 = v13_2.to_hex(255, 255, 255, 255)
+      local vec = vector(vector(client.screen_size()).x, 0)
+      local v37_5_2 = v37_5("b")
+      local format = string.format(v41_9, to_hex, to_hex_2)
+      local v37_5_3 = v37_5("")
+      local format_2 = string.format(v42_9, to_hex)
+      local v37_5_4 = v37_5("")
+      local format_3 = string.format(v43_9, to_hex)
+      local vec_2 = vector(renderer.measure_text(v37_5_2, format))
+      local vec_3 = vector(renderer.measure_text(v37_5_3, format_2))
+      local vec_4 = vector(renderer.measure_text(v37_5_4, format_3))
+      local sum = vector(3, 3) * 2 + vector(math.max(vec_2.x, vec_3.x, vec_4.x) + 34 + 5, math.max(vec_2.y + vec_3.y + vec_4.y, 34))
+      local sum_2 = sum + vector(10, 0)
+      local sum_3 = vec + vector(-37, (sum.y - 34) / 2)
+      renderer.gradient(vec.x - sum_2.x, vec.y, sum_2.x, sum_2.y, v0_2, v1, v2, 0, v0_2, v1, v2, 220, true)
+      v46_6:draw(sum_3.x, sum_3.y, 34, 34, 255, 255, 255, 255, "f")
+      local sum_4 = vec + vector(-sum.x + 3, 3)
+      renderer.text(sum_4.x, sum_4.y, 255, 255, 255, 255, v37_5_2, nil, format)
+      sum_4.y = sum_4.y + vec_2.y
+      renderer.text(sum_4.x, sum_4.y, 255, 255, 255, 255, v37_5_3, nil, format_2)
+      sum_4.y = sum_4.y + vec_3.y
+      renderer.text(sum_4.x, sum_4.y, 255, 255, 255, 255, v37_5_4, nil, format_3)
+      sum_4.y = sum_4.y + vec_4.y
+      return
     end
   end
+  local v41_10
   do
     local v42_10 = string.format("%s\a%%s.PINK", v12.name:upper())
+    local v43_10 = string.format("USER - %s [\a%%s%s\a%%s]", string.upper(v12.user), string.upper(v12.build))
+    function v41_10()
+      local to_hex = v13_2.to_hex(watermarks.color_branded:get())
+      local to_hex_2 = v13_2.to_hex(255, 255, 255, 255)
+      local vec = vector(client.screen_size())
+      local v37_5_2 = v37_5("-")
+      local v8 = {
+        string.format(v42_10, to_hex),
+        string.format(v43_10, to_hex, to_hex_2)
+      }
+      local vec_2 = vector(8, vec.y / 2)
+      local vec_3 = vector(35, 35)
+      if v35_6.eva_small ~= nil then
+        renderer.texture(v35_6.eva_small, vec_2.x, vec_2.y, vec_3.x, vec_3.y, 255, 255, 255, 255, "f")
+        vec_2.x = vec_2.x + vec_3.x - 4
+        vec_2.y = vec_2.y + vec_3.y + 1
+      end
+      local vec_4 = vector(renderer.measure_text(v37_5_2, v8[1]))
+      vec_2.y = vec_2.y - (vector(renderer.measure_text(v37_5_2, v8[2])).y - 1)
+      renderer.text(vec_2.x, vec_2.y, 255, 255, 255, 255, v37_5_2, nil, v8[2])
+      vec_2.y = vec_2.y - (vec_4.y - 1)
+      renderer.text(vec_2.x, vec_2.y, 255, 255, 255, 255, v37_5_2, nil, v8[1])
+      return
+    end
   end
   local v42_11 = function(arg1)
     v13_2.event_callback("paint_ui", v40_9, arg1:get("corner"))
@@ -605,625 +611,603 @@ end
 do
   local indicators = v29_4.visuals.indicators
   local v40_10 = 0
+  local v41_11
   do
-    local v42_12 = {}
-    ;({})[1] = {
-      "\226\156\166",
-      0,
-      12,
-      0.5
+    local v42_12 = {
+      {
+        "\226\156\166",
+        0,
+        12,
+        0.5
+      },
+      {
+        "\226\139\134",
+        -6,
+        3,
+        0.2
+      },
+      {
+        "\226\152\133",
+        -1,
+        8,
+        0.4
+      },
+      {
+        "\226\156\168",
+        -1,
+        6,
+        0.7
+      },
+      {
+        "\226\139\134",
+        -3,
+        4,
+        0.3
+      },
+      {
+        "\226\152\133",
+        -1,
+        7,
+        0.6
+      },
+      {
+        "\226\139\134",
+        -2,
+        5,
+        0.2
+      },
+      {
+        "\226\156\168",
+        0,
+        8,
+        0.7
+      }
     }
-    ;({})[2] = {
-      "\226\139\134",
-      -6,
-      3,
-      0.2
-    }
-    ;({})[3] = {
-      "\226\152\133",
-      -1,
-      8,
-      0.4
-    }
-    ;({})[4] = {
-      "\226\156\168",
-      -1,
-      6,
-      0.7
-    }
-    ;({})[5] = {
-      "\226\139\134",
-      -3,
-      4,
-      0.3
-    }
-    ;({})[6] = {
-      "\226\152\133",
-      -1,
-      7,
-      0.6
-    }
-    ;({})[7] = {
-      "\226\139\134",
-      -2,
-      5,
-      0.2
-    }
-    ;({})[8] = {
-      "\226\156\168",
-      0,
-      8,
-      0.7
-    }
-    do
-      local v43_11 = 0
-      local v44_13 = 0
-      local v45_12 = 0
-      local v46_7 = 0
-      local v47_11 = 0
-      local v48_10 = function()
-        if v23_5.is_onground then
-          if not v23_5.is_crouched then
-            if not v23_5.is_moving then
-              return "stand"
-            end
-            if not v14_2.is_slow_motion() then
-              return "run"
-            end
-            return "walk"
-          end
-          if not v23_5.is_moving then
-            return "crouch"
-          end
-          return "sneak"
-        end
+    local v43_11 = 0
+    local v44_13 = 0
+    local v45_12 = 0
+    local v46_7 = 0
+    local v47_11 = 0
+    local v48_10 = function()
+      if v23_5.is_onground then
         if not v23_5.is_crouched then
-          return "air"
-        end
-        return "airc"
-      end
-      local v49_12 = function(arg1, arg2, arg3, arg4, arg5)
-        local realtime = globals.realtime()
-        do
-          local v36_5_2 = v36_5()
-          if v36_5_2 then
-            v36_5_2 = v14_2
-            v36_5_2 = v36_5_2.get_dpi
-            v36_5_2 = v36_5_2()
+          if not v23_5.is_moving then
+            return "stand"
           end
-          v36_5_2 = v36_5_2 or 1
-          do
-            local x = arg1.x
-            do
-              local y = arg1.y
-              local v9 = {}
-              do
-                local len = #v42_12
-                local v11 = 0
-                local v12 = 0
-                for _FORV_16_ = 1, len do
-                  local v17 = v42_12[_FORV_16_]
-                  local vec = vector(renderer.measure_text("", v17[1]))
-                  v11 = v11 + (vec.x + v17[2]) * v36_5_2
-                  v12 = math.max(v12, vec.y + v17[3])
-                  v9[_FORV_16_] = vec
-                end
-                local v7 = math.round(x - v11 * 0.5 * (1 - v44_13))
-              end
-              for _FORV_16_ = 1, len do
-                local v17_2 = v42_12[_FORV_16_]
-                local v18 = v9[_FORV_16_]
-                local v20 = v17_2[2]
-                renderer.text(v7 + v20, y + v17_2[3], arg2, arg3, arg4, arg5 * ((math.sin(realtime * v17_2[4]) * 0.5 + 0.5) * 0.7 + 0.3), v37_5(""), nil, v17_2[1])
-                v7 = v7 + (v18.x + v20) * v36_5_2
-              end
-            end
+          if not v14_2.is_slow_motion() then
+            return "run"
           end
-          arg1.y = arg1.y + v12 * 0.58 * v36_5_2
+          return "walk"
         end
-        return
-      end
-      local v50_13 = function(arg1, arg2, arg3, arg4, arg5, arg6)
-        local v48_10_2 = v48_10()
-        local v37_5_2 = v37_5("")
-        local vec = vector(renderer.measure_text(v37_5_2, v48_10_2))
-        local y = arg1.y
-        renderer.text(math.round(arg1.x - vec.x * 0.5 * (1 - v44_13)), y, arg2, arg3, arg4, arg5 * arg6, v37_5_2, nil, v48_10_2)
-        arg1.y = arg1.y + math.round(vec.y)
-        return
-      end
-      local v51_16 = function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
-        do
-          local name = v12.name
-          local v37_5_2 = v37_5("b")
-          local vec = vector(renderer.measure_text(v37_5_2, name))
-          name = v26_6.gradient(name, -globals.realtime() * 1.25, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
-          local y = arg1.y
-          renderer.text(math.round(arg1.x - vec.x * 0.5 * (1 - v44_13)), y, arg2, arg3, arg4, arg5, v37_5_2, nil, name)
-          arg1.y = arg1.y + vec.y
+        if not v23_5.is_moving then
+          return "crouch"
         end
-        return
+        return "sneak"
       end
-      local v52_15 = function(arg1, arg2, arg3, arg4, arg5, arg6)
-        local v37_5_2 = v37_5("")
-        local vec = vector(renderer.measure_text(v37_5_2, "dt"))
-        do
-          local y = arg1.y
-          local v8 = math.round(arg1.x - vec.x * 0.5 * (1 - v44_13))
-          if v14_2.is_duck_peek_assist() then
-            arg5 = 255
-            arg4 = 50
-            arg3 = 0
-            arg2 = 255
-          end
-          renderer.text(v8, y, arg2, arg3, arg4, arg5 * arg6, v37_5_2, nil, "dt")
-        end
-        arg1.y = arg1.y + math.round(vec.y * arg6)
-        return
+      if not v23_5.is_crouched then
+        return "air"
       end
-      local v53_17 = function(arg1, arg2, arg3, arg4, arg5, arg6)
-        local v37_5_2 = v37_5("")
-        local vec = vector(renderer.measure_text(v37_5_2, "dmg"))
-        local y = arg1.y
-        renderer.text(math.round(arg1.x - vec.x * 0.5 * (1 - v44_13)), y, arg2, arg3, arg4, arg5 * arg6, v37_5_2, nil, "dmg")
-        arg1.y = arg1.y + math.round(vec.y * arg6)
-        return
-      end
-      local v54_13 = function(arg1, arg2, arg3, arg4, arg5, arg6)
-        local v37_5_2 = v37_5("")
-        local vec = vector(renderer.measure_text(v37_5_2, "osaa"))
-        local y = arg1.y
-        renderer.text(math.round(arg1.x - vec.x * 0.5 * (1 - v44_13)), y, arg2, arg3, arg4, arg5 * arg6, v37_5_2, nil, "osaa")
-        arg1.y = arg1.y + math.round(vec.y * arg6)
-        return
-      end
+      return "airc"
+    end
+    local v49_12 = function(arg1, arg2, arg3, arg4, arg5)
+      local realtime = globals.realtime()
       do
-        local v55_15 = function(arg1)
-          local is_scoped = entity.get_prop(arg1, "m_bIsScoped")
-          local is_double_tap_active = v14_2.is_double_tap_active()
-          local is_override_minimum_damage = v14_2.is_override_minimum_damage()
-          local is_on_shot_antiaim_active = v14_2.is_on_shot_antiaim_active()
-          v43_11 = v32_5.interp(v43_11, entity.is_alive(arg1), 0.05)
-          do
-            local interp = v32_5.interp
-            local v44_13_2 = v44_13
-            local v8 = entity.is_alive(arg1)
-            v8 = is_scoped == 1
-            interp = interp(v44_13_2, v8, 0.05)
-            v44_13 = interp
-          end
-          v45_12 = v32_5.interp(v45_12, is_double_tap_active, 0.05)
-          v46_7 = v32_5.interp(v46_7, is_override_minimum_damage, 0.05)
-          v47_11 = v32_5.interp(v47_11, is_on_shot_antiaim_active, 0.05)
-          return
+        local v36_5_2 = v36_5()
+        if v36_5_2 then
+          v36_5_2 = v14_2
+          v36_5_2 = v36_5_2.get_dpi
+          v36_5_2 = v36_5_2()
         end
+        v36_5_2 = v36_5_2 or 1
         do
-          local v56_14 = function()
-            local prod = vector(client.screen_size()) * 0.5
-            do
-              local v2, v3, v4, v5 = indicators.color_accent:get()
-              do
-                do
-                  local v6, v7, v8, v9 = indicators.color_secondary:get()
-                  prod.x = prod.x + math.round(10 * v44_13)
-                  prod.y = prod.y + v40_10
-                  local prod_2 = v5 * v43_11
-                  local prod_3 = v9 * v43_11
-                end
-                v49_12(prod, v2, v3, v4, prod_2)
-                v51_16(prod, v2, v3, v4, prod_2, v6, v7, v8, prod_3)
-              end
-            end
-            v50_13(prod, 255, 255, 255, 200, v43_11)
-            v52_15(prod, 255, 255, 255, 200, v45_12 * v43_11)
-            v53_17(prod, 255, 255, 255, 200, v46_7 * v43_11)
-            v54_13(prod, 255, 255, 255, 200 * (1 - v45_12 * 0.5), v47_11 * v43_11)
-            return
+          local x = arg1.x
+          for _FORV_16_ = 1, #v42_12 do
+            local v17 = v42_12[_FORV_16_]
+            local vec = vector(renderer.measure_text("", v17[1]))
+            ;({})[_FORV_16_] = vec
           end
-          local v41_11 = function()
-            local me = entity.get_local_player()
-            if me == nil then
-              return
-            end
-            v55_15(me)
-            if v43_11 > 0 then
-              v56_14()
-            end
-            return
-          end
+          local v7 = math.round(x - (0 + (vec.x + v17[2]) * v36_5_2) * 0.5 * (1 - v44_13))
         end
+        for _FORV_16_ = 1, #v42_12 do
+          local v17_2 = v42_12[_FORV_16_]
+          local v18 = ({})[_FORV_16_]
+          local v19 = v17_2[1]
+          local v20 = v17_2[2]
+          renderer.text(v7 + v20, arg1.y + v17_2[3], arg2, arg3, arg4, arg5 * ((math.sin(realtime * v17_2[4]) * 0.5 + 0.5) * 0.7 + 0.3), v37_5(""), nil, v19)
+          v7 = v7 + (v18.x + v20) * v36_5_2
+        end
+        arg1.y = arg1.y + math.max(0, vec.y + v17[3]) * 0.58 * v36_5_2
       end
+      return
+    end
+    local v50_13 = function(arg1, arg2, arg3, arg4, arg5, arg6)
+      local v48_10_2 = v48_10()
+      local v37_5_2 = v37_5("")
+      local vec = vector(renderer.measure_text(v37_5_2, v48_10_2))
+      do
+        local x = arg1.x
+        local y = arg1.y
+        x = math.round(x - vec.x * 0.5 * (1 - v44_13))
+        renderer.text(x, y, arg2, arg3, arg4, arg5 * arg6, v37_5_2, nil, v48_10_2)
+      end
+      arg1.y = arg1.y + math.round(vec.y)
+      return
+    end
+    local v51_16 = function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
+      do
+        local name = v12.name
+        local v37_5_2 = v37_5("b")
+        local vec = vector(renderer.measure_text(v37_5_2, name))
+        name = v26_6.gradient(name, -globals.realtime() * 1.25, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
+        do
+          local x = arg1.x
+          local y = arg1.y
+          x = math.round(x - vec.x * 0.5 * (1 - v44_13))
+          renderer.text(x, y, arg2, arg3, arg4, arg5, v37_5_2, nil, name)
+        end
+        arg1.y = arg1.y + vec.y
+      end
+      return
+    end
+    local v52_15 = function(arg1, arg2, arg3, arg4, arg5, arg6)
+      local v37_5_2 = v37_5("")
+      local vec = vector(renderer.measure_text(v37_5_2, "dt"))
+      do
+        local x = arg1.x
+        local v8 = math.round(x - vec.x * 0.5 * (1 - v44_13))
+      end
+      if v14_2.is_duck_peek_assist() then
+        arg5 = 255
+        arg4 = 50
+        arg3 = 0
+        arg2 = 255
+      end
+      renderer.text(v8, arg1.y, arg2, arg3, arg4, arg5 * arg6, v37_5_2, nil, "dt")
+      arg1.y = arg1.y + math.round(vec.y * arg6)
+      return
+    end
+    local v53_17 = function(arg1, arg2, arg3, arg4, arg5, arg6)
+      local v37_5_2 = v37_5("")
+      local vec = vector(renderer.measure_text(v37_5_2, "dmg"))
+      do
+        local x = arg1.x
+        local y = arg1.y
+        x = math.round(x - vec.x * 0.5 * (1 - v44_13))
+        renderer.text(x, y, arg2, arg3, arg4, arg5 * arg6, v37_5_2, nil, "dmg")
+      end
+      arg1.y = arg1.y + math.round(vec.y * arg6)
+      return
+    end
+    local v54_14 = function(arg1, arg2, arg3, arg4, arg5, arg6)
+      local v37_5_2 = v37_5("")
+      local vec = vector(renderer.measure_text(v37_5_2, "osaa"))
+      do
+        local x = arg1.x
+        local y = arg1.y
+        x = math.round(x - vec.x * 0.5 * (1 - v44_13))
+        renderer.text(x, y, arg2, arg3, arg4, arg5 * arg6, v37_5_2, nil, "osaa")
+      end
+      arg1.y = arg1.y + math.round(vec.y * arg6)
+      return
+    end
+    local v55_15 = function(arg1)
+      local is_alive = entity.is_alive(arg1)
+      local is_scoped = entity.get_prop(arg1, "m_bIsScoped")
+      local is_double_tap_active = v14_2.is_double_tap_active()
+      local is_override_minimum_damage = v14_2.is_override_minimum_damage()
+      local is_on_shot_antiaim_active = v14_2.is_on_shot_antiaim_active()
+      v43_11 = v32_6.interp(v43_11, is_alive, 0.05)
+      do
+        local interp = v32_6.interp
+        local v44_13_2 = v44_13
+        local v8 = is_alive
+        v8 = is_scoped == 1
+        interp = interp(v44_13_2, v8, 0.05)
+        v44_13 = interp
+      end
+      v45_12 = v32_6.interp(v45_12, is_double_tap_active, 0.05)
+      v46_7 = v32_6.interp(v46_7, is_override_minimum_damage, 0.05)
+      v47_11 = v32_6.interp(v47_11, is_on_shot_antiaim_active, 0.05)
+      return
+    end
+    local v56_14 = function()
+      local prod = vector(client.screen_size()) * 0.5
+      do
+        local v2, v3, v4, v5 = indicators.color_accent:get()
+        prod.x = prod.x + math.round(10 * v44_13)
+        prod.y = prod.y + v40_10
+        local prod_2 = v5 * v43_11
+        local prod_3 = indicators.color_secondary:get() * v43_11
+        v49_12(prod, v2, v3, v4, prod_2)
+        v51_16(prod, v2, v3, v4, prod_2, indicators.color_secondary:get())
+      end
+      v50_13(prod, 255, 255, 255, 200, v43_11)
+      v52_15(prod, 255, 255, 255, 200, v45_12 * v43_11)
+      v53_17(prod, 255, 255, 255, 200, v46_7 * v43_11)
+      v54_14(prod, 255, 255, 255, 200 * (1 - v45_12 * 0.5), v47_11 * v43_11)
+      return
+    end
+    function v41_11()
+      local me = entity.get_local_player()
+      if me == nil then
+        return
+      end
+      v55_15(me)
+      if v43_11 > 0 then
+        v56_14()
+      end
+      return
     end
   end
+  local v42_13
   do
     local v43_12 = ""
-    do
-      local v44_14 = 0
-      local v45_13 = 0
-      local v46_8 = 0
-      local v47_12 = 0
-      local v48_11 = 0
-      local v49_13 = 0
-      local v50_14 = 0
-      local v51_17 = function(arg1)
-        local player_weapon = entity.get_player_weapon(arg1)
-        if player_weapon == nil then
-          return false
-        end
-        local csgo_weapons_2 = csgo_weapons(player_weapon)
-        if csgo_weapons_2 == nil then
-          return false
-        end
-        if csgo_weapons_2.type ~= "grenade" then
-          return false
-        end
-        return true
-      end
-      local v52_16 = function(arg1, arg2)
-        local lerp = v13_2.lerp
-        return lerp(arg1, arg2, (math.abs(math.sin(globals.realtime() * 3))))
-      end
-      local v53_18 = function()
-        if v23_5.is_onground then
-          if not v23_5.is_crouched then
-            if not v23_5.is_moving then
-              return "-STANDING-"
-            end
-            if not v14_2.is_slow_motion() then
-              return "-MOVING-"
-            end
-            return "-WALKING-"
-          end
-          return "-CROUCH-"
-        end
-        return "-AIR-"
-      end
-      local v54_14 = function()
-        if not v14_2.is_double_tap_active() then
-          if v14_2.is_on_shot_antiaim_active() then
-            v43_12 = "HIDE"
-          end
-        else
-          v43_12 = "DT"
-        end
-        return v43_12
-      end
-      local v55_16 = function(arg1, arg2)
-        return (arg1:gsub("\a(%x%x%x%x%x%x)(%x%x)", function(arg1, arg2)
-          return "\a" .. arg1 .. string.format("%02x", tonumber(arg2, 16) * arg2)
-        end))
-      end
-      local v56_15 = function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
-        local v37_5_2 = v37_5("-")
-        local vec = vector(renderer.measure_text(v37_5_2, "ANGELIC"))
-        local vec_2 = vector(renderer.measure_text(v37_5_2, "YAW"))
-        local max = math.max(vec.y, vec_2.y)
-        do
-          local v16 = arg1:unpack()
-          local v15 = math.round(arg1:unpack() - (2 + (vec.x + vec_2.x + 1) * 0.5) * (1 - v45_13))
-          local v52_16_2 = v52_16(0.25, 1)
-          renderer.text(v15, v16, arg6, arg7, arg8, arg9 * arg10, v37_5_2, nil, "ANGELIC")
-          v15 = v15 + vec.x + 1
-          renderer.text(v15, v16, arg2, arg3, arg4, arg5 * arg10 * v52_16_2, v37_5_2, nil, "YAW")
-        end
-        arg1.y = arg1.y + max
-        return
-      end
-      local v57_13 = function(arg1, arg2, arg3, arg4, arg5, arg6)
-        local v53_18_2 = v53_18()
-        local v37_5_2 = v37_5("-")
-        local vec = vector(renderer.measure_text(v37_5_2, v53_18_2))
-        vec.x = vec.x + 1
-        if vec.x < v46_8 then
-          v46_8 = vec.x
-        else
-          v46_8 = v32_5.interp(v46_8, vec.x, 0.034)
-        end
-        local v10 = arg1:unpack()
-        renderer.text(math.round(arg1:unpack() - (2 + v46_8 * 0.5) * (1 - v45_13)), v10, arg2, arg3, arg4, arg5 * arg6, v37_5_2, math.round(v46_8), v53_18_2)
-        arg1.y = arg1.y + vec.y
-        return
-      end
-      local v58_14 = function(arg1, arg2, arg3)
-        local defensive = v24_5.get().defensive
-        do
-          local v54_14_2 = v54_14()
-          do
-            local v37_5_2 = v37_5("-")
-            local active, v8, v9, v10, v11 = "IDLE", 255, 255, 255, 200
-            if v50_14 == 1 then
-              if defensive.left > 0 then
-                active = "ACTIVE"
-                v11 = 255
-                v10 = 255
-                v9 = 255
-                v8 = 120
-              else
-                active = "READY"
-                v11 = 255
-                v10 = 109
-                v9 = 255
-                v8 = 192
-              end
-            elseif v50_14 == 0 then
-              active = "WAITING"
-              v11 = 128
-              v10 = 64
-              v9 = 64
-              v8 = 255
-            else
-              active = "CHARGING"
-              v8 = v13_2.lerp(255, 192, v50_14)
-              v9 = v13_2.lerp(64, 255, v50_14)
-              v10 = v13_2.lerp(64, 145, v50_14)
-              v11 = 255
-            end
-            local v5 = string.format("\a%s%s \a%s%s", v13_2.to_hex(255, 255, 255, v11), v54_14_2, v13_2.to_hex(v8, v9, v10, v11), active)
-            local v55_16_2 = v55_16(v5, arg3 * arg2)
-            local v55_16_3 = v55_16(v55_16_2, 0.5 * arg2)
-            local vec = vector(renderer.measure_text(v37_5_2, v5))
-            vec.x = vec.x + 1
-            local round = math.round(vec.x * arg2)
-            local round_2 = math.round(vec.y * arg2)
-            local round_3 = math.round(round * v50_14)
-            do
-              local v19 = arg1:unpack()
-              local v18 = math.round(arg1:unpack() - (1 + round * 0.5) * (1 - v45_13))
-              if round_3 ~= 0 then
-                renderer.text(v18, v19, v8, v9, v10, v11 * arg2 * arg3, v37_5_2, round_3, v55_16_2)
-              end
-              if round ~= 0 then
-                renderer.text(v18, v19, v8, v9, v10, v11 * arg2 * arg3, v37_5_2, round, v55_16_3)
-              end
-            end
-            arg1.y = arg1.y + round_2
-          end
-        end
-        return
-      end
-      local v59_12 = function(arg1, arg2, arg3)
-        local v37_5_2 = v37_5("-")
-        local vec = vector(renderer.measure_text(v37_5_2, "DMG"))
-        vec.x = vec.x + 1
-        local round = math.round(vec.x * arg2)
-        local round_2 = math.round(vec.y * arg2)
-        if round == 0 then
-          return
-        end
-        local v8 = arg1:unpack()
-        renderer.text(math.round(arg1:unpack() - (2 + round * 0.5) * (1 - v45_13)), v8, 255, 255, 255, 255 * arg2 * arg3, v37_5_2, round, "DMG")
-        arg1.y = arg1.y + round_2
-        return
-      end
-      do
-        local v60_11 = function(arg1)
-          local v1 = v24_5.get()
-          local is_scoped = entity.get_prop(arg1, "m_bIsScoped")
-          local v51_17_2 = v51_17(arg1)
-          local is_double_tap_active = v14_2.is_double_tap_active()
-          local is_override_minimum_damage = v14_2.is_override_minimum_damage()
-          local is_on_shot_antiaim_active = v14_2.is_on_shot_antiaim_active()
-          local v8 = 0
-          if entity.is_alive(arg1) then
-            local v9 = v51_17_2
-            v9 = v9 and 0.5
-            v9 = v9 or 1
-            v8 = v9
-          end
-          v44_14 = v32_5.interp(v44_14, v8, 0.05)
-          do
-            local interp = v32_5.interp
-            local v45_13_2 = v45_13
-            local v11 = v8
-            v11 = is_scoped == 1
-            interp = interp(v45_13_2, v11, 0.05)
-            v45_13 = interp
-          end
-          v47_12 = v32_5.interp(v47_12, is_double_tap_active, 0.03)
-          v48_11 = v32_5.interp(v48_11, is_override_minimum_damage, 0.03)
-          v49_13 = v32_5.interp(v49_13, is_on_shot_antiaim_active, 0.03)
-          v50_14 = v32_5.interp(v50_14, v1.shift, 0.03)
-          if not v1.shift then
-            v50_14 = 0
-          end
-          return
-        end
-        do
-          local v61_8 = function()
-            local prod = vector(client.screen_size()) * 0.5
-            local v2, v3, v4, v5 = indicators.color_accent:get()
-            local v6, v7, v8, v9 = indicators.color_secondary:get()
-            prod.x = prod.x + math.round(10 * v45_13)
-            prod.y = prod.y + v40_10
-            v56_15(prod, v2, v3, v4, v5, v6, v7, v8, v9, v44_14)
-            v57_13(prod, 255, 255, 255, 255, v44_14)
-            v58_14(prod, math.max(v47_12, v49_13), v44_14)
-            v59_12(prod, v48_11, v44_14)
-            return
-          end
-          local v42_13 = function()
-            local me = entity.get_local_player()
-            if me == nil then
-              return
-            end
-            v60_11(me)
-            if v44_14 > 0 then
-              v61_8()
-            end
-            return
-          end
-        end
-      end
-    end
-  end
-  do
-    local v44_15 = 0
-    do
-      local v45_14 = 0
-      local v46_9 = 0
-      local v47_13 = 0
-      local v48_12 = false
-      local v49_14 = false
-      local v50_15 = function(arg1)
-        if arg1 == nil then
-          return false
-        end
-        if v38_4.manual_yaw:get() == nil then
-          return true
-        end
+    local v44_14 = 0
+    local v45_13 = 0
+    local v46_8 = 0
+    local v47_12 = 0
+    local v48_11 = 0
+    local v49_13 = 0
+    local v50_14 = 0
+    local v51_17 = function(arg1)
+      local player_weapon = entity.get_player_weapon(arg1)
+      if player_weapon == nil then
         return false
       end
+      local csgo_weapons_2 = csgo_weapons(player_weapon)
+      if csgo_weapons_2 == nil then
+        return false
+      end
+      if csgo_weapons_2.type ~= "grenade" then
+        return false
+      end
+      return true
+    end
+    local v52_16 = function(arg1, arg2)
+      local abs = math.abs(math.sin(globals.realtime() * 3))
+      local lerp = v13_2.lerp
+      return lerp(arg1, arg2, abs)
+    end
+    local v53_18 = function()
+      if v23_5.is_onground then
+        if not v23_5.is_crouched then
+          if not v23_5.is_moving then
+            return "-STANDING-"
+          end
+          if not v14_2.is_slow_motion() then
+            return "-MOVING-"
+          end
+          return "-WALKING-"
+        end
+        return "-CROUCH-"
+      end
+      return "-AIR-"
+    end
+    local v54_15 = function()
+      if not v14_2.is_double_tap_active() then
+        if v14_2.is_on_shot_antiaim_active() then
+          v43_12 = "HIDE"
+        end
+      else
+        v43_12 = "DT"
+      end
+      return v43_12
+    end
+    local v55_16 = function(arg1, arg2)
+      return (arg1:gsub("\a(%x%x%x%x%x%x)(%x%x)", function(arg1, arg2_)
+        return "\a" .. arg1 .. string.format("%02x", tonumber(arg2_, 16) * arg2)
+      end))
+    end
+    local v56_15 = function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
+      local v37_5_2 = v37_5("-")
+      local vec = vector(renderer.measure_text(v37_5_2, "ANGELIC"))
+      local vec_2 = vector(renderer.measure_text(v37_5_2, "YAW"))
+      local sum = vec.x + vec_2.x + 1
+      local max = math.max(vec.y, vec_2.y)
       do
-        local v51_18 = function(arg1)
-          local v1 = v24_5.get()
-          local is_double_tap_active = v14_2.is_double_tap_active()
-          local is_on_shot_antiaim_active = v14_2.is_on_shot_antiaim_active()
-          local v5 = 0
-          if entity.is_alive(arg1) then
-            v5 = 1
+        local v15 = arg1:unpack()
+        local v15_2 = math.round(v15 - (2 + sum * 0.5) * (1 - v45_13))
+        local v52_16_2 = v52_16(0.25, 1)
+        renderer.text(v15_2, arg1:unpack())
+        v15_2 = v15_2 + vec.x + 1
+        renderer.text(v15_2, arg1:unpack())
+      end
+      arg1.y = arg1.y + max
+      return
+    end
+    local v57_13 = function(arg1, arg2, arg3, arg4, arg5, arg6)
+      local v53_18_2 = v53_18()
+      local v37_5_2 = v37_5("-")
+      local vec = vector(renderer.measure_text(v37_5_2, v53_18_2))
+      vec.x = vec.x + 1
+      if vec.x < v46_8 then
+        v46_8 = vec.x
+      else
+        v46_8 = v32_6.interp(v46_8, vec.x, 0.034)
+      end
+      local v9, v10 = arg1:unpack()
+      v9 = math.round(v9 - (2 + v46_8 * 0.5) * (1 - v45_13))
+      renderer.text(v9, v10, arg2, arg3, arg4, arg5 * arg6, v37_5_2, math.round(v46_8), v53_18_2)
+      arg1.y = arg1.y + vec.y
+      return
+    end
+    local v58_14 = function(arg1, arg2, arg3)
+      local defensive = v24_5.get().defensive
+      do
+        local v54_15_2 = v54_15()
+        if v50_14 == 1 then
+          if defensive.left > 0 then
+          else
           end
-          v48_12 = v50_15(arg1)
-          v49_14 = v14_2.is_duck_peek_assist()
-          v44_15 = v32_5.interp(v44_15, v5, 0.05)
-          v45_14 = v32_5.interp(v45_14, v1.shift, 0.03)
-          v46_9 = v32_5.interp(v46_9, is_on_shot_antiaim_active, 0.03)
-          v47_13 = v32_5.interp(v47_13, is_double_tap_active, 0.03)
-          if not v1.shift then
-            v45_14 = 0
-          end
-          return
+        elseif v50_14 == 0 then
+        else
         end
-        local v52_17 = function(arg1, arg2)
-          local v48_12_2 = v48_12
-          v48_12_2 = v48_12_2 and "\227\129\166\227\130\147\227\129\151\227\129\174\227\130\136\227\129\134\227\129\170 YAW"
-          v48_12_2 = v48_12_2 or "\227\131\170\227\130\187\227\131\131\227\131\136 YAW"
-          local v37_5_2 = v37_5("")
-          local vec = vector(renderer.measure_text(v37_5_2, v48_12_2))
-          math.round(vec.x)
-          local round = math.round(vec.y)
-          local v6 = {}
-          ;({})[1] = 218
-          ;({})[2] = 118
+        local v5 = string.format("\a%s%s \a%s%s", v13_2.to_hex(255, 255, 255, 255), v54_15_2, v13_2.to_hex(v13_2.lerp(255, 192, v50_14), v13_2.lerp(64, 255, v50_14), v13_2.lerp(64, 145, v50_14), 255), "CHARGING")
+      end
+      local v55_16_2 = v55_16(v5, arg3 * arg2)
+      local v55_16_3 = v55_16(v55_16_2, 0.5 * arg2)
+      local vec = vector(renderer.measure_text(v37_5("-"), v5))
+      vec.x = vec.x + 1
+      local round = math.round(vec.x * arg2)
+      local round_2 = math.round(vec.y * arg2)
+      local round_3 = math.round(round * v50_14)
+      do
+        local v18 = arg1:unpack()
+        local v18_2 = math.round(v18 - (1 + round * 0.5) * (1 - v45_13))
+        if round_3 ~= 0 then
+          renderer.text(v18_2, arg1:unpack())
+        end
+        if round ~= 0 then
+          renderer.text(v18_2, arg1:unpack())
+        end
+      end
+      arg1.y = arg1.y + round_2
+      return
+    end
+    local v59_12 = function(arg1, arg2, arg3)
+      local v37_5_2 = v37_5("-")
+      local vec = vector(renderer.measure_text(v37_5_2, "DMG"))
+      vec.x = vec.x + 1
+      local round = math.round(vec.x * arg2)
+      local round_2 = math.round(vec.y * arg2)
+      if round == 0 then
+        return
+      end
+      local v7, v8 = arg1:unpack()
+      v7 = math.round(v7 - (2 + round * 0.5) * (1 - v45_13))
+      renderer.text(v7, v8, 255, 255, 255, 255 * arg2 * arg3, v37_5_2, round, "DMG")
+      arg1.y = arg1.y + round_2
+      return
+    end
+    local v60_11 = function(arg1)
+      local v1 = v24_5.get()
+      local is_alive = entity.is_alive(arg1)
+      local is_scoped = entity.get_prop(arg1, "m_bIsScoped")
+      local v51_17_2 = v51_17(arg1)
+      local is_double_tap_active = v14_2.is_double_tap_active()
+      local is_override_minimum_damage = v14_2.is_override_minimum_damage()
+      local is_on_shot_antiaim_active = v14_2.is_on_shot_antiaim_active()
+      local v8 = 0
+      if is_alive then
+        local v9 = v51_17_2
+        v9 = v9 and 0.5
+        v9 = v9 or 1
+        v8 = v9
+      end
+      v44_14 = v32_6.interp(v44_14, v8, 0.05)
+      do
+        local interp = v32_6.interp
+        local v45_13_2 = v45_13
+        local v11 = v8
+        v11 = is_scoped == 1
+        interp = interp(v45_13_2, v11, 0.05)
+        v45_13 = interp
+      end
+      v47_12 = v32_6.interp(v47_12, is_double_tap_active, 0.03)
+      v48_11 = v32_6.interp(v48_11, is_override_minimum_damage, 0.03)
+      v49_13 = v32_6.interp(v49_13, is_on_shot_antiaim_active, 0.03)
+      v50_14 = v32_6.interp(v50_14, v1.shift, 0.03)
+      if not v1.shift then
+        v50_14 = 0
+      end
+      return
+    end
+    local v61_8 = function()
+      local prod = vector(client.screen_size()) * 0.5
+      local v2, v3, v4, v5 = indicators.color_accent:get()
+      local v6, v7, v8, v9 = indicators.color_secondary:get()
+      prod.x = prod.x + math.round(10 * v45_13)
+      prod.y = prod.y + v40_10
+      v56_15(prod, v2, v3, v4, v5, v6, v7, v8, v9, v44_14)
+      v57_13(prod, 255, 255, 255, 255, v44_14)
+      v58_14(prod, math.max(v47_12, v49_13), v44_14)
+      v59_12(prod, v48_11, v44_14)
+      return
+    end
+    function v42_13()
+      local me = entity.get_local_player()
+      if me == nil then
+        return
+      end
+      v60_11(me)
+      if v44_14 > 0 then
+        v61_8()
+      end
+      return
+    end
+  end
+  local v43_13
+  do
+    local v44_15 = 0
+    local v45_14 = 0
+    local v46_9 = 0
+    local v47_13 = 0
+    local v48_12 = false
+    local v49_14 = false
+    local v50_15 = function(arg1)
+      if arg1 == nil then
+        return false
+      end
+      if v38_4.manual_yaw:get() == nil then
+        return true
+      end
+      return false
+    end
+    local v51_18 = function(arg1)
+      local v1 = v24_5.get()
+      local is_alive = entity.is_alive(arg1)
+      local is_double_tap_active = v14_2.is_double_tap_active()
+      local is_on_shot_antiaim_active = v14_2.is_on_shot_antiaim_active()
+      local v5 = 0
+      if is_alive then
+        v5 = 1
+      end
+      v48_12 = v50_15(arg1)
+      v49_14 = v14_2.is_duck_peek_assist()
+      v44_15 = v32_6.interp(v44_15, v5, 0.05)
+      v45_14 = v32_6.interp(v45_14, v1.shift, 0.03)
+      v46_9 = v32_6.interp(v46_9, is_on_shot_antiaim_active, 0.03)
+      v47_13 = v32_6.interp(v47_13, is_double_tap_active, 0.03)
+      if not v1.shift then
+        v45_14 = 0
+      end
+      return
+    end
+    local v52_17 = function(arg1, arg2)
+      local v48_12_2 = v48_12
+      v48_12_2 = v48_12_2 and "\227\129\166\227\130\147\227\129\151\227\129\174\227\130\136\227\129\134\227\129\170 YAW"
+      v48_12_2 = v48_12_2 or "\227\131\170\227\130\187\227\131\131\227\131\136 YAW"
+      local v37_5_2 = v37_5("")
+      local vec = vector(renderer.measure_text(v37_5_2, v48_12_2))
+      math.round(vec.x)
+      local round = math.round(vec.y)
+      local v6 = {
+        218,
+        118,
+        0
+      }
+      local v7 = {
+        177,
+        151,
+        255
+      }
+      local v48_12_3 = v48_12
+      v48_12_3 = v48_12_3 and v6
+      v48_12_3 = v48_12_3 or v7
+      local v9, v10 = arg1:unpack()
+      v9 = math.round(v9)
+      renderer.text(v9, v10, v48_12_3[1], v48_12_3[2], v48_12_3[3], 255 * arg2, v37_5_2, 0, v48_12_2)
+      arg1.y = arg1.y + round
+      return
+    end
+    local v53_19 = function(arg1, arg2)
+      local v48_12_2 = v48_12
+      v48_12_2 = v48_12_2 and "\227\129\169\227\129\134\227\129\166\227\129\141\227\129\170"
+      v48_12_2 = v48_12_2 or "\227\131\135\227\131\149\227\130\169\227\131\171\227\131\136"
+      local vec = vector(renderer.measure_text("", v48_12_2))
+      math.round(vec.x)
+      local round = math.round(vec.y)
+      local v5 = {
+        209,
+        139,
+        230
+      }
+      local v6 = {
+        255,
+        0,
+        0
+      }
+      local v48_12_3 = v48_12
+      v48_12_3 = v48_12_3 and v5
+      v48_12_3 = v48_12_3 or v6
+      local v8, v9 = arg1:unpack()
+      v8 = math.round(v8)
+      renderer.text(v8, v9, v48_12_3[1], v48_12_3[2], v48_12_3[3], 255 * arg2, "", 0, v48_12_2)
+      arg1.y = arg1.y + round
+      return
+    end
+    local v54_16 = function(arg1, arg2)
+      local v2 = not v49_14
+      v2 = v2 and "\229\128\141\227\129\174"
+      v2 = v2 or "\229\128\141\227\129\174 (\227\131\149\227\130\167\227\130\164\227\130\175\227\131\128\227\131\131\227\130\175)"
+      local v37_5_2 = v37_5("")
+      local vec = vector(renderer.measure_text(v37_5_2, v2))
+      math.round(vec.x)
+      local round = math.round(vec.y)
+      do
+        local v6 = v45_14
+        v6 = v45_14 == 1
+        if v6 then
+          v6 = {}
+          ;({})[1] = 0
+          ;({})[2] = 255
           ;({})[3] = 0
-          local v7 = {}
-          ;({})[1] = 177
-          ;({})[2] = 151
-          ;({})[3] = 255
-          local v48_12_3 = v48_12
-          v48_12_3 = v48_12_3 and v6
-          v48_12_3 = v48_12_3 or v7
-          local v10 = arg1:unpack()
-          renderer.text(math.round(arg1:unpack()), v10, v48_12_3[1], v48_12_3[2], v48_12_3[3], 255 * arg2, v37_5_2, 0, v48_12_2)
-          arg1.y = arg1.y + round
-          return
         end
-        local v53_19 = function(arg1, arg2)
-          local v48_12_2 = v48_12
-          v48_12_2 = v48_12_2 and "\227\129\169\227\129\134\227\129\166\227\129\141\227\129\170"
-          v48_12_2 = v48_12_2 or "\227\131\135\227\131\149\227\130\169\227\131\171\227\131\136"
-          local vec = vector(renderer.measure_text("", v48_12_2))
-          math.round(vec.x)
-          local round = math.round(vec.y)
-          local v5 = {}
-          ;({})[1] = 209
-          ;({})[2] = 139
-          ;({})[3] = 230
-          local v6 = {}
+        if not v6 then
+          v6 = {}
           ;({})[1] = 255
           ;({})[2] = 0
           ;({})[3] = 0
-          local v48_12_3 = v48_12
-          v48_12_3 = v48_12_3 and v5
-          v48_12_3 = v48_12_3 or v6
-          local v9 = arg1:unpack()
-          renderer.text(math.round(arg1:unpack()), v9, v48_12_3[1], v48_12_3[2], v48_12_3[3], 255 * arg2, "", 0, v48_12_2)
-          arg1.y = arg1.y + round
-          return
         end
-        local v54_15 = function(arg1, arg2)
-          local v2 = not v49_14
-          v2 = v2 and "\229\128\141\227\129\174"
-          v2 = v2 or "\229\128\141\227\129\174 (\227\131\149\227\130\167\227\130\164\227\130\175\227\131\128\227\131\131\227\130\175)"
-          local v37_5_2 = v37_5("")
-          local vec = vector(renderer.measure_text(v37_5_2, v2))
-          math.round(vec.x)
-          local round = math.round(vec.y)
-          do
-            local v6 = v45_14
-            v6 = v45_14 == 1
-            if v6 then
-              v6 = {}
-              ;({})[1] = 0
-              ;({})[2] = 255
-              ;({})[3] = 0
-            end
-            if not v6 then
-              v6 = {}
-              ;({})[1] = 255
-              ;({})[2] = 0
-              ;({})[3] = 0
-            end
-            local v8 = arg1:unpack()
-            renderer.text(math.round(arg1:unpack()), v8, v6[1], v6[2], v6[3], 255 * arg2 * v47_13, v37_5_2, 0, v2)
-          end
-          arg1.y = arg1.y + round
-          return
-        end
-        local v55_17 = function(arg1, arg2)
-          local v2 = not v49_14
-          v2 = v2 and "\227\130\162\227\131\179\227\131\129\227\130\168\227\130\164\227\131\160"
-          v2 = v2 or "\227\130\162\227\131\179\227\131\129\227\130\168\227\130\164\227\131\160 (\227\131\149\227\130\167\227\130\164\227\130\175\227\131\128\227\131\131\227\130\175)"
-          local v37_5_2 = v37_5("")
-          local vec = vector(renderer.measure_text(v37_5_2, v2))
-          math.round(vec.x)
-          local round = math.round(vec.y)
-          local v49_14_2 = v49_14
-          if v49_14_2 then
-            v49_14_2 = {}
-            ;({})[1] = 255
-            ;({})[2] = 0
-            ;({})[3] = 0
-          end
-          if not v49_14_2 then
-            v49_14_2 = {}
-            ;({})[1] = 209
-            ;({})[2] = 139
-            ;({})[3] = 230
-          end
-          local v8 = arg1:unpack()
-          renderer.text(math.round(arg1:unpack()), v8, v49_14_2[1], v49_14_2[2], v49_14_2[3], 255 * arg2 * v46_9, v37_5_2, 0, v2)
-          arg1.y = arg1.y + round
-          return
-        end
-        do
-          local v56_16 = function()
-            local prod = vector(client.screen_size()) * 0.5
-            prod.y = prod.y + 40
-            local is_on_shot_antiaim_active = v14_2.is_on_shot_antiaim_active()
-            local is_double_tap_active = v14_2.is_double_tap_active()
-            v52_17(prod, v44_15)
-            v53_19(prod, v44_15)
-            if is_double_tap_active then
-              v54_15(prod, v44_15)
-            end
-            if is_on_shot_antiaim_active and not is_double_tap_active then
-              v55_17(prod, v44_15)
-            end
-            return
-          end
-          local v43_13 = function()
-            local me = entity.get_local_player()
-            if me == nil then
-              return
-            end
-            v51_18(me)
-            if v44_15 > 0 then
-              v56_16()
-            end
-            return
-          end
-        end
+        local v7, v8 = arg1:unpack()
+        v7 = math.round(v7)
+        renderer.text(v7, v8, v6[1], v6[2], v6[3], 255 * arg2 * v47_13, v37_5_2, 0, v2)
       end
+      arg1.y = arg1.y + round
+      return
+    end
+    local v55_17 = function(arg1, arg2)
+      local v2 = not v49_14
+      v2 = v2 and "\227\130\162\227\131\179\227\131\129\227\130\168\227\130\164\227\131\160"
+      v2 = v2 or "\227\130\162\227\131\179\227\131\129\227\130\168\227\130\164\227\131\160 (\227\131\149\227\130\167\227\130\164\227\130\175\227\131\128\227\131\131\227\130\175)"
+      local v37_5_2 = v37_5("")
+      local vec = vector(renderer.measure_text(v37_5_2, v2))
+      math.round(vec.x)
+      local round = math.round(vec.y)
+      local v49_14_2 = v49_14
+      if v49_14_2 then
+        v49_14_2 = {}
+        ;({})[1] = 255
+        ;({})[2] = 0
+        ;({})[3] = 0
+      end
+      if not v49_14_2 then
+        v49_14_2 = {}
+        ;({})[1] = 209
+        ;({})[2] = 139
+        ;({})[3] = 230
+      end
+      local v7, v8 = arg1:unpack()
+      v7 = math.round(v7)
+      renderer.text(v7, v8, v49_14_2[1], v49_14_2[2], v49_14_2[3], 255 * arg2 * v46_9, v37_5_2, 0, v2)
+      arg1.y = arg1.y + round
+      return
+    end
+    local v56_16 = function()
+      local prod = vector(client.screen_size()) * 0.5
+      prod.y = prod.y + 40
+      local is_on_shot_antiaim_active = v14_2.is_on_shot_antiaim_active()
+      local is_double_tap_active = v14_2.is_double_tap_active()
+      v52_17(prod, v44_15)
+      v53_19(prod, v44_15)
+      if is_double_tap_active then
+        v54_16(prod, v44_15)
+      end
+      if is_on_shot_antiaim_active and not is_double_tap_active then
+        v55_17(prod, v44_15)
+      end
+      return
+    end
+    function v43_13()
+      local me = entity.get_local_player()
+      if me == nil then
+        return
+      end
+      v51_18(me)
+      if v44_15 > 0 then
+        v56_16()
+      end
+      return
     end
   end
   local v44_16 = function(arg1)
@@ -1506,7 +1490,7 @@ do
         local vec = vector(client.screen_size())
         local v12, v13 = vector(vec.x / 2, vec.y / 2):unpack()
         do
-          local interp = v32_5.interp
+          local interp = v32_6.interp
           local v42_16_2 = v42_16
           local v16 = v9
           if v16 then
@@ -1595,24 +1579,13 @@ do
             v20_2 = v20_2 and body_yaw_offset < 0
             v20_2 = v20_2 and v33_5_3
             v20_2 = v20_2 or v33_5_4
-            do
-              local v21 = 150
-              v21 = body_yaw_offset ~= nil
-              v21 = v21 and body_yaw_offset > 0
-              v21 = v21 and v33_5_3
-              v21 = v21 or v33_5_4
-              do
-                local diff = v12 - v40_13 - round_4
-                local sum = v12 + v40_13 + round_4
-                local v20_3 = v20_2:clone()
-                local v21_2 = v21:clone()
-                renderer.triangle(diff - round_4, v13, diff, v13 - round_5, diff, v13 + round_5, v18_3:unpack())
-                renderer.triangle(sum + round_4, v13, sum, v13 - round_5, sum, v13 + round_5, v19_3:unpack())
-                renderer.rectangle(diff + round_3 + 2, v13 - round_5, -round_3, round_5 * 2, v20_3:unpack())
-              end
-            end
+            local v20_3 = v20_2:clone()
           end
-          renderer.rectangle(sum - round_3 - 2, v13 - round_5, round_3, round_5 * 2, v21_2:unpack())
+          local v21 = (body_yaw_offset ~= nil and body_yaw_offset > 0 and v33_5_3 or v33_5_4):clone()
+          renderer.triangle(v12 - v40_13 - round_4 - round_4, v13, v12 - v40_13 - round_4, v13 - round_5, v12 - v40_13 - round_4, v13 + round_5, v18_3:unpack())
+          renderer.triangle(v12 + v40_13 + round_4 + round_4, v13, v12 + v40_13 + round_4, v13 - round_5, v12 + v40_13 + round_4, v13 + round_5, v19_3:unpack())
+          renderer.rectangle(v12 - v40_13 - round_4 + round_3 + 2, v13 - round_5, -round_3, round_5 * 2, v20_3:unpack())
+          renderer.rectangle(v12 + v40_13 + round_4 - round_3 - 2, v13 - round_5, round_3, round_5 * 2, v21:unpack())
         end
       end
       return
@@ -1710,7 +1683,8 @@ do
       v42_18 = 1
       v43_18 = 0.66
       v44_20 = v40_15
-      local v46_12, v48_13_2 = v44_20, v48_13(v44_20)
+      local v48_13_2, v48_13_3 = v48_13(v44_20)
+      v46_12 = v48_13_3
       v45_18 = v48_13_2
     end
     v41_16 = v0.shift

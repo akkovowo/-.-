@@ -135,7 +135,8 @@ def infer(P,kidnups,mode_names=None):
     for pc,r,i in usesite:
         if i is None: continue
         webs[find(i)]['uses'].append(pc)
-    global LAST_S2W
+    global LAST_S2W,LAST_WEBS
+    LAST_WEBS=webs
     LAST_S2W={(pc,r):find(i) for i,(pc,r) in enumerate(sites)}
     # labels (jump targets)
     targets=set()
@@ -146,7 +147,16 @@ def infer(P,kidnups,mode_names=None):
         if code[pc][0] in('EQ','LT','LE','TEST','TESTSET'): targets.add(pc+2)
     return webs,sites,targets,pseudo,uses,defs
 
+TEMP_MEMO={}
 def is_temp(w,targets,code,pseudo,uses_,defs_):
+    key=(id(code),w['reg'],min(w['defs']) if w['defs'] else -1)
+    if key in TEMP_MEMO: return TEMP_MEMO[key]
+    TEMP_MEMO[key]=True   # in-progress assumption
+    r_=_is_temp(w,targets,code,pseudo,uses_,defs_)
+    TEMP_MEMO[key]=r_
+    return r_
+
+def _is_temp(w,targets,code,pseudo,uses_,defs_):
     ds=w['defs'];us=sorted(set(w['uses']))
     if len(ds)!=1: return False
     r=w['reg']
@@ -170,6 +180,11 @@ def is_temp(w,targets,code,pseudo,uses_,defs_):
         if op=='SETTABLE' and A<r: return False
         for x in defs_[k]:
             if x<r: return False
+            if x>r:
+                root=LAST_S2W.get((k,x))
+                if root is not None:
+                    wq=LAST_WEBS[root]
+                    if wq['uses'] and max(wq['uses'])>u and not is_temp(wq,targets,code,pseudo,uses_,defs_): return False
     return True
 
 def scope_ends(code,succ):
@@ -229,14 +244,32 @@ def make_locals(P,kidnups,names,reserved=frozenset()):
                 spans.append((so,t))
     spans.sort()
     L=[]   # dicts: reg,lo,lu,end
-    for w in webs.values():
+    forced=set();groups=[]
+    roots_of={id(w):rt for rt,w in webs.items()}
+    islocal=lambda rt: not is_temp(webs[rt],targets,code,pseudo,uses,defs)
+    for pc in range(n):
+        op,A,B,C=code[pc]
+        if (op=='CALL' and C>=3) or (op=='VARARG' and B>=3):
+            regs=range(A,A+C-1) if op=='CALL' else range(A,A+B-1)
+            grp=[s2w.get((pc,x)) for x in regs]
+            grp=[g for g in grp if g is not None and webs[g]['uses']]
+            groups.append(grp)
+            if any(islocal(g) for g in grp):
+                forced.update(grp)
+    for rt,w in webs.items():
         r=w['reg']
         if r<P.nparams: continue
         if any(code[d][0] in('FORLOOP','FORPREP','TFORLOOP') for d in w['defs']): continue
         if any(code[u][0] in('FORLOOP','FORPREP','TFORLOOP') for u in w['uses']): continue
-        if is_temp(w,targets,code,pseudo,uses,defs): continue
+        dead_call=(not w['uses']) and len(w['defs'])==1 and code[w['defs'][0]][0]=='CALL' and code[w['defs'][0]][3]==2
+        if dead_call:
+            dd=w['defs'][0]
+            L.append({'reg':r,'lo':dd+1,'lu':dd+1,'end':dd+1,'d':dd,'roots':{rt},'captured':False,'dead':True})
+            continue
+        if rt not in forced and is_temp(w,targets,code,pseudo,uses,defs): continue
         lo=min(w['defs']);d0=lo
         lu=extend(w)
+        if code[lu][0] in('TEST','TESTSET','EQ','LT','LE') and lu+1<n: lu+=1
         ch=True
         while ch:
             ch=False
@@ -246,7 +279,7 @@ def make_locals(P,kidnups,names,reserved=frozenset()):
         later=[d for d in firstdef[r] if d>lo]
         lim=E[lo]
         if later: lim=min(lim,later[0]-1)
-        L.append({'reg':r,'lo':lo+1,'lu':lu,'end':max(lu,lim),'d':d0})
+        L.append({'reg':r,'lo':lo+1,'lu':lu,'end':max(lu,lim),'d':d0,'roots':{rt},'lim':lim,'captured':any(u in pseudo for u in w['uses'])})
     # merge overlapping same-register locals
     byreg={}
     for x in L: byreg.setdefault(x['reg'],[]).append(x)
@@ -256,11 +289,30 @@ def make_locals(P,kidnups,names,reserved=frozenset()):
         cur=None
         for x in lst:
             if cur and x['lo']<=cur['end']:
-                cur['end']=max(cur['end'],x['end']);cur['lu']=max(cur['lu'],x['lu'])
+                cur['end']=max(cur['end'],x['end']);cur['lu']=max(cur['lu'],x['lu']);cur['roots']|=x['roots'];cur['lim']=max(cur.get('lim',0),x.get('lim',0));cur['captured']=cur['captured'] or x['captured']
             else:
                 cur=dict(x);L.append(cur)
+    for grp in groups:
+        ents=[e for e in L if e['roots']&set(grp)]
+        if len(ents)>1:
+            hi=max(e['end'] for e in ents);lo_=min(e['lo'] for e in ents);lu_=max(e['lu'] for e in ents)
+            for e in ents: e['end']=hi;e['lo']=lo_;e['lu']=lu_
     # stack-discipline normalization
     L.sort(key=lambda x:(x['lo'],x['reg']))
+    # demote locals that live past the definition of a lower-register local (impossible in stack discipline)
+    drop=set()
+    for k,Y in enumerate(L):
+        for X in L[:k]:
+            if id(X) in drop: continue
+            if X['reg']>Y['reg'] and X['lo']<=Y['lo']-1<=X['end'] and X['lu']>=Y['lo']-1:
+                if X.get('captured'):
+                    # try hoisting Y's declaration to an earlier dead 'local x' (LOADNIL)
+                    cand=[v['defs'][0] for v in webs.values() if v['reg']==Y['reg'] and not v['uses'] and len(v['defs'])==1 and code[v['defs'][0]][0]=='LOADNIL' and v['defs'][0]<X['lo']-1 and v['defs'][0]<Y['lo']]
+                    if cand:
+                        Y['lo']=max(cand)+1
+                else:
+                    drop.add(id(X))
+    L=[x for x in L if id(x) not in drop]
     for k,Y in enumerate(L):
         for X in L[:k]:
             if X['lo']<=Y['lo']-1<=X['end']:
@@ -277,8 +329,11 @@ def make_locals(P,kidnups,names,reserved=frozenset()):
     import naming
     nm=naming.Namer(P)
     used=set(naming.KEYWORDS)|set(reserved)|set(getattr(P,'upnames',None) or [])
+    ups=set(getattr(P,'upnames',None) or [])
     for r in range(P.nparams):
-        out.append((r,'arg%d'%(r+1),0,n));used.add('arg%d'%(r+1))
+        pn='arg%d'%(r+1)
+        while pn in ups: pn+='_'
+        out.append((r,pn,0,n));used.add(pn)
     for x in sorted(L,key=lambda x:(x['lo'],x['reg'])):
         base=None
         try: base=nm.name_for(x['d'])
@@ -305,7 +360,7 @@ def patch_newtable(P,kidnups):
         if len(w['defs'])!=1: continue
         d=w['defs'][0]
         if code[d][0]!='NEWTABLE': continue
-        if not is_temp(w,targets,code,pseudo,uses,defs): continue
+        temp=is_temp(w,targets,code,pseudo,uses,defs)
         r=w['reg']
         narr=0;nh=0
         for pc in sorted(set(w['uses'])):
@@ -313,4 +368,16 @@ def patch_newtable(P,kidnups):
             if op=='SETLIST' and A==r: narr+=B if B else 1
             elif op=='SETTABLE' and A==r: nh+=1
             else: break
-        code[d][2]=fb_encode(min(narr,500));code[d][3]=fb_encode(min(nh,500))
+        code[d][2]=fb_encode(min(narr,500))
+        if temp: code[d][3]=fb_encode(min(nh,500))
+
+
+def patch_deadcalls(P,kidnups):
+    webs,sites,targets,pseudo,uses,defs=infer(P,kidnups)
+    code=P.code;n=0
+    for w in webs.values():
+        if w['uses'] or len(w['defs'])!=1: continue
+        d=w['defs'][0]
+        if code[d][0]=='CALL' and code[d][3]==2:
+            code[d][3]=1;n+=1
+    return n

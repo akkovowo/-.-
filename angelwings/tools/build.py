@@ -51,6 +51,7 @@ def process_tree():
     for fid,P in protos.items():
         if fid in fails: P.locvars=[];continue
         LV.patch_newtable(P,kn)
+        LV.patch_deadcalls(P,kn)
     def lname(P,reg,pc):
         best=None
         for (r,nm,st,en) in getattr(P,'locvars',[]):
@@ -60,7 +61,7 @@ def process_tree():
         P=protos[fid]
         if not hasattr(P,'upnames') or P.upnames is None: P.upnames=['up%d'%i for i in range(P.nups)]
         if fid in FALLBACK:
-            P.locvars=[(r,'arg%d'%(r+1),0,len(P.code)-1) for r in range(P.nparams)]
+            P.locvars=[(r,'arg%d'%(r+1)+('_' if ('arg%d'%(r+1)) in P.upnames else ''),0,len(P.code)-1) for r in range(P.nparams)]
         elif fid not in fails:
             L=LV.make_locals(P,kn,None,GLOBALS)
             nn=len(P.code)

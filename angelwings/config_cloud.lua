@@ -1,4 +1,4 @@
--- angelwings: раздел config_cloud (декомпилировано, имена восстановлены эвристикой)
+-- angelwings: раздел config_cloud (декомпилировано; имена восстановлены эвристикой)
 -- Локальные (vNN, ...) объявлены в angelwings_full.lua выше по файлу
 
 -- ===== блок 33 =====
@@ -36,51 +36,40 @@ do
     return arg3
   end
   function v18_2.encode(arg1)
-    local pcall_2 = pcall(json.stringify, arg1)
-    if pcall(json.stringify, arg1) then
-      do
-        local pcall_2, pcall_3 = base64.encode, pcall(base64.encode, pcall_2, "KXsoAciaIvD82pElTFH5u0xRkN3eOwJM1SbPj6QBzLrmhyd9UW4ZGnVYgfCt7q+/=")
-      end
-      if pcall_3 then
-        pcall_2 = string.gsub(pcall_2, "[%+%/%=]", {
-          ["+"] = "z113Z",
-          ["/"] = "z143Z",
-          ["="] = "_"
-        })
-        pcall_2 = string.format("angelwings_%s", pcall_2)
-        return true, pcall_2
-      end
-      return false, pcall_2
+    local ok, json_str = pcall(json.stringify, arg1)
+    if not ok then
+      return false, json_str
     end
-    return false, pcall_2
+    local ok2, b64 = pcall(base64.encode, json_str, "KXsoAciaIvD82pElTFH5u0xRkN3eOwJM1SbPj6QBzLrmhyd9UW4ZGnVYgfCt7q+/=")
+    if not ok2 then
+      return false, b64
+    end
+    b64 = string.gsub(b64, "[%+%/%=]", {
+      ["+"] = "z113Z",
+      ["/"] = "z143Z",
+      ["="] = "_"
+    })
+    return true, string.format("angelwings_%s", b64)
   end
   function v18_2.decode(arg1)
-    local v1, v2 = arg1:match("angelwings_([%w%+%/]+)(_*)")
-    if v1 == nil then
+    local body, pad = arg1:match("angelwings_([%w%+%/]+)(_*)")
+    if body == nil then
       return false, "Config not supported"
     end
-    local v3 = v2
-    if v3 then
-      v3 = string
-      v3 = v3.rep
-      v3 = v3("=", #v2)
+    if pad then
+      pad = string.rep("=", #pad)
     end
-    v3 = v3 or ""
-    v2 = v3
-    v3 = string
-    v3 = v3.gsub
-    v3 = v3(v1, "z1%d3Z", {z113Z = "+", z143Z = "/"})
-    local pcall_2 = pcall(base64.decode, v3 .. v2, "KXsoAciaIvD82pElTFH5u0xRkN3eOwJM1SbPj6QBzLrmhyd9UW4ZGnVYgfCt7q+/=")
-    if pcall(base64.decode, v3 .. v2, "KXsoAciaIvD82pElTFH5u0xRkN3eOwJM1SbPj6QBzLrmhyd9UW4ZGnVYgfCt7q+/=") then
-      do
-        local pcall_2, pcall_3 = json.parse, pcall(json.parse, pcall_2)
-      end
-      if pcall_3 then
-        return true, pcall_2
-      end
-      return false, pcall_2
+    pad = pad or ""
+    body = string.gsub(body, "z1%d3Z", {z113Z = "+", z143Z = "/"})
+    local ok, decoded = pcall(base64.decode, body .. pad, "KXsoAciaIvD82pElTFH5u0xRkN3eOwJM1SbPj6QBzLrmhyd9UW4ZGnVYgfCt7q+/=")
+    if not ok then
+      return false, decoded
     end
-    return false, pcall_2
+    local ok2, data = pcall(json.parse, decoded)
+    if ok2 then
+      return true, data
+    end
+    return false, data
   end
   function v18_2.import(arg1, arg2)
     if arg1 == nil then
