@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<script>document.documentElement.classList.add("js")</script>
 <meta name="color-scheme" content="light">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>JJstore — оригинальная техника в Воронеже</title>
@@ -28,7 +29,7 @@
   <div class="head-row">
     <a href="#" class="logo"><img src="assets/brand/logo.png" alt="JJstore"><span>JJstore</span></a>
     <div class="search glass">
-      <input id="search" type="search" placeholder="Поиск" autocomplete="off">
+      <input id="search" type="search" placeholder="Поиск" autocomplete="off" aria-label="Поиск"><kbd class="k">/</kbd>
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <div class="results" id="results"></div>
     </div>
@@ -57,7 +58,7 @@
 
 <main class="wrap">
 
-  <section class="hero" aria-label="Новинки и предложения">
+  <section class="hero" data-reveal aria-label="Новинки и предложения">
     <div class="slides" id="slides">
       <a class="slide glass s-red" href="https://jjstore.ru/apple/iphone/iphone-17-pro-1" target="_blank" rel="noopener">
         <div class="s-text"><span class="s-tag">Новинка</span><h2>iPhone 17 Pro</h2><p>от 98 990 ₽</p><span class="s-btn">Смотреть</span></div>
@@ -103,7 +104,7 @@
     <a class="tile glass" href="https://jjstore.ru/uslugi" target="_blank" rel="noopener"><img src="assets/cat/uslugi.png" alt="Услуги" loading="lazy"><span>Услуги</span></a>
   </section>
 
-  <section class="row" aria-label="Предложения">
+  <section class="row" data-reveal aria-label="Предложения">
     <div class="scroller"><div class="track promos">
       <a class="promo glass" href="https://jjstore.ru/baraholka" target="_blank" rel="noopener"><span class="p-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.7.400-1 .9-1 1.700M12 17h.01"/></svg></span><h3>Почему дёшево?</h3><p>Как мы держим цены</p><span class="p-go"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span></a>
       <a class="promo glass" href="https://jjstore.ru/trade-in" target="_blank" rel="noopener"><span class="p-ico"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3-6.200"/><path d="M20 4v5h-5"/></svg></span><h3>Trade-in</h3><p>Обмен старого устройства</p><span class="p-go"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span></a>
@@ -113,8 +114,8 @@
     </div></div>
   </section>
 
-  <section class="row products">
-    <h2 class="sec-title"><i class="dot"></i>Новинки</h2>
+  <section class="row products" data-reveal>
+    <div class="sec-head"><h2 class="sec-title"><i class="dot"></i>Новинки</h2><a class="sec-all" href="https://jjstore.ru/apple/iphone" target="_blank" rel="noopener">Все<svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></a></div>
     <div class="scroller">
       <button class="arrow prev" aria-label="Назад"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button>
       <div class="track" id="trackNew"></div>
@@ -122,8 +123,8 @@
     </div>
   </section>
 
-  <section class="row products">
-    <h2 class="sec-title"><i class="dot"></i>Популярное</h2>
+  <section class="row products" data-reveal>
+    <div class="sec-head"><h2 class="sec-title"><i class="dot"></i>Популярное</h2><a class="sec-all" href="https://jjstore.ru/apple" target="_blank" rel="noopener">Все<svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></a></div>
     <div class="scroller">
       <button class="arrow prev" aria-label="Назад"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button>
       <div class="track" id="trackPop"></div>
@@ -193,6 +194,13 @@
     <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5Z"/><path d="M9 9.500h6M9 12.500h4"/></svg>
   </button>
 </div>
+
+<!-- Mini cart bar -->
+<button class="minicart glass" id="miniCart" aria-label="Открыть корзину">
+  <span class="mc-ico"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><i id="mcQty">0</i></span>
+  <span class="mc-text"><b id="mcSum">0 ₽</b><small id="mcLabel">в корзине</small></span>
+  <span class="mc-go">Открыть<svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span>
+</button>
 
 <div class="modal" id="cartModal" aria-hidden="true">
   <div class="modal-scrim" data-close></div>

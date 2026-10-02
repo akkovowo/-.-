@@ -54,16 +54,27 @@
       const c = box.scrollLeft + box.clientWidth / 2;
       let best = 0, d = 1e9;
       slides.forEach((s, i) => { const m = Math.abs(s.offsetLeft - box.offsetLeft + s.clientWidth / 2 - c); if (m < d) { d = m; best = i; } });
-      cur = best; ds.forEach((x, i) => x.classList.toggle('on', i === best)); slides.forEach((s, i) => s.classList.toggle('active', i === best));
+      cur = best; slides.forEach((s, i) => s.classList.toggle('active', i === best));
     };
     box.addEventListener('scroll', mark, { passive: true });
     ds.forEach((x, i) => x.onclick = () => { go(i); play(); });
     $('#hPrev').onclick = () => { go(cur - 1); play(); };
     $('#hNext').onclick = () => { go(cur + 1); play(); };
-    const play = () => { clearInterval(timer); timer = setInterval(() => go(cur + 1), 6000); };
-    ['pointerenter', 'touchstart'].forEach(ev => box.addEventListener(ev, () => clearInterval(timer), { passive: true }));
+    const DUR = 6000;
+    const play = () => { clearTimeout(timer); box.classList.remove('paused'); timer = setTimeout(() => go(cur + 1), DUR); };
+    const stop = () => { clearTimeout(timer); box.classList.add('paused'); };
+    ['pointerenter', 'touchstart'].forEach(ev => box.addEventListener(ev, stop, { passive: true }));
     ['pointerleave', 'touchend'].forEach(ev => box.addEventListener(ev, play, { passive: true }));
-    mark(); play();
+    let last = -1;
+    const onChange = () => { if (cur !== last) { last = cur; ds.forEach(x => { x.classList.remove('on'); }); void dots.offsetWidth; ds[cur].classList.add('on'); if (!box.classList.contains('paused')) play(); } };
+    box.addEventListener('scroll', () => requestAnimationFrame(onChange), { passive: true });
+    /* subtle parallax on the banner photo */
+    if (matchMedia('(hover:hover) and (pointer:fine)').matches) slides.forEach(s => {
+      const im = s.querySelector('img');
+      s.addEventListener('pointermove', e => { const r = s.getBoundingClientRect(); im.style.translate = `${((e.clientX - r.left) / r.width - .5) * -18}px ${((e.clientY - r.top) / r.height - .5) * -12}px`; });
+      s.addEventListener('pointerleave', () => { im.style.translate = ''; });
+    });
+    mark(); onChange(); play();
   })();
 
   /* Cart: { id: qty } */
@@ -88,7 +99,7 @@
       s.innerHTML = n ? stepper(id) : `<button class="buy" data-act="inc" data-id="${id}">В корзину</button>`;
     });
   }
-  function renderCart() {
+  let renderCart = function () {
     const ids = Object.keys(cart).map(Number).filter(id => byId(id));
     const qty = totalQty(), box = $('#cartItems');
     $('#cartModal').classList.toggle('is-empty', !ids.length);
@@ -109,7 +120,7 @@
     $('#cartMeta').textContent = qty ? `${qty} ${plural(qty, 'товар', 'товара', 'товаров')}` : '';
     const c = $('#cartCount'); c.textContent = qty; c.classList.toggle('on', qty > 0);
     syncCards();
-  }
+  };
   function bump() { const c = $('#cartCount'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
 
   const modal = $('#cartModal');
@@ -152,6 +163,61 @@
       g.style.setProperty('--mx', (e.clientX - r.left) + 'px'); g.style.setProperty('--my', (e.clientY - r.top) + 'px');
     }, { passive: true });
   }
+
+
+  /* ---------- UX polish ---------- */
+  /* reveal on scroll */
+  (function () {
+    const els = [...document.querySelectorAll('[data-reveal], .wall .tile')];
+    document.querySelectorAll('.wall .tile').forEach((t, i) => { t.dataset.reveal = ''; t.style.setProperty('--d', (i % 6) * 45 + 'ms'); });
+    if (!('IntersectionObserver' in window)) { document.documentElement.classList.remove('js'); return; }
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .08, rootMargin: '0px 0px -4% 0px' });
+    document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+  })();
+
+  /* sliding highlight under the brand menu (segmented-control feel) */
+  (function () {
+    const nav = $('.brands'); if (!nav || !matchMedia('(hover:hover)').matches) return;
+    const ind = document.createElement('i'); ind.className = 'ind'; nav.prepend(ind);
+    nav.querySelectorAll('a').forEach(a => {
+      a.addEventListener('pointerenter', () => { ind.style.cssText = `opacity:1;width:${a.offsetWidth}px;height:${a.offsetHeight}px;transform:translate(${a.offsetLeft}px,${a.offsetTop}px)`; });
+    });
+    nav.addEventListener('pointerleave', () => { ind.style.opacity = 0; });
+  })();
+
+  /* header condenses on scroll down, expands on scroll up */
+  (function () {
+    const head = $('#head'); let y = scrollY, ticking = false;
+    addEventListener('scroll', () => {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(() => {
+        const ny = scrollY, dy = ny - y;
+        if (ny < 120) head.classList.remove('compact'); else if (dy > 6) head.classList.add('compact'); else if (dy < -6) head.classList.remove('compact');
+        y = ny; ticking = false;
+      });
+    }, { passive: true });
+  })();
+
+  /* mini cart bar */
+  const mini = $('#miniCart');
+  function syncMini() {
+    const q = totalQty(); mini.classList.toggle('on', q > 0 && !modal.classList.contains('on'));
+    $('#mcQty').textContent = q; $('#mcSum').textContent = fmt(totalSum());
+    $('#mcLabel').textContent = `${q} ${plural(q, 'товар', 'товара', 'товаров')}`;
+  }
+  mini.onclick = openCart;
+  const _render = renderCart; renderCart = function () { _render(); syncMini(); };
+  new MutationObserver(syncMini).observe(modal, { attributes: true, attributeFilter: ['class'] });
+  syncMini();
+
+  /* search: "/" focuses, suggestions on empty focus */
+  (function () {
+    const sugg = ['iPhone 17', 'AirPods', 'PlayStation', 'iPhone 15'];
+    const show = () => { if (input.value.trim()) return; res.innerHTML = '<div class="sugg"><small>Популярные запросы</small>' + sugg.map(s => `<button type="button" data-q="${s}">${s}</button>`).join('') + '</div>'; res.classList.add('on'); };
+    input.addEventListener('focus', show);
+    res.addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; input.value = b.dataset.q; input.dispatchEvent(new Event('input')); input.focus(); });
+    document.addEventListener('keydown', e => { if (e.key === '/' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); input.focus(); } });
+  })();
 
   /* cookie notice (remembered) */
   (function () {
