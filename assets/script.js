@@ -4,6 +4,7 @@
   const LOCAL = 'assets/img/', REMOTE = 'https://jjstore.ru/image/cache/catalog/';
   const fmt = n => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₽';
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const norm = s => s.toLowerCase().replace(/ё/g, 'е');
   const plural = (n, a, b, c) => { const m = n % 100, d = n % 10; return (m > 10 && m < 20) ? c : d === 1 ? a : (d > 1 && d < 5) ? b : c; };
   const PLACE = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90"><rect x="38" y="14" width="44" height="62" rx="10" fill="#e6e9f2"/><rect x="46" y="22" width="28" height="40" rx="5" fill="#f6f7fa"/></svg>');
   const ICON = {
@@ -58,7 +59,7 @@
   products.forEach(p => { const seen = new Set(); p.cats.forEach(c0 => { let c = c0; while (c && cats[c] && !seen.has(c)) { seen.add(c); catCount[c] = (catCount[c] || 0) + 1; c = cats[c][1]; } }); });
   const prodsOf = slug => { const set = new Set(descendants(slug)); return products.filter(p => p.cats.some(c => set.has(c))); };
   /* broken photo -> neutral placeholder */
-  document.addEventListener('error', e => { const t = e.target; if (t && t.tagName === 'IMG' && !t.dataset.fb) { t.dataset.fb = 1; t.src = PLACE; } }, true);
+  document.addEventListener('error', e => { const t = e.target; if (t && t.tagName === 'IMG') { if (t.dataset.hide) { t.remove(); return; } if (!t.dataset.fb) { t.dataset.fb = 1; t.src = PLACE; } } }, true);
 
   /* ================= CARDS ================= */
   const card = (p, o = {}) => `
@@ -148,6 +149,34 @@
   }
   function bump(sel) { const c = $(sel); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
 
+  /* ----- product descriptions (scraped from the product pages) ----- */
+  const DESC = window.DESC || { c: {}, m: {}, d: {} };
+  const nameKey = p => norm(p.name).replace(/\s+/g, ' ');
+  const byName = new Map(products.map(p => [nameKey(p) + '|' + p.price, p]));
+  function descFor(p) {
+    const q = byName.get(nameKey(p) + '|' + p.price);
+    const u = DESC.m[p.url] ? p.url : (q && DESC.m[q.url] ? q.url : null);
+    return { code: DESC.c[p.url] || (q && DESC.c[q.url]) || '', d: u ? DESC.d[DESC.m[u]] : null };
+  }
+  function descHtml(p) {
+    const { code, d } = descFor(p);
+    if (!d && !code) return '';
+    const [hl, paras, imgs] = d || [[], [], []];
+    let text = '', buf = '';
+    const flush = () => { if (buf) { text += `<p>${esc(buf)}</p>`; buf = ''; } };
+    paras.forEach(t => {
+      if (t.length <= 48 && !/[.!?,;:…]$/.test(t)) { flush(); text += `<h4>${esc(t)}</h4>`; }
+      else { buf += (buf ? ' ' : '') + t; if (/[.!?]$/.test(t) && buf.length > 140) flush(); }
+    });
+    flush();
+    return `<section class="pq-desc">
+      <h3>Описание${code ? `<small>Код товара: ${esc(code)}</small>` : ''}</h3>
+      ${hl.length ? `<ul class="hl">${hl.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+      ${text ? `<div class="txt" id="descTxt">${text}</div><button class="txt-more" id="descMore" type="button">Читать полностью</button>` : ''}
+      ${imgs.length ? `<div class="d-imgs">${imgs.map(s => `<img src="https://${esc(s)}" alt="" loading="lazy" data-hide="1">`).join('')}</div>` : ''}
+    </section>`;
+  }
+
   /* ----- product quick view ----- */
   function openProduct(id) {
     const p = byId.get(id); if (!p) return;
@@ -172,12 +201,14 @@
           <a class="pq-ext" href="${esc(link(p))}" target="_blank" rel="noopener">Страница товара на jjstore.ru ${ICON.ext}</a>
         </div>
       </div>
+      ${descHtml(p)}
       ${rel.length ? `<div class="pq-rel"><b>Ещё в этой категории</b><div class="rel-row">${rel.map(r => `<button class="rel" data-act="view" data-id="${esc(r.id)}"><img${rm(r)} src="${esc(imgSrc(r))}" alt="" loading="lazy"><span>${esc(r.name)}</span><em>${fmt(r.price)}</em></button>`).join('')}</div></div>` : ''}`;
-    syncSlots(); openModal(pModal);
+    syncSlots(); openModal(pModal); $('#pBody').scrollTop = 0;
   }
 
   /* ----- global click delegation ----- */
   document.addEventListener('click', e => {
+    if (e.target.closest('#descMore')) { const t = $('#descTxt'); const o = t.classList.toggle('open'); e.target.closest('#descMore').textContent = o ? 'Свернуть' : 'Читать полностью'; return; }
     const close = e.target.closest('[data-close]');
     if (close && close.closest('.modal')) { closeModals(); return; }
     const a = e.target.closest('[data-act]');
@@ -288,7 +319,6 @@
   /* ================= CATALOG PAGE ================= */
   const home = $('#home'), catalog = $('#catalog');
   const PAGE = 24;
-  const norm = s => s.toLowerCase().replace(/ё/g, 'е');
   function searchProducts(q) {
     const toks = norm(q).split(/\s+/).filter(Boolean); if (!toks.length) return [];
     const out = [];
