@@ -195,3 +195,13 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .search>svg{left:14px;right:auto;top:11px;font-size:18px;color:#8a8e99;transition:color .25s}
 .search:focus-within{background:rgba(255,255,255,.95);box-shadow:0 0 0 3px rgba(246,71,71,.22),0 8px 24px rgba(40,50,80,.1);max-width:520px}
 .search:focus-within>svg{color:var(--accent)}
+
+/* compact category wall: 6 columns, smaller tiles */
+.wall{grid-template-columns:repeat(6,1fr);grid-auto-rows:136px;gap:14px;margin-top:20px}
+.tile{--r:26px;border-radius:26px}
+.tile img{max-height:54%;max-width:60%;top:42%}
+.tile.feat img{max-height:62%;max-width:54%;top:44%}
+.tile span{font-size:12px;padding:5px 12px;margin-bottom:11px}
+.tile.feat span{font-size:15px;padding:8px 20px;margin-bottom:18px}
+@media(max-width:980px){.wall{grid-template-columns:repeat(4,1fr);grid-auto-rows:124px;gap:12px}}
+@media(max-width:760px){.wall{grid-template-columns:repeat(2,1fr);grid-auto-rows:124px;gap:10px}.tile.feat{grid-column:span 2;grid-row:span 2}}
