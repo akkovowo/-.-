@@ -211,7 +211,8 @@
   $('#trackNew').innerHTML = NEW_IDS.map(n => card(feat(n), { isNew: true })).join('');
   $('#trackPop').innerHTML = POP_IDS.map(n => card(feat(n))).join('');
   $$('.scroller').forEach(sc => {
-    const tr = sc.querySelector('.track'), pv = sc.querySelector('.prev'), nx = sc.querySelector('.next');
+    const tr = sc.querySelector('.track'), row = sc.closest('.row');
+    const pv = row && row.querySelector('.pager .prev'), nx = row && row.querySelector('.pager .next');
     if (!pv) return;
     const step = () => Math.max(tr.clientWidth * .8, 240);
     pv.onclick = () => tr.scrollBy({ left: -step(), behavior: 'smooth' });
@@ -219,6 +220,32 @@
     const upd = () => { pv.classList.toggle('off', tr.scrollLeft < 8); nx.classList.toggle('off', tr.scrollLeft + tr.clientWidth > tr.scrollWidth - 8); };
     tr.addEventListener('scroll', upd, { passive: true }); upd();
   });
+
+  /* "Новинки": slow endless ping-pong scroll (left <-> right); pauses while the user touches / hovers it */
+  (function () {
+    const tr = $('#trackNew'); if (!tr || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    const SPEED = 38;                       // px per second
+    let pos = 0, dir = 1, last = 0, paused = false, resumeT, visible = false, raf = 0;
+    const pause = () => { paused = true; clearTimeout(resumeT); };
+    const resume = (ms = 1800) => { clearTimeout(resumeT); resumeT = setTimeout(() => { paused = false; pos = tr.scrollLeft; }, ms); };
+    ['pointerenter', 'pointerdown', 'touchstart', 'focusin'].forEach(ev => tr.addEventListener(ev, pause, { passive: true }));
+    ['pointerleave', 'touchend', 'focusout'].forEach(ev => tr.addEventListener(ev, () => resume(), { passive: true }));
+    tr.addEventListener('wheel', () => { pause(); resume(2200); }, { passive: true });
+    $('#trackNew').closest('.row').querySelectorAll('.pager button').forEach(b => b.addEventListener('click', () => { pause(); resume(2600); }));
+    const tick = t => {
+      raf = requestAnimationFrame(tick);
+      const dt = Math.min(64, t - (last || t)); last = t;
+      if (paused || !visible || !tr.offsetParent) return;
+      const max = tr.scrollWidth - tr.clientWidth; if (max <= 0) return;
+      if (Math.abs(tr.scrollLeft - pos) > 2) pos = tr.scrollLeft;        // the user moved it: follow
+      pos += dir * SPEED * dt / 1000;
+      if (pos >= max) { pos = max; dir = -1; } else if (pos <= 0) { pos = 0; dir = 1; }
+      tr.scrollLeft = pos;
+    };
+    if ('IntersectionObserver' in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { threshold: .2 }).observe(tr); else visible = true;
+    tr.classList.add('auto');
+    raf = requestAnimationFrame(tick);
+  })();
 
   /* Hero banners: snap scroller, dots, arrows, autoplay */
   (function () {

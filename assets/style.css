@@ -626,3 +626,23 @@ body.in-catalog .minicart{bottom:calc(16px + env(safe-area-inset-bottom))}
 .ci .buy{font-size:12.5px;padding:8px 18px}
 .ci .slot{min-height:0;justify-content:flex-start}
 .price-f label{white-space:nowrap}
+
+/* ---------- carousel controls: joined glass pill instead of round arrows ---------- */
+.sec-ctl{display:flex;align-items:center;gap:10px}
+.pager{display:inline-flex;align-items:stretch;height:38px;border-radius:99px;padding:3px;background:rgba(255,255,255,.7)}
+.pager i{width:1px;margin:8px 2px;background:rgba(40,50,80,.14)}
+.pg,.hp-btn{display:grid;place-items:center;font-size:18px;color:#3b3e47;transition:background .25s,color .25s,transform .3s var(--ease),opacity .25s}
+.pg{width:42px;border-radius:99px}
+.pg svg,.hp-btn svg{stroke-width:2.2}
+.pg:hover:not(.off){background:rgba(246,71,71,.1);color:var(--accent)}
+.pg:active:not(.off){transform:scale(.9)}
+.pg.off{opacity:.3;pointer-events:none}
+.hero-ui{display:flex;justify-content:center}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 6px;border-radius:99px;background:rgba(255,255,255,.7)}
+.hp-btn{width:34px;height:30px;border-radius:99px}
+.hp-btn:hover{background:rgba(246,71,71,.1);color:var(--accent)}
+.hp-btn:active{transform:scale(.88)}
+.hero-pill .dots{padding:0 4px}
+/* auto-scrolling row must not fight scroll-snap; soft fade at both edges */
+.track.auto{scroll-snap-type:none;scroll-behavior:auto;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%)}
+@media(max-width:760px){.pager{height:34px}.pg{width:36px}}
