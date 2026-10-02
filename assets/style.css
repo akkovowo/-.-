@@ -205,3 +205,20 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .tile.feat span{font-size:15px;padding:8px 20px;margin-bottom:18px}
 @media(max-width:980px){.wall{grid-template-columns:repeat(4,1fr);grid-auto-rows:124px;gap:12px}}
 @media(max-width:760px){.wall{grid-template-columns:repeat(2,1fr);grid-auto-rows:124px;gap:10px}.tile.feat{grid-column:span 2;grid-row:span 2}}
+
+/* mobile: vertical product grid (no horizontal scroller — backdrop-filter cards can fail to paint inside it on iOS Safari) + compact header */
+@media(max-width:760px){
+  .products{margin:14px 0 60px}
+  .track{display:grid;grid-template-columns:1fr 1fr;gap:12px;overflow:visible;scroll-snap-type:none;padding:0;margin:0}
+  .card{flex:none;min-width:0;padding:12px 10px 16px}
+  .card .img{height:130px}
+  .card h4{font-size:12.5px;min-height:34px}
+  .price{font-size:16px;margin:6px 0 10px}
+  .buy{padding:9px 16px;font-size:12px}
+  .arrow{display:none}
+  .head-row{flex-wrap:nowrap;gap:10px}
+  .search{order:0;flex:1;min-width:0;max-width:none}
+  .logo span{display:none}
+  .icons{margin-left:0}
+  .sec-title{margin-top:36px}
+}
