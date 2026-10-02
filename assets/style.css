@@ -706,3 +706,15 @@ img.rm{mix-blend-mode:multiply;filter:none!important}
 @media(max-width:760px){.d-imgs{grid-template-columns:1fr}}
 .txt h4{font-size:14px;font-weight:700;color:var(--text);margin:12px 0 4px;letter-spacing:-.01em}
 .txt h4:first-child{margin-top:0}
+
+/* modals must fit the *visible* viewport (mobile browsers: 100vh is taller than what you can see) */
+.modal{height:100%;max-height:100%}
+.modal-card{max-height:min(720px,100%)}
+@supports (height:100dvh){.modal{height:100dvh}}
+@media(max-width:760px){
+  .modal{padding:8px}
+  .modal-card,.modal-card.pq{max-height:100%}
+  .modal-card.pq{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  .modal .m-body{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;min-height:0}
+  .wish-card .m-list{max-height:none}
+}
