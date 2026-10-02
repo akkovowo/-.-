@@ -294,3 +294,11 @@ footer{padding:28px 0 48px}
   .scene::before,.hero-mark,.hero h1,.hero .lead,.hero-actions,.hero-note,.providers,.header .bar,.plan.card-active,.faq details>p{animation:none}
   .js .reveal{opacity:1;transform:none;transition:none}
 }
+
+/* credit */
+.credit{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:14px;font-family:var(--font-mono);font-size:11px;letter-spacing:.02em;color:var(--dim)}
+.credit a{color:var(--muted);text-decoration:underline;text-decoration-color:rgba(255,255,255,.25);text-underline-offset:3px;transition:color var(--lg-fast) ease,text-decoration-color var(--lg-fast) ease}
+.credit a:hover{color:var(--accent);text-decoration-color:var(--accent)}
+.heart{width:13px;height:13px;fill:var(--accent);filter:drop-shadow(0 0 4px color-mix(in srgb,var(--accent) 60%,transparent));transform-origin:center;animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}14%{transform:scale(1.28)}28%{transform:scale(1)}42%{transform:scale(1.2)}70%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.heart{animation:none}}
