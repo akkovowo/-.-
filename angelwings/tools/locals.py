@@ -135,6 +135,8 @@ def infer(P,kidnups,mode_names=None):
     for pc,r,i in usesite:
         if i is None: continue
         webs[find(i)]['uses'].append(pc)
+    global LAST_S2W
+    LAST_S2W={(pc,r):find(i) for i,(pc,r) in enumerate(sites)}
     # labels (jump targets)
     targets=set()
     for pc in range(n):
@@ -199,18 +201,52 @@ def make_locals(P,kidnups,names,reserved=frozenset()):
     for w in webs.values():
         firstdef.setdefault(w['reg'],[]).append(min(w['defs']))
     for r in firstdef: firstdef[r].sort()
+    s2w=LAST_S2W
+    tempmemo={}
+    def istemp(root):
+        if root not in tempmemo:
+            tempmemo[root]=is_temp(webs[root],targets,code,pseudo,uses,defs)
+        return tempmemo[root]
+    def extend(w,seen=None):
+        seen=seen or set()
+        lu=max(w['defs']+w['uses'])
+        for u in set(w['uses']):
+            for t in defs[u]:
+                root=s2w.get((u,t))
+                if root is None or root in seen: continue
+                wt=webs[root]
+                if wt is w: continue
+                if istemp(root):
+                    seen.add(root)
+                    lu=max(lu,extend(wt,seen))
+        return lu
+    spans=[]
+    for pc in range(n):
+        if code[pc][0]=='JMP':
+            t=pc+1+code[pc][2]
+            if t>pc+1:
+                so=pc-1 if pc>0 and code[pc-1][0] in('EQ','LT','LE','TEST','TESTSET') else pc
+                spans.append((so,t))
+    spans.sort()
     L=[]   # dicts: reg,lo,lu,end
     for w in webs.values():
         r=w['reg']
         if r<P.nparams: continue
         if any(code[d][0] in('FORLOOP','FORPREP','TFORLOOP') for d in w['defs']): continue
+        if any(code[u][0] in('FORLOOP','FORPREP','TFORLOOP') for u in w['uses']): continue
         if is_temp(w,targets,code,pseudo,uses,defs): continue
-        lo=min(w['defs'])
-        lu=max(w['defs']+w['uses'])
+        lo=min(w['defs']);d0=lo
+        lu=extend(w)
+        ch=True
+        while ch:
+            ch=False
+            for so,t in spans:
+                if so<lo<t and lu>=t:
+                    lo=so-0;ch=True;break
         later=[d for d in firstdef[r] if d>lo]
         lim=E[lo]
         if later: lim=min(lim,later[0]-1)
-        L.append({'reg':r,'lo':lo+1,'lu':lu,'end':max(lu,lim),'d':lo})
+        L.append({'reg':r,'lo':lo+1,'lu':lu,'end':max(lu,lim),'d':d0})
     # merge overlapping same-register locals
     byreg={}
     for x in L: byreg.setdefault(x['reg'],[]).append(x)
@@ -227,10 +263,10 @@ def make_locals(P,kidnups,names,reserved=frozenset()):
     L.sort(key=lambda x:(x['lo'],x['reg']))
     for k,Y in enumerate(L):
         for X in L[:k]:
-            if X['lo']<=Y['lo']<=X['end']:
+            if X['lo']<=Y['lo']-1<=X['end']:
                 if X['reg']>=Y['reg']:
                     # X is dead once Y's register (or a lower one) starts
-                    X['end']=max(X['lu'],min(X['end'],Y['lo']-1))
+                    X['end']=max(X['lu'],min(X['end'],Y['lo']-2))
                 else:
                     # Y must nest inside X
                     if Y['end']>X['end']:

@@ -21,7 +21,7 @@ def shift_ins(ins,loops):
         if isinstance(v,int):
             ins[i]=v+2*sum(1 for a in loops if v>=a)
 
-def translate(F, kids):
+def translate(F, kids, ALLOWED=None):
     import tr
     tr.API['regs']=F.api_regs;tr.API['ups']=F.api_ups
     """returns Proto (children unresolved ids in .kids)"""
@@ -83,6 +83,30 @@ def translate(F, kids):
     while stack:
         raise Unsupported('unclosed loop')
     # ---- resolve labels
+    def fuse_cmp(code,allowed):
+        refd=set(it[4] for it in code if it[0]!='LABEL' and it[4] is not None)
+        for it in code:
+            if it[0]=='LABEL' and isinstance(it[4],tuple) and it[4][0]=='ALIAS': refd.add(it[4][2])
+        code[:]=[it for it in code if not(it[0]=='LABEL' and not(isinstance(it[4],tuple) and it[4][0]=='ALIAS') and it[4] not in refd)]
+        k=0;n=0;sites=[]
+        while k+6<len(code):
+            seq=code[k:k+7]
+            ok=(seq[0][0] in('EQ','LT','LE') and seq[1][0]=='JMP' and isinstance(seq[1][4],tuple) and seq[1][4][0]=='LOC'
+                and seq[2][0]=='LOADBOOL' and seq[2][2:4]==[0,1] and seq[3][0]=='LABEL' and seq[3][4]==seq[1][4]
+                and seq[4][0]=='LOADBOOL' and seq[4][2:4]==[1,0] and seq[5][0]=='TEST' and seq[5][1]==seq[2][1]==seq[4][1]
+                and seq[6][0] in('JMP',) )
+            if ok:
+                ordn=len(sites);sites.append(seq[0])
+                if allowed is not None and ordn in allowed:
+                    c=seq[5][3]
+                    cmp_=list(seq[0])
+                    if c==0: cmp_[1]=1-cmp_[1]
+                    j=list(seq[6])
+                    code[k:k+7]=[cmp_,j];n+=1
+                    continue
+            k+=1
+        return sites
+    SITES=fuse_cmp(code,ALLOWED)
     def resolve(code):
         labels={};aliases={}
         real=[];pending=[]
@@ -165,7 +189,7 @@ def translate(F, kids):
                     if k>255: raise Unsupported('K>255')
                     ins[fi]=256+k
         if op=='SETTABLE' and False: pass
-    P=Proto();P.id=F.id;P.code=out;P.consts=consts;P.kids=protos
+    P=Proto();P.sites=[real.index(s) if s in real else None for s in SITES];P.id=F.id;P.code=out;P.consts=consts;P.kids=protos
     P.nups=len(F.ups);P.nparams=cx.nparams;P.vararg=cx.vararg or any(i[0]=='VARARG' for i in out)
     mx=max([cx.maxreg]+[ (i[1]+1) for i in out if isinstance(i[1],int)]+[ (i[3]+1) for i in out if i[0]=='CONCAT' ])
     P.maxstack=min(250,mx+3)
@@ -216,3 +240,24 @@ def encode(P,kidp,child):
     return bytes(b)
 VARFLAG=2
 HEADER=b'\x1bLua\x51\x00\x01\x04\x08\x04\x08\x00'
+
+
+def translate2(F,kids,kidnups):
+    import locals as LV
+    P1=translate(F,kids,None)
+    if not P1.sites: return P1
+    webs,sites,targets,pseudo,uses,defs=LV.infer(P1,kidnups)
+    safe=set()
+    for ordn,k in enumerate(P1.sites):
+        if k is None: continue
+        code=P1.code
+        r=code[k+2][1]
+        ok=False
+        for w in webs.values():
+            if w['reg']==r and set(w['defs'])=={k+2,k+3} and set(w['uses'])=={k+4}:
+                ok=True
+        if ok: safe.add(ordn)
+    if not safe: return P1
+    global FUSED_TOTAL
+    FUSED_TOTAL=globals().get('FUSED_TOTAL',0)+len(safe)
+    return translate(F,kids,safe)

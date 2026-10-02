@@ -29,10 +29,10 @@ def _prop(fid):
 _prop(407)
 protos={};fails={}
 for fid,F in funcs.items():
-    try: protos[fid]=translate(F,None)
+    try: protos[fid]=translate2(F,None,{c:len(desc[c]) for c in desc})
     except Unsupported as e: fails[fid]=str(e)
     except Exception as e: fails[fid]='EXC '+repr(e)
-print(len(protos),len(fails));print(list(fails.items())[:10])
+print(len(protos),len(fails),'fused',getattr(__import__('asm'),'FUSED_TOTAL',0));print(list(fails.items())[:10])
 
 def stub(fid,F):
     P=Proto();P.id=fid;P.code=[['RETURN',0,1,0]];P.consts=[];P.kids=[];P.nups=len(F.ups);P.nparams=0;P.vararg=True;P.maxstack=2

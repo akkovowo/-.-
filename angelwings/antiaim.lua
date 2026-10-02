@@ -1,5 +1,5 @@
 -- angelwings: раздел antiaim (декомпилировано, имена восстановлены эвристикой)
--- Локальные ссылки вида vNN/arg1 могут быть объявлены в основном файле angelwings_full.lua
+-- Локальные (vNN, ...) объявлены в angelwings_full.lua выше по файлу
 
 -- ===== блок 19 =====
 local v14_2 = {}
@@ -112,6 +112,7 @@ do
   v27_3.lagcompensation = {distance = 0, teleport = false}
   local v28_3 = function(arg1)
     do
+      local v1 = globals.tickcount()
       v1 = globals.tickcount() > entity.get_prop(arg1, "m_nTickBase")
       v27_3.shift = v1
     end
@@ -120,6 +121,7 @@ do
   local v29_2 = function(arg1, arg2)
     local v3 = (arg2 - arg1):lengthsqr()
     do
+      local v4 = arg2 - arg1
       v4 = v3 > 4096
       v27_3.breaking_lc = v4
       v27_3.lagcompensation.distance = v3
@@ -235,13 +237,11 @@ v28_6.aim_tools = {
 local v29_4 = {}
 do
   local v30_3 = function(arg1, arg2)
-    do
-      local v2 = arg2
-      if not v2 then
-        v2 = v14_2
-        v2 = v2.get_color
-        v2 = v2(true)
-      end
+    local v2 = arg2
+    if not v2 then
+      v2 = v14_2
+      v2 = v2.get_color
+      v2 = v2(true)
     end
     return (string.gsub(arg1, "${(.-)}", (string.format("\a%s%%1\a%s", v2, "FFFFFFC8"))))
   end
@@ -360,8 +360,11 @@ do
     local v37 = function(arg1, arg2)
       local v2 = {}
       do
+        local v3
         v3 = arg1 == "shared"
+        local v4
         v4 = arg1 == "on use"
+        local v5
         v5 = arg1 == "freestanding"
         local v6 = function(arg1)
           return arg1 .. ":" .. arg1
@@ -436,8 +439,8 @@ do
         for _FORV_11_ = 1, 10 do
           v2.delays[_FORV_11_] = v18_2.push("antiaim", v6("delay_" .. _FORV_11_), v21_4.new(ui.new_slider, "AA", "Anti-aimbot angles", v31_3(v30_3("  ${~}  delay " .. _FORV_11_), v6("delay_" .. _FORV_11_)), 1, 14, 0, true, "t"))
         end
+        v2.invert_chance = v18_2.push("antiaim", v6("invert_chance"), v21_4.new(ui.new_slider, "AA", "Anti-aimbot angles", v31_3(v30_3("  ${~}  invert chance"), v6("invert_chance")), 1, 100, 100, true, "%"))
       end
-      v2.invert_chance = v18_2.push("antiaim", v6("invert_chance"), v21_4.new(ui.new_slider, "AA", "Anti-aimbot angles", v31_3(v30_3("  ${~}  invert chance"), v6("invert_chance")), 1, 100, 100, true, "%"))
       return v2
     end
     v35_2.select = v21_4.new(ui.new_combobox, "AA", "Anti-aimbot angles", [[
@@ -532,8 +535,8 @@ do
  fakelag_value]]), "roll_antiaim"), -50, 50, 0, true, "\194\176"))
       }
       v35_2.settings = v38
-      local v39 = {}
     end
+    local v39 = {}
     v39.state = v21_4.new(ui.new_combobox, "AA", "Anti-aimbot angles", v31_3(v30_3("${state}"), "builder"), v28_6.states)
     for _FORV_43_ = 1, #v28_6.states do
       local v44_2 = v28_6.states[_FORV_43_]
@@ -661,15 +664,15 @@ do
       v19_4.push(-1, v41_2.enabled)
       v36_2.angelic_tap = v41_2
     end
-    local v42_3 = {}
-    v42_3.enabled = v18_2.push("ragebot", "teleport_fix.enabled", v21_4.new(ui.new_checkbox, "AA", "Anti-aimbot angles", "teleport fix"))
-    v19_4.push(-1, v42_3.enabled)
-    v36_2.teleport_fix = v42_3
-    local v43_2 = {}
-    v43_2.enabled = v18_2.push("ragebot", "air_autostop.enabled", v21_4.new(ui.new_checkbox, "AA", "Anti-aimbot angles", "quick stop in air"))
-    v43_2.hotkey = v18_2.push("ragebot", "air_autostop.hotkey", v21_4.new(ui.new_hotkey, "AA", "Anti-aimbot angles", "quick stop in air hotkey", true))
-    v19_4.push(-1, v43_2.enabled)
-    v36_2.air_autostop = v43_2
+    local v42_2 = {}
+    v42_2.enabled = v18_2.push("ragebot", "teleport_fix.enabled", v21_4.new(ui.new_checkbox, "AA", "Anti-aimbot angles", "teleport fix"))
+    v19_4.push(-1, v42_2.enabled)
+    v36_2.teleport_fix = v42_2
+    local v43 = {}
+    v43.enabled = v18_2.push("ragebot", "air_autostop.enabled", v21_4.new(ui.new_checkbox, "AA", "Anti-aimbot angles", "quick stop in air"))
+    v43.hotkey = v18_2.push("ragebot", "air_autostop.hotkey", v21_4.new(ui.new_hotkey, "AA", "Anti-aimbot angles", "quick stop in air hotkey", true))
+    v19_4.push(-1, v43.enabled)
+    v36_2.air_autostop = v43
     local v44_3 = {}
     v44_3.enabled = v18_2.push("ragebot", "force_shot.enabled", v21_4.new(ui.new_checkbox, "AA", "Anti-aimbot angles", "force shot"))
     v44_3.hotkey = v18_2.push("ragebot", "force_shot.hotkey", v21_4.new(ui.new_hotkey, "AA", "Anti-aimbot angles", "force shot hotkey", true))
@@ -808,8 +811,8 @@ do
     v19_4.push(-2, v45_4.enabled)
     v37_3.old_feature_indicators = v45_4
     v29_4.visuals = v37_3
-    local v38_3 = {}
   end
+  local v38_3 = {}
   v38_3.animated_zoom = {
     enabled = v18_2.push("visuals", "animated_zoom.enabled", v21_4.new(ui.new_checkbox, "AA", "Anti-aimbot angles", "animated zoom")),
     speed = v18_2.push("visuals", "animated_zoom.speed", v21_4.new(ui.new_slider, "AA", "Anti-aimbot angles", v31_3(v30_3("  ${~}  animation speed"), "animated_zoom"), 1, 100, 20, true, "%"))
@@ -887,21 +890,21 @@ do
     v19_4.push(-1, v47_3.enabled)
     v38_3.never_slide = v47_3
     v29_4.misc = v38_3
-    local v39_5 = {}
   end
+  local v39_5 = {}
   do
     local str = v12.name .. "#db"
     local read = database.read(str)
     read = read or {}
-    local v42_4 = {}
-    local v43_3 = {}
+    local v42_3 = {}
+    local v43_2 = {}
     local v44_5 = {}
     v44_5[1] = {
       name = "default",
       data = "angelwings_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"
     }
     for _FORV_48_ = 1, #read do
-      v42_4[_FORV_48_] = read[_FORV_48_]
+      v42_3[_FORV_48_] = read[_FORV_48_]
     end
     for _FORV_48_ = #v44_5, 1, -1 do
       local v49 = v44_5[_FORV_48_]
@@ -921,7 +924,7 @@ do
         default = arg3
       }
     end
-    local v46_3 = function(arg1, arg2)
+    local v46_2 = function(arg1, arg2)
       for _FORV_5_ = 1, #arg1 do
         local v6 = arg1[_FORV_5_]
         if v6.name == arg2 then
@@ -930,29 +933,29 @@ do
       end
       return nil, -1
     end
-    local v47_6 = function()
-      database.write(str, v42_4)
+    local v47_4 = function()
+      database.write(str, v42_3)
       return
     end
     local v48_2 = function()
-      for _FORV_3_ = 1, #v43_3 do
-        v43_3[_FORV_3_] = nil
+      for _FORV_3_ = 1, #v43_2 do
+        v43_2[_FORV_3_] = nil
       end
       for _FORV_3_ = 1, #v44_5 do
         local v4 = v44_5[_FORV_3_]
-        table.insert(v43_3, (v45_6(v4.name, v4.data, true)))
+        table.insert(v43_2, (v45_6(v4.name, v4.data, true)))
       end
-      for _FORV_3_ = 1, #v42_4 do
-        local v4_2 = v42_4[_FORV_3_]
+      for _FORV_3_ = 1, #v42_3 do
+        local v4_2 = v42_3[_FORV_3_]
         v45_6(v4_2.name, v4_2.data, false).data_index = _FORV_3_
-        table.insert(v43_3, (v45_6(v4_2.name, v4_2.data, false)))
+        table.insert(v43_2, (v45_6(v4_2.name, v4_2.data, false)))
       end
       return
     end
     local v49_2 = function()
       local v0 = {}
-      for _FORV_4_ = 1, #v43_3 do
-        local v5 = v43_3[_FORV_4_]
+      for _FORV_4_ = 1, #v43_2 do
+        local v5 = v43_2[_FORV_4_]
         local name = v5.name
         if v5.default then
           name = "*" .. name
@@ -962,8 +965,8 @@ do
       return v0
     end
     local v50 = function(arg1)
-      local v46_3_2 = v46_3
-      return v46_3_2(v43_3, arg1)
+      local v46_2_2 = v46_2
+      return v46_2_2(v43_2, arg1)
     end
     local v51 = function(arg1)
       local v50_2, v50_3 = v50(arg1)
@@ -980,8 +983,8 @@ do
       local export = v18_2.export()
       local v50_2, v50_3 = v50(arg1)
       if v50_2 == nil or v50_3 == -1 then
-        table.insert(v42_4, v45_6(arg1, export, false))
-        v47_6()
+        table.insert(v42_3, v45_6(arg1, export, false))
+        v47_4()
         v48_2()
         v39_5.list:update(v49_2())
         v17_2.success(string.format("%s config is created", arg1))
@@ -990,12 +993,12 @@ do
       if not v50_2.default then
         v50_2.data = export
         if v50_2.data_index ~= nil then
-          local v4 = v42_4[v50_2.data_index]
+          local v4 = v42_3[v50_2.data_index]
           if v4 ~= nil then
             v4.data = export
           end
         end
-        v47_6()
+        v47_4()
         v48_2()
         v17_2.success(string.format("%s config is saved", arg1))
         return
@@ -1013,12 +1016,12 @@ do
         if data_index == nil then
           return
         end
-        table.remove(v42_4, data_index)
-        v47_6()
+        table.remove(v42_3, data_index)
+        v47_4()
         v48_2()
         v39_5.list:update(v49_2())
         local v4 = ""
-        local v6 = v43_3[math.min(v39_5.list:get() + 1, #v43_3)]
+        local v6 = v43_2[math.min(v39_5.list:get() + 1, #v43_2)]
         if v6 ~= nil then
           v4 = v6.name
         end
@@ -1084,7 +1087,7 @@ do
       if v1 == nil then
         return
       end
-      local v2 = v43_3[v1 + 1]
+      local v2 = v43_2[v1 + 1]
       if v2 == nil then
         return
       end
@@ -1135,7 +1138,7 @@ do
     ui.set_visible(fake_lag.limit, arg1)
     return
   end
-  local v42_5 = function(arg1)
+  local v42_4 = function(arg1)
     local defensive = arg1.defensive
     if arg1.override ~= nil then
       v22_5.set(arg1.override, true)
@@ -1250,7 +1253,7 @@ do
     end
     return
   end
-  local v43_4 = function()
+  local v43_3 = function()
     v22_5.set(v33_2.wings, true)
     v22_5.set(v33_2.category, true)
     v22_5.set(v34_2.enabled, true)
@@ -1314,7 +1317,7 @@ do
         v22_5.set(builder.state, true)
         local v4_2 = builder[v3_2]
         if v4_2 ~= nil then
-          v42_5(v4_2)
+          v42_4(v4_2)
         end
       end
       if v1 == "antibrute" then
@@ -1531,8 +1534,8 @@ do
     v41_3(v0)
     return
   end
-  v22_5.get_event_bus().update:set(v43_4)
-  v43_4()
+  v22_5.get_event_bus().update:set(v43_3)
+  v43_3()
   v22_5.force_update()
   client.set_event_callback("shutdown", v44_6)
   client.set_event_callback("paint_ui", v45_7)
@@ -1544,8 +1547,8 @@ do
   local v39_6 = 0
   local v40_5 = false
   local v41_4
-  local v42_6 = 0
-  local v43_5 = {}
+  local v42_5 = 0
+  local v43_4 = {}
   ;({})[1] = -1
   ;({})[2] = 1
   ;({})[3] = 0
@@ -1564,7 +1567,7 @@ do
   local v45_8 = {}
   do
     local angles = v14_2.antiaimbot.angles
-    local v47_7 = function(arg1, ...)
+    local v47_5 = function(arg1, ...)
       if (...) == nil then
         return
       end
@@ -1616,47 +1619,47 @@ do
       if arg1.body_yaw_offset ~= nil then
         arg1.body_yaw_offset = v13_2.clamp(arg1.body_yaw_offset, -180, 180)
       end
-      v47_7(angles.enabled, arg1.enabled)
-      v47_7(angles.pitch[1], arg1.pitch)
-      v47_7(angles.pitch[2], arg1.pitch_offset)
-      v47_7(angles.yaw_base, arg1.yaw_base)
-      v47_7(angles.yaw[1], arg1.yaw)
-      v47_7(angles.yaw[2], arg1.yaw_offset)
-      v47_7(angles.yaw_jitter[1], arg1.yaw_jitter)
-      v47_7(angles.yaw_jitter[2], arg1.jitter_offset)
-      v47_7(angles.body_yaw[1], arg1.body_yaw)
-      v47_7(angles.body_yaw[2], arg1.body_yaw_offset)
-      v47_7(angles.freestanding_body_yaw, arg1.freestanding_body_yaw)
-      v47_7(angles.edge_yaw, arg1.edge_yaw)
+      v47_5(angles.enabled, arg1.enabled)
+      v47_5(angles.pitch[1], arg1.pitch)
+      v47_5(angles.pitch[2], arg1.pitch_offset)
+      v47_5(angles.yaw_base, arg1.yaw_base)
+      v47_5(angles.yaw[1], arg1.yaw)
+      v47_5(angles.yaw[2], arg1.yaw_offset)
+      v47_5(angles.yaw_jitter[1], arg1.yaw_jitter)
+      v47_5(angles.yaw_jitter[2], arg1.jitter_offset)
+      v47_5(angles.body_yaw[1], arg1.body_yaw)
+      v47_5(angles.body_yaw[2], arg1.body_yaw_offset)
+      v47_5(angles.freestanding_body_yaw, arg1.freestanding_body_yaw)
+      v47_5(angles.edge_yaw, arg1.edge_yaw)
       if arg1.freestanding == true then
-        v47_7(angles.freestanding[1], true)
-        v47_7(angles.freestanding[2], "Always on")
+        v47_5(angles.freestanding[1], true)
+        v47_5(angles.freestanding[2], "Always on")
       elseif arg1.freestanding == false then
-        v47_7(angles.freestanding[1], false)
-        v47_7(angles.freestanding[2], "On hotkey")
+        v47_5(angles.freestanding[1], false)
+        v47_5(angles.freestanding[2], "On hotkey")
       end
-      v47_7(angles.roll, arg1.roll)
+      v47_5(angles.roll, arg1.roll)
       return
     end
     setmetatable(v45_8, v48_3)
     v38_4.buffer = v45_8
   end
-  local v46_4 = {}
+  local v46_3 = {}
   do
-    local v47_8 = false
+    local v47_6 = false
     local v48_4 = 0
     local v49_3 = function()
-      local L0_60, L1_61, L2_62, L3_63, L4_64, L5_65, L6_66
-      L0_60 = v47_8
-      L0_60 = not L0_60
-      v47_8 = L0_60
+      local L0_70, L1_71, L2_72, L3_73, L4_74, L5_75, L6_76
+      L0_70 = v47_6
+      L0_70 = not L0_70
+      v47_6 = L0_70
       return
     end
     local v50_2 = function()
-      local L0_67, L1_68, L2_69, L3_70, L4_71, L5_72, L6_73, L7_74, L8_75, L9_76, L10_77, L11_78, L12_79, L13_80, L14_81, L15_82, L16_83, L17_84, L18_85, L19_86, L20_87, L21_88, L22_89, L23_90, L24_91, L25_92, L26_93
-      L0_67 = v48_4
-      L0_67 = L0_67 + 1
-      v48_4 = L0_67
+      local L0_77, L1_78, L2_79, L3_80, L4_81, L5_82, L6_83, L7_84, L8_85, L9_86, L10_87, L11_88, L12_89, L13_90, L14_91, L15_92, L16_93, L17_94, L18_95, L19_96, L20_97, L21_98, L22_99, L23_100, L24_101, L25_102, L26_103
+      L0_77 = v48_4
+      L0_77 = L0_77 + 1
+      v48_4 = L0_77
       return
     end
     local v51_2 = function(arg1)
@@ -1687,11 +1690,11 @@ do
         return
       end
       if v2 == "jitter" then
-        local v47_8_2 = v47_8
-        v47_8_2 = v47_8_2 and v5
-        v47_8_2 = v47_8_2 or v4
+        local v47_6_2 = v47_6
+        v47_6_2 = v47_6_2 and v5
+        v47_6_2 = v47_6_2 or v4
         arg1.pitch = "Custom"
-        arg1.pitch_offset = v47_8_2
+        arg1.pitch_offset = v47_6_2
         return
       end
       if v2 == "spin" then
@@ -1725,23 +1728,22 @@ do
           v40_5_2 = v40_5_2 and 0
           v40_5_2 = v40_5_2 or v3
           yaw_offset = yaw_offset + v40_5_2
+          arg1.yaw_offset = yaw_offset
         end
-        arg1.yaw_offset = yaw_offset
         return
       end
       if v2 == "center" then
         if not arg2.delay_affect_modifier:get() then
-          do
-            v4 = bit.band(v48_4, 1) ~= 0
-            local yaw_offset_2 = arg1.yaw_offset
-            local v6 = v4
-            v6 = v6 and v3 * 0.5
-            if not v6 then
-              v6 = -v3
-              v6 = v6 * 0.5
-            end
-            yaw_offset_2 = yaw_offset_2 + v6
+          local v4 = bit.band(v48_4, 1)
+          v4 = bit.band(v48_4, 1) ~= 0
+          local yaw_offset_2 = arg1.yaw_offset
+          local v6 = v4
+          v6 = v6 and v3 * 0.5
+          if not v6 then
+            v6 = -v3
+            v6 = v6 * 0.5
           end
+          yaw_offset_2 = yaw_offset_2 + v6
           arg1.yaw_offset = yaw_offset_2
         else
           arg1.yaw_left = arg1.yaw_left - v3 * 0.5
@@ -1752,7 +1754,7 @@ do
         return
       end
       if v2 == "skitter" then
-        arg1.yaw_offset = arg1.yaw_offset + v3 * v43_5[v39_6 % #v43_5 + 1]
+        arg1.yaw_offset = arg1.yaw_offset + v3 * v43_4[v39_6 % #v43_4 + 1]
         return
       end
       return
@@ -1779,16 +1781,16 @@ do
       if v2 == "spin" then
         do
           local prod = v4 * 0.5
+          local sum = 180 + v13_2.lerp(-prod, prod, globals.curtime() * v3 * 0.1 % 1)
         end
-        local sum = 180 + v13_2.lerp(-prod, prod, globals.curtime() * v3 * 0.1 % 1)
         arg1.yaw = "180"
         arg1.yaw_offset = sum
       end
       if v2 == "random" then
         do
           local abs = math.abs(v4 * 0.5)
+          local sum_2 = 180 + v13_2.random_int(-abs, abs)
         end
-        local sum_2 = 180 + v13_2.random_int(-abs, abs)
         arg1.yaw = "180"
         arg1.yaw_offset = sum_2
       end
@@ -1815,14 +1817,14 @@ do
       arg1.delay = v2
       return
     end
-    function v46_4.update(arg1, arg2)
+    function v46_3.update(arg1, arg2)
       if arg2.chokedcommands == 0 then
         v49_3()
         v50_2()
       end
       return
     end
-    function v46_4.apply(arg1, arg2, arg3)
+    function v46_3.apply(arg1, arg2, arg3)
       if arg3.force_break_lc ~= nil then
         arg2.force_defensive = arg3.force_break_lc:get()
       end
@@ -1837,6 +1839,7 @@ do
       end
       if is_double_tap_active and not is_duck_peek_assist then
         do
+          local v7 = v24_5.get().defensive.left
           v7 = v24_5.get().defensive.left > 0
         end
         if arg3.enabled:get() and v7 then
@@ -1852,13 +1855,14 @@ do
       return false
     end
   end
-  local v47_9 = {}
+  local v47_7 = {}
   do
     local builder = v29_4.antiaim.builder
     local v49_4 = function(arg1)
       return (arg1:gsub("^%l", string.upper))
     end
     local v50_3 = function()
+      local v0_2 = next(entity.get_players(true))
       v0_2 = next(entity.get_players(true)) == nil
       return v0_2
     end
@@ -1980,6 +1984,7 @@ do
       end
       local v1 = arg1.body_yaw:get()
       do
+        local v2 = arg1.body_yaw
         v2 = v1 == "jitter"
         v2 = v2 or v1 == "random"
         v2 = v2 or v1 == "min/max"
@@ -2007,6 +2012,7 @@ do
       end
       local v1 = arg1.body_yaw:get()
       do
+        local v2 = arg1.body_yaw
         v2 = v1 == "jitter"
         v2 = v2 or v1 == "random"
         v2 = v2 or v1 == "min/max"
@@ -2017,10 +2023,10 @@ do
       end
       return
     end
-    function v47_9.get(arg1, arg2)
+    function v47_7.get(arg1, arg2)
       return builder[arg2]
     end
-    function v47_9.apply_ex(arg1, arg2)
+    function v47_7.apply_ex(arg1, arg2)
       if arg2 == nil then
         return false
       end
@@ -2035,7 +2041,7 @@ do
       v56(arg2)
       return true
     end
-    function v47_9.apply(arg1, arg2)
+    function v47_7.apply(arg1, arg2)
       local v2 = arg1:get(arg2)
       if v2 == nil then
         return nil
@@ -2048,7 +2054,7 @@ do
       end
       return nil
     end
-    function v47_9.update(arg1)
+    function v47_7.update(arg1)
       if v24_5.get().shift or arg1:apply("fakelag") == nil then
         if not v50_3() or arg1:apply("dormant") == nil then
           if arg1:apply(v25_6.get()[#v25_6.get()]) == nil then
@@ -2090,15 +2096,15 @@ do
       return nil
     end
     local v57 = function()
-      local L0_94, L1_95, L2_96, L3_97, L4_98, L5_99, L6_100, L7_101, L8_102, L9_103, L10_104, L11_105, L12_106, L13_107, L14_108, L15_109, L16_110, L17_111, L18_112, L19_113, L20_114, L21_115, L22_116, L23_117, L24_118
-      L20_114 = nil
-      v50_4 = L20_114
-      L20_114 = nil
-      v51_4 = L20_114
-      L20_114 = nil
-      v52_4 = L20_114
-      L20_114 = nil
-      v53_4 = L20_114
+      local L0_104, L1_105, L2_106, L3_107, L4_108, L5_109, L6_110, L7_111, L8_112, L9_113, L10_114, L11_115, L12_116, L13_117, L14_118, L15_119, L16_120, L17_121, L18_122, L19_123, L20_124, L21_125, L22_126, L23_127, L24_128
+      L20_124 = nil
+      v50_4 = L20_124
+      L20_124 = nil
+      v51_4 = L20_124
+      L20_124 = nil
+      v52_4 = L20_124
+      L20_124 = nil
+      v53_4 = L20_124
       return
     end
     function v48_5.update()
@@ -2146,6 +2152,7 @@ do
     local freestanding = v29_4.antiaim.settings.freestanding
     local v51_5, v52_5
     local v53_5 = function(arg1, arg2)
+      local v2 = math.abs(arg2 - arg1)
       v2 = 2 >= math.abs(arg2 - arg1)
       return v2
     end
@@ -2214,7 +2221,7 @@ do
       return false
     end
     local v60 = function(arg1)
-      local v1 = v47_9:get("freestanding")
+      local v1 = v47_7:get("freestanding")
       if v1.override ~= nil and not v1.override:get() then
         v1 = nil
       end
@@ -2232,11 +2239,11 @@ do
           v45_8.freestanding_body_yaw = true
         end
         if v1 ~= nil then
-          v47_9:apply_ex(v1)
+          v47_7:apply_ex(v1)
         end
       end
       if v23_5.is_vulnerable and v1 ~= nil and v1.defensive ~= nil then
-        if not v46_4:apply(arg1, v1.defensive) then
+        if not v46_3:apply(arg1, v1.defensive) then
           if v52_5 ~= nil then
             v51_5 = v52_5
           end
@@ -2281,10 +2288,14 @@ do
       local team_num = entity.get_prop(me, "m_iTeamNum")
       local vec = vector(entity.get_origin(me))
       do
+        local v7 = csgo_weapons_2.idx
         v7 = csgo_weapons_2.idx == 49
         do
+          local v8 = entity.get_prop(me, "m_bIsDefusing")
           v8 = entity.get_prop(me, "m_bIsDefusing") == 1
+          local v9 = entity.get_prop(me, "m_bIsGrabbingHostage")
           v9 = entity.get_prop(me, "m_bIsGrabbingHostage") == 1
+          local v10 = entity.get_prop(me, "m_bInBombZone")
           v10 = entity.get_prop(me, "m_bInBombZone") == 1
           if not v8 and not v9 then
             if not v10 or arg2.bomb_e_fix:get() and not v7 then
@@ -2334,15 +2345,15 @@ do
         v51_6 = false
         return false
       end
-      local v2 = v47_9:get("on use")
+      local v2 = v47_7:get("on use")
       if v2 == nil then
         return false
       end
       if v2.override == nil or v2.override:get() then
         if v52_6(arg2, v2) then
-          v47_9:apply_ex(v2)
+          v47_7:apply_ex(v2)
           if v2 ~= nil and v2.defensive ~= nil then
-            v46_4:apply(arg2, v2.defensive)
+            v46_3:apply(arg2, v2.defensive)
           end
           v45_8.pitch = "Custom"
           v45_8.pitch_offset = arg2.pitch
@@ -2371,6 +2382,7 @@ do
       if arg3 ~= 1 and arg3 ~= 2 then
         return false
       end
+      local v3 = false
       v3 = arg1 ~= arg2
       return v3
     end
@@ -2403,9 +2415,9 @@ do
       return
     end
     function v51_7.get()
-      local L0_119, L1_120, L2_121, L3_122, L4_123, L5_124
-      L0_119 = v53_6
-      return L0_119
+      local L0_129, L1_130, L2_131, L3_132, L4_133, L5_134
+      L0_129 = v53_6
+      return L0_129
     end
     function v51_7.update(arg1, arg2)
       local v2 = v55_5[v53_6]
@@ -2431,10 +2443,10 @@ do
         v45_8.body_yaw_offset = 180
         v45_8.freestanding_body_yaw = true
       end
-      local v4 = v47_9:apply("manual aa")
+      local v4 = v47_7:apply("manual aa")
       if v4 ~= nil then
         v45_8.yaw_offset = v45_8.yaw_offset + v2
-        if v4.defensive ~= nil and v46_4:apply(arg2, v4.defensive) then
+        if v4.defensive ~= nil and v46_3:apply(arg2, v4.defensive) then
           local yaw_offset_2 = v45_8.defensive.yaw_offset
           if yaw_offset_2 ~= nil then
             v45_8.defensive.yaw_offset = yaw_offset_2 + v2
@@ -2473,6 +2485,7 @@ do
       if csgo_weapons_2 == nil then
         return false
       end
+      local v2 = csgo_weapons_2.type
       v2 = csgo_weapons_2.type == "knife"
       if v2 then
         v2 = csgo_weapons_2.idx
@@ -2539,14 +2552,15 @@ do
       local vec = vector(entity.get_origin(arg1))
       local vec_2 = vector(v13_2.get_eye_position(arg2))
       do
+        local v4 = entity.get_prop(arg1, "m_flDuckAmount")
         v4 = 0.5 < entity.get_prop(arg1, "m_flDuckAmount")
         local z = vec.z
         local v6 = v4
         v6 = v6 and 45
         v6 = v6 or 60
         z = z + v6
+        vec.z = z
       end
-      vec.z = z
       local ceil = math.ceil
       return ceil(vec.z - vec_2.z)
     end
@@ -2564,9 +2578,8 @@ do
       return v1((vector(entity.get_prop(arg1, "m_vecVelocity"))))
     end
     local v62 = function(arg1)
-      do
-        v2 = bit.band(entity.get_prop(arg1, "m_fFlags"), 1) ~= 0
-      end
+      local v2 = bit.band(entity.get_prop(arg1, "m_fFlags"), 1)
+      v2 = bit.band(entity.get_prop(arg1, "m_fFlags"), 1) ~= 0
       return v2
     end
     local v63 = function(arg1, arg2)
@@ -2620,165 +2633,168 @@ do
       return false
     end
     local v65 = function(arg1, arg2)
-      do
-        v2 = entity.get_prop(arg1, "m_iTeamNum") == 3
-        local v56_5_2 = v56_5((entity.get_player_weapon(arg1)))
-        local is_onground = v23_5.is_onground
-        if is_onground then
-          is_onground = v23_5
-          is_onground = is_onground.is_moving
-          is_onground = not is_onground
-        end
-        if is_onground then
-          is_onground = v23_5
-          is_onground = is_onground.is_crouched
-          is_onground = not is_onground
-        end
-        local v59_3_2 = v59_3(arg1, arg2)
-        if not v56_5_2 or v23_5.is_onground or not v23_5.is_crouched then
-          do
-            local v7 = is_onground
+      local v2 = entity.get_prop(arg1, "m_iTeamNum")
+      v2 = entity.get_prop(arg1, "m_iTeamNum") == 3
+      local v56_5_2 = v56_5((entity.get_player_weapon(arg1)))
+      local is_onground = v23_5.is_onground
+      if is_onground then
+        is_onground = v23_5
+        is_onground = is_onground.is_moving
+        is_onground = not is_onground
+      end
+      if is_onground then
+        is_onground = v23_5
+        is_onground = is_onground.is_crouched
+        is_onground = not is_onground
+      end
+      local v59_3_2 = v59_3(arg1, arg2)
+      if not v56_5_2 or v23_5.is_onground or not v23_5.is_crouched then
+        do
+          local v7 = is_onground
+          if v7 then
+            v7 = v2
+            v7 = v7 and -6
+            v7 = v7 or 20
+            v7 = v59_3_2 >= v7
+          end
+          if not v7 then
+            v7 = v23_5
+            v7 = v7.is_crouched
+            if v7 then
+              v7 = v23_5
+              v7 = v7.is_onground
+            end
             if v7 then
               v7 = v2
-              v7 = v7 and -6
-              v7 = v7 or 20
+              v7 = v7 and -20
+              v7 = v7 or -4
               v7 = v59_3_2 >= v7
             end
-            if not v7 then
-              v7 = v23_5
-              v7 = v7.is_crouched
-              if v7 then
-                v7 = v23_5
-                v7 = v7.is_onground
-              end
-              if v7 then
-                v7 = v2
-                v7 = v7 and -20
-                v7 = v7 or -4
-                v7 = v59_3_2 >= v7
-              end
-            end
-            local v61_2 = v61(arg2)
-            local v10 = not v62(arg2)
-            v10 = v10 and v61_2 > 75
-            if not v10 then
-              v10 = v63
-              v10 = v10(arg2, arg1)
-              v10 = not v10
-            end
           end
-          if not v7 or not v10 then
-            return false
+          local v61_2 = v61(arg2)
+          local v10 = not v62(arg2)
+          v10 = v10 and v61_2 > 75
+          if not v10 then
+            v10 = v63
+            v10 = v10(arg2, arg1)
+            v10 = not v10
           end
-          local tickcount = globals.tickcount()
-          local v64_2 = v64(arg2, arg1)
-          if v64_2 == false then
-            v55_6 = tickcount + 16
-            return true
-          end
-          if v64_2 == true then
-            v55_6 = 0
-            return false
-          end
-          v13 = tickcount <= v55_6
-          return v13
         end
-        local v7_2 = v2
-        v7_2 = v7_2 and -35
-        v7_2 = v7_2 or -20
+        if not v7 or not v10 then
+          return false
+        end
+        local tickcount = globals.tickcount()
+        local v64_2 = v64(arg2, arg1)
+        if v64_2 == false then
+          v55_6 = tickcount + 16
+          return true
+        end
+        if v64_2 == true then
+          v55_6 = 0
+          return false
+        end
+        local v13 = v55_6
+        v13 = tickcount <= v55_6
+        return v13
       end
-      v7_3 = v59_3_2 > v7_2
-      return v7_3
+      local v7_2 = v2
+      v7_2 = v7_2 and -35
+      v7_2 = v7_2 or -20
+      v7_2 = v59_3_2 > v7_2
+      return v7_2
     end
     local v66 = function(arg1, arg2)
       local v3 = vector(entity.get_prop(arg1, "m_vecVelocity")):length()
       local v58_4_2 = v58_4(arg1)
       v58_4_2 = v58_4_2 or 250
       do
+        local v5 = arg2.in_back
         v5 = arg2.in_back == 1
         if v5 then
           v5 = arg2.forwardmove
           v5 = v5 < 0
         end
+        local v6 = arg2.in_forward
         v6 = arg2.in_forward == 1
         if v6 then
           v6 = arg2.forwardmove
           v6 = v6 > 0
         end
+        local v7 = arg2.in_moveleft
         v7 = arg2.in_moveleft == 1
         if v7 then
           v7 = arg2.sidemove
           v7 = v7 < 0
         end
+        local v8 = arg2.in_moveright
+        v8 = arg2.in_moveright == 1
+        if v8 then
+          v8 = arg2.sidemove
+          v8 = v8 > 0
+        end
         do
-          v8 = arg2.in_moveright == 1
-          if v8 then
-            v8 = arg2.sidemove
-            v8 = v8 > 0
+          local v9 = entity.get_prop(arg1, "m_vecVelocity")
+          v9 = v3 > 1.1001
+          if v9 then
+            v9 = v58_4_2 * 0.1
+            v9 = v58_4_2 - v9
+            v9 = v3 < v9
           end
           do
-            v9 = v3 > 1.1001
-            if v9 then
-              v9 = v58_4_2 * 0.1
-              v9 = v58_4_2 - v9
-              v9 = v3 < v9
+            local is_onground = v23_5.is_onground
+            if is_onground then
+              is_onground = v23_5
+              is_onground = is_onground.is_moving
+              is_onground = not is_onground
             end
-            do
-              local is_onground = v23_5.is_onground
-              if is_onground then
-                is_onground = v23_5
-                is_onground = is_onground.is_moving
-                is_onground = not is_onground
-              end
-              if is_onground then
-                is_onground = v23_5
-                is_onground = is_onground.is_crouched
-                is_onground = not is_onground
-              end
+            if is_onground then
+              is_onground = v23_5
+              is_onground = is_onground.is_crouched
+              is_onground = not is_onground
             end
-            if not is_onground then
-              if v23_5.is_onground then
-                if not v6 then
-                  if not v5 then
-                    local v11 = v8
-                    v11 = v11 and 38
-                    if not v11 then
-                      v11 = v7
-                      v11 = v11 and 20
-                    end
-                    v11 = v11 or 32
-                    return v11
+          end
+          if not is_onground then
+            if v23_5.is_onground then
+              if not v6 then
+                if not v5 then
+                  local v11 = v8
+                  v11 = v11 and 38
+                  if not v11 then
+                    v11 = v7
+                    v11 = v11 and 20
                   end
-                  local v11_2 = v8
-                  v11_2 = v11_2 and 30
-                  if not v11_2 then
-                    v11_2 = v7
-                    v11_2 = v11_2 and 20
-                  end
-                  v11_2 = v11_2 or 30
-                  return v11_2
+                  v11 = v11 or 32
+                  return v11
                 end
-                if not v9 then
-                  local v11_3 = v8
-                  v11_3 = v11_3 and 38
-                  if not v11_3 then
-                    v11_3 = v7
-                    v11_3 = v11_3 and 14
-                  end
-                  v11_3 = v11_3 or 26
-                  return v11_3
+                local v11_2 = v8
+                v11_2 = v11_2 and 30
+                if not v11_2 then
+                  v11_2 = v7
+                  v11_2 = v11_2 and 20
                 end
-                local v11_4 = v8
-                v11_4 = v11_4 and 33
-                if not v11_4 then
-                  v11_4 = v7
-                  v11_4 = v11_4 and 20
-                end
-                v11_4 = v11_4 or 20
-                return v11_4
+                v11_2 = v11_2 or 30
+                return v11_2
               end
-              return 32
+              if not v9 then
+                local v11_3 = v8
+                v11_3 = v11_3 and 38
+                if not v11_3 then
+                  v11_3 = v7
+                  v11_3 = v11_3 and 14
+                end
+                v11_3 = v11_3 or 26
+                return v11_3
+              end
+              local v11_4 = v8
+              v11_4 = v11_4 and 33
+              if not v11_4 then
+                v11_4 = v7
+                v11_4 = v11_4 and 20
+              end
+              v11_4 = v11_4 or 20
+              return v11_4
             end
+            return 32
           end
         end
       end
@@ -2831,6 +2847,7 @@ do
       if csgo_weapons_2.idx == 31 then
         return false
       end
+      local v2 = csgo_weapons_2.weapon_type_int
       v2 = csgo_weapons_2.weapon_type_int == 0
       return v2
     end
@@ -2927,16 +2944,19 @@ do
     end
     local v61_2 = function(arg1)
       local v58_6_2 = v58_6(arg1)
+      local v2 = arg1
       v2 = v58_6_2 ~= nil
       v2 = v2 and v58_6_2 > 0
       return v2
     end
     local v62_2 = function(arg1)
+      local v1 = v59_4(arg1)
       v1 = v59_4(arg1) ~= nil
       return v1
     end
     local v63_2 = function(arg1)
       local v60_3_2 = v60_3(arg1)
+      local v2 = arg1
       v2 = v60_3_2 ~= nil
       v2 = v2 and v60_3_2 ~= 0
       return v2
@@ -3043,11 +3063,13 @@ do
         trace_bullet_3 = 0
       end
       do
+        local v13 = sum_2.x
         v13 = trace_bullet > 0
         v13 = v13 or trace_bullet_3 > 0
         v13 = v13 and trace_bullet ~= trace_bullet_3
       end
       if v13 then
+        local v14 = sum_2.y
         v14 = trace_bullet > trace_bullet_3
         v14 = v14 and -1
         v14 = v14 or 1
@@ -3060,10 +3082,13 @@ do
         if v60_4() then
           v62_3(arg2)
           do
+            local v2 = v58_7
             v2 = v58_7 == -1
             do
+              local v4 = v24_5.get().defensive.left
               v4 = v24_5.get().defensive.left ~= 0
               do
+                local v5 = arg2.command_number % 7
                 v5 = arg2.command_number % 7 == 0
                 arg2.force_defensive = v5
               end
@@ -3088,10 +3113,10 @@ do
                 v45_8.body_yaw = "Static"
               end
               local v5_4 = v4
+              v5_4 = v5_4 and -1
+              v5_4 = v5_4 or 1
+              v45_8.body_yaw_offset = v5_4
             end
-            v5_4 = v5_4 and -1
-            v5_4 = v5_4 or 1
-            v45_8.body_yaw_offset = v5_4
             v45_8.freestanding_body_yaw = false
             v45_8.edge_yaw = false
             v45_8.freestanding = false
@@ -3111,6 +3136,7 @@ do
     local defensive = v45_8.defensive
     local defensive_2 = v24_5.get().defensive
     do
+      local v3
       v3 = defensive ~= nil
       if v3 then
         v3 = defensive_2.left
@@ -3131,9 +3157,14 @@ do
         local delay = v45_8.delay
         delay = delay or 1
         max = max(v2, delay)
+        v2 = v44_7
+        v2 = v2[arg1]
+        v2 = v2 + 1
+        v44_7[arg1] = v2
+        v2 = v44_7
+        v2 = v2[arg1]
       end
-      v44_7[arg1] = v44_7[arg1] + 1
-      if max(v2, delay) > v44_7[arg1] then
+      if max > v2 then
         return
       end
     end
@@ -3185,8 +3216,8 @@ do
       ;({})[3] = "Skitter"
       ;({})[4] = "Center"
       local jitter_offset = v45_8.jitter_offset
-      if 0.15 < globals.realtime() - v42_6 then
-        v42_6 = globals.realtime()
+      if 0.15 < globals.realtime() - v42_5 then
+        v42_5 = globals.realtime()
         v41_4 = v0_2[math.random(1, #v0_2)]
       end
       v45_8.yaw_jitter = v41_4
@@ -3203,8 +3234,8 @@ do
         v40_5_2 = v40_5_2 and jitter_offset_2
         v40_5_2 = v40_5_2 or 0
         v40_5_2 = yaw_offset + v40_5_2
+        v45_8.yaw_offset = v40_5_2
       end
-      v45_8.yaw_offset = yaw_offset + v40_5_2
       return
     end
     if v45_8.yaw_jitter == "Center" then
@@ -3220,7 +3251,7 @@ do
       return
     end
     if v45_8.yaw_jitter == "Skitter" then
-      local v1 = v43_5[v39_6 % #v43_5 + 1]
+      local v1 = v43_4[v39_6 % #v43_4 + 1]
       local yaw_offset_3 = v45_8.yaw_offset
       yaw_offset_3 = yaw_offset_3 or 0
       v45_8.yaw_jitter = "Off"
@@ -3284,15 +3315,15 @@ do
   end
   local v62_4 = function(arg1)
     v45_8.freestanding = false
-    v46_4:update(arg1)
-    local v1 = v47_9:update(arg1)
+    v46_3:update(arg1)
+    local v1 = v47_7:update(arg1)
     v48_5:update(arg1)
     v55_7:update(arg1)
     if not v50_5:update(arg1) then
       if not v51_7:update(arg1) then
         if not v54_5:update() then
           if v1 ~= nil and v1.defensive ~= nil then
-            v46_4:apply(arg1, v1.defensive)
+            v46_3:apply(arg1, v1.defensive)
           end
           v49_5:update(arg1)
           v53_7:update(arg1)
@@ -3335,7 +3366,9 @@ do
     local idx = csgo_weapons_2.idx
     local defensive = v24_5.get().defensive
     do
+      local v8
       v8 = csgo_weapons_2.type == "grenade"
+      local v9
       v9 = idx == 64
       local force_defensive = arg1.force_defensive
       force_defensive = force_defensive and not v8
@@ -3366,14 +3399,14 @@ do
   local vtable_bind_3 = vtable_bind("client_panorama.dll", "VClientEntityList003", 3, "void*(__thiscall*)(void*,int)")
   local vtable_thunk_2 = vtable_thunk(483, "float(__thiscall*)(void*)")
   local vtable_thunk_3 = vtable_thunk(453, "float(__thiscall*)(void*)")
-  local v42_9 = function(arg1, arg2)
+  local v42_8 = function(arg1, arg2)
     return {
       x = arg1.x - arg2.x,
       y = arg1.y - arg2.y,
       z = arg1.z - arg2.z
     }
   end
-  local v43_9 = function(arg1, arg2)
+  local v43_8 = function(arg1, arg2)
     return {
       x = arg1.y * arg2.z - arg1.z * arg2.y,
       y = arg1.z * arg2.x - arg1.x * arg2.z,
@@ -3386,9 +3419,9 @@ do
   end
   local v45_11 = function(arg1, arg2, arg3)
     local v44_11_2 = v44_11
-    return v44_11_2((v43_9(arg3, (v42_9(arg1, arg2)))))
+    return v44_11_2((v43_8(arg3, (v42_8(arg1, arg2)))))
   end
-  local v46_6 = function()
+  local v46_5 = function()
     local current_threat = client.current_threat()
     if current_threat then
       local vec = vector(client.eye_position())
@@ -3501,6 +3534,7 @@ do
       do
         local extend_vector = v13_2.extend_vector
         local v11 = v9
+        local v12
         v12 = arg5 == 0
         v12 = v12 and 0
         v12 = v12 or arg4
@@ -3519,11 +3553,13 @@ do
       local vec_3 = vector(entity.get_prop(arg1, "m_vecMaxs"))
       v57_9.pos[0] = v61_6(arg2, nil, 0, arg5, 0, vec, vec_2, vec_3, arg5)
       for _FORV_11_ = 1, arg4 do
+        local v12 = _FORV_11_ % 2
         v12 = _FORV_11_ % 2 == 0
         v12 = v12 and arg3 - 90
         v12 = v12 or arg3 + 90
         do
           local pos = v57_9.pos
+          local v14 = 0
           v14 = _FORV_11_ <= 2
           v14 = v14 and 0
           v14 = v14 or _FORV_11_ - 2
@@ -3551,8 +3587,11 @@ do
         local v7 = next_primary_attack
         v7 = v7 or 0
         max = max(v5, v6, v7)
+        v5 = globals
+        v5 = v5.curtime
+        v5 = v5()
       end
-      if not (max(v5, v6, v7) > globals.curtime()) and not (0 >= entity.get_prop(arg2, "m_iClip1")) then
+      if not (max > v5) and not (0 >= entity.get_prop(arg2, "m_iClip1")) then
         return true
       end
       return false
@@ -3620,18 +3659,21 @@ do
               local vec = vector(entity.hitbox_position(arg3, v16))
               do
                 local trace_bullet = client.trace_bullet
-                local v19 = arg2
-                local x = v11.x
-                local y = v11.y
-                local z = v11.z
-                local x_2 = vec.x
-                local y_2 = vec.y
-                local z_2 = vec.z
-                v26 = v16 == 0
-                local trace_bullet_2 = trace_bullet(v19, x, y, z, x_2, y_2, z_2, v26)
-              end
-              if v16 == 0 then
-                trace_bullet_2 = trace_bullet_2 * 4
+                do
+                  local v19 = arg2
+                  local x = v11.x
+                  local y = v11.y
+                  local z = v11.z
+                  local x_2 = vec.x
+                  local y_2 = vec.y
+                  local z_2 = vec.z
+                  local v26 = entity.hitbox_position(arg3, v16)
+                  v26 = v16 == 0
+                  local trace_bullet_2 = trace_bullet(v19, x, y, z, x_2, y_2, z_2, v26)
+                end
+                if v16 == 0 then
+                  trace_bullet_2 = trace_bullet_2 * 4
+                end
               end
               if trace_bullet_2 >= math.min(v6, health) and trace_bullet_2 > 0 then
                 return v11, _FORV_10_
@@ -3788,6 +3830,7 @@ do
           local tickcount = globals.tickcount()
           local me_3 = entity.get_local_player()
           do
+            local v9 = bit.band(entity.get_prop(me_3, "m_fFlags"), 1)
             v9 = bit.band(entity.get_prop(me_3, "m_fFlags"), 1) ~= 1
             if not v9 then
               v9 = arg1.in_forward
@@ -3838,56 +3881,58 @@ do
                 v15 = v15(client.camera_angles())
                 v15 = v15.y
               end
-            end
-            local v62_6_2 = v62_6(me_3, mid, v15, 4, 18)
-            local v17
-            local v18 = 0
-            if not v9 and not v52_10 and not v54_8 and v65_3(me_3, current_threat) then
-              local v18, v66_3_2 = v62_6_2, v66_3(v62_6_2, me_3, current_threat, v50_8)
-              v17 = v66_3_2
-            end
-            do
-              v19 = arg1.in_attack == 1
-              if v19 then
-                v19 = v63_5
-                v19 = v19(me_3, entity.get_player_weapon(me_3))
+              local v62_6_2 = v62_6(me_3, mid, v15, 4, 18)
+              local v17
+              local v18 = 0
+              if not v9 and not v52_10 and not v54_8 and v65_3(me_3, current_threat) then
+                local v18, v66_3_2 = v62_6_2, v66_3(v62_6_2, me_3, current_threat, v50_8)
+                v17 = v66_3_2
               end
-            end
-            if v19 then
-              v54_8 = true
-              v53_10 = true
-            end
-            do
-              v20 = v17 ~= nil
-              v51_10 = v20
-            end
-            v57_9.active_point_index = v18
-            if not v51_10 then
-              if not v9 or v52_10 or v53_10 or v54_8 then
-                if not v53_10 and not v54_8 then
-                  v57_9.draw_point = nil
+              do
+                local v19 = arg1.in_attack
+                v19 = arg1.in_attack == 1
+                if v19 then
+                  v19 = v63_5
+                  v19 = v19(me_3, entity.get_player_weapon(me_3))
+                end
+              end
+              if v19 then
+                v54_8 = true
+                v53_10 = true
+              end
+              do
+                local v20 = me_3
+                v20 = v17 ~= nil
+                v51_10 = v20
+              end
+              v57_9.active_point_index = v18
+              if not v51_10 then
+                if not v9 or v52_10 or v53_10 or v54_8 then
+                  if not v53_10 and not v54_8 then
+                    v57_9.draw_point = nil
+                  else
+                    v52_10 = true
+                    v53_10 = false
+                    v57_9.draw_point = nil
+                    v55_10 = true
+                  end
                 else
-                  v52_10 = true
+                  v52_10 = false
                   v53_10 = false
                   v57_9.draw_point = nil
-                  v55_10 = true
+                  v55_10 = false
+                  v56_10 = false
                 end
               else
+                if v57_9.draw_point == nil then
+                  v57_9.draw_point = v17
+                end
+                v13_2.set_movement(arg1, v17, me_3)
                 v52_10 = false
-                v53_10 = false
-                v57_9.draw_point = nil
+                v53_10 = true
                 v55_10 = false
                 v56_10 = false
               end
-            else
-              if v57_9.draw_point == nil then
-                v57_9.draw_point = v17
-              end
-              v13_2.set_movement(arg1, v17, me_3)
-              v52_10 = false
-              v53_10 = true
-              v55_10 = false
-              v56_10 = false
             end
             if not v52_10 then
               v57_9.last_returning_time = tickcount
@@ -3951,7 +3996,7 @@ do
     end)
     client.set_event_callback("paint", v71)
   end
-  local v47_12 = {}
+  local v47_10 = {}
   do
     local teleport_fix = v29_4.ragebot.teleport_fix
     local v49_9 = function(arg1)
@@ -3994,6 +4039,7 @@ do
         end
         local diff = toticks(globals.curtime()) - toticks(f_last_shot_time)
         local max = math.max(25, toticks(csgo_weapons_2.cycletime) - 20)
+        local v9 = 25
         v9 = diff > 1
         v9 = v9 and diff < max
         return v9
@@ -4004,7 +4050,7 @@ do
       v31_5.set(v14_2.ragebot.aimbot.double_tap[1], false)
       return
     end
-    function v47_12.update()
+    function v47_10.update()
       if teleport_fix.enabled:get() then
         if v50_9() then
           v51_11()
@@ -4047,6 +4093,7 @@ do
     local v53_11 = cvar.cl_sidespeed
     local v54_9 = function(arg1)
       local me = entity.get_local_player()
+      local v9 = me
       v9 = 0.65 < client.trace_line(me, entity.hitbox_position(me, 0))
       return v9
     end
@@ -4101,10 +4148,12 @@ do
       return
     end)
     local v58_12 = function(arg1)
+      local v1 = globals.curtime()
       v1 = globals.curtime() >= entity.get_prop(arg1, "m_flNextAttack")
       return v1
     end
     local v59_10 = function(arg1)
+      local v1 = globals.curtime()
       v1 = globals.curtime() >= entity.get_prop(arg1, "m_flNextPrimaryAttack")
       return v1
     end
@@ -4131,6 +4180,7 @@ do
           local v8 = entity_2(me):get_anim_state()
           if v8 ~= nil and not v8.on_ground then
             do
+              local v10 = entity.get_prop(me, "m_bIsScoped")
               v10 = entity.get_prop(me, "m_bIsScoped") ~= 0
               local v12 = v14_2.is_override_minimum_damage()
               if v12 then
@@ -4154,10 +4204,10 @@ do
               local classname = entity.get_classname(player_weapon)
               if classname ~= "CKnife" and classname ~= "CWeaponTaser" and not string.match(classname, "nade") then
                 if classname == "CWeaponSSG08" then
-                  if arg1.quick_stop == false and v46_6() < ui.get(v14_2.ragebot.aimbot.minimum_hit_chance) then
+                  if arg1.quick_stop == false and v46_5() < ui.get(v14_2.ragebot.aimbot.minimum_hit_chance) then
                     local v52_11_4 = v52_11
                     do return v52_11_4() end
-                    if v46_6() < ui.get(v14_2.ragebot.aimbot.minimum_hit_chance) then
+                    if v46_5() < ui.get(v14_2.ragebot.aimbot.minimum_hit_chance) then
                       local v52_11_5 = v52_11
                       return v52_11_5()
                     end
@@ -4219,12 +4269,12 @@ do
       if player_weapon == nil then
         return false
       end
-      local v46_6_2 = v46_6()
-      if v46_6_2 == nil then
+      local v46_5_2 = v46_5()
+      if v46_5_2 == nil then
         return false
       end
       local v3 = force_shot.hc:get()
-      if vtable_thunk_2((vtable_bind_3(player_weapon))) <= 0.023 and v46_6_2 >= v3 then
+      if vtable_thunk_2((vtable_bind_3(player_weapon))) <= 0.023 and v46_5_2 >= v3 then
         return true
       end
       return false
@@ -4243,34 +4293,34 @@ do
       return false
     end
     local v53_12 = function()
-      local L0_150, L1_151, L2_152, L3_153
-      L0_150 = force_shot
-      L0_150 = L0_150.enabled
-      L1_151 = L0_150
-      L0_150 = L0_150.get
-      L0_150 = L0_150(L1_151)
-      if L0_150 then
-        L0_150 = v52_12
-        L0_150 = L0_150()
-        if L0_150 then
-          L0_150, L1_151, L2_152, L3_153 = nil, nil, nil, nil
+      local L0_194, L1_195, L2_196, L3_197
+      L0_194 = force_shot
+      L0_194 = L0_194.enabled
+      L1_195 = L0_194
+      L0_194 = L0_194.get
+      L0_194 = L0_194(L1_195)
+      if L0_194 then
+        L0_194 = v52_12
+        L0_194 = L0_194()
+        if L0_194 then
+          L0_194, L1_195, L2_196, L3_197 = nil, nil, nil, nil
           if not client.current_threat() then
-            L3_153 = 200
-            L2_152 = 255
-            L1_151 = 255
-            L0_150 = 255
+            L3_197 = 200
+            L2_196 = 255
+            L1_195 = 255
+            L0_194 = 255
           elseif not v51_13() then
-            L3_153 = 255
-            L2_152 = 10
-            L1_151 = 10
-            L0_150 = 255
+            L3_197 = 255
+            L2_196 = 10
+            L1_195 = 10
+            L0_194 = 255
           else
-            L3_153 = 255
-            L2_152 = 43
-            L1_151 = 202
-            L0_150 = 159
+            L3_197 = 255
+            L2_196 = 43
+            L1_195 = 202
+            L0_194 = 159
           end
-          renderer.indicator(L0_150, L1_151, L2_152, L3_153, "SHOT")
+          renderer.indicator(L0_194, L1_195, L2_196, L3_197, "SHOT")
           return
         end
         return
@@ -4601,16 +4651,17 @@ do
           local v5 = 0
           do
             local is_duck_peek_assist = v14_2.is_duck_peek_assist()
+            local is_double_tap_active = v14_2.is_double_tap_active()
+            local is_on_shot_antiaim_active = v14_2.is_on_shot_antiaim_active()
             do
-              local is_double_tap_active = v14_2.is_double_tap_active()
-              local is_on_shot_antiaim_active = v14_2.is_on_shot_antiaim_active()
+              local is_grenade_2 = is_grenade
+              is_grenade_2 = is_grenade_2 and "Dynamic"
+              is_grenade_2 = is_grenade_2 or "Maximum"
               do
-                local is_grenade_2 = is_grenade
-                is_grenade_2 = is_grenade_2 and "Dynamic"
-                is_grenade_2 = is_grenade_2 or "Maximum"
                 local v10 = fakelags.limit:get()
                 local v11 = fakelags.amount:get()
                 do
+                  local v12 = csgo_weapons_2.type
                   v12 = csgo_weapons_2.type == "grenade"
                   if v11 == "angelic" then
                     v5 = v10 - v54_12 % 5
@@ -4627,21 +4678,21 @@ do
                     v13 = v13 or is_on_shot_antiaim_active
                   end
                 end
-                if not v13 and not v12 then
-                  if v5_2 > arg2.chokedcommands then
-                    arg2.allow_send_packet = false
-                  else
-                    v54_12 = v54_12 + 1
-                    arg2.no_choke = true
-                  end
-                end
-                v30_4.set(v14_2.antiaimbot.fake_lag.enabled[1], true)
-                v30_4.set(v14_2.antiaimbot.fake_lag.enabled[2], "Always on")
               end
+              if not v13 and not v12 then
+                if v5_2 > arg2.chokedcommands then
+                  arg2.allow_send_packet = false
+                else
+                  v54_12 = v54_12 + 1
+                  arg2.no_choke = true
+                end
+              end
+              v30_4.set(v14_2.antiaimbot.fake_lag.enabled[1], true)
+              v30_4.set(v14_2.antiaimbot.fake_lag.enabled[2], "Always on")
+              v30_4.set(v14_2.antiaimbot.fake_lag.amount, is_grenade_2)
             end
           end
         end
-        v30_4.set(v14_2.antiaimbot.fake_lag.amount, is_grenade_2)
         v30_4.set(v14_2.antiaimbot.fake_lag.limit, 15)
         v30_4.set(v14_2.antiaimbot.fake_lag.variance, 100)
         return
@@ -4673,7 +4724,7 @@ do
     v53_16()
     v52_14:update(arg1)
     v49_11:update(arg1)
-    v47_12:update(arg1)
+    v47_10:update(arg1)
     v51_15:update(arg1)
     v48_9:update(arg1)
     v50_12:update(arg1)
@@ -4686,7 +4737,7 @@ do
   client.set_event_callback("setup_command", v55_14)
 end
 
--- ===== блок 66 =====
+-- ===== блок 67 =====
 do
   local v40_18 = function(arg1)
     local csgo_weapons_2 = csgo_weapons(arg1)
@@ -4721,92 +4772,95 @@ do
         do
           local diff = vec_3.x - vec_2.x
           local v7 = v13_2.normalize(vec_3.y - vec_2.y + 180, -180, 180)
-        end
-        local abs = math.abs(v7)
-        local v10 = -90
-        do
-          v11 = v13_2.clamp(diff, -89, 89) < -45
-          v12 = v7 > 0
-          v13 = 0 < arg1.sidemove
-          v14 = 0 < arg1.forwardmove
-          if abs > 70 and abs < 135 then
-            if arg1.forwardmove == 0 and arg1.sidemove ~= 0 then
-              if not v12 then
-                v10 = -v10
-              end
-              if v12 then
-                v13 = not v13
-              end
-              do
-                local v15 = v13
-                v15 = v15 and 1
-                v15 = v15 or 0
-                arg1.in_back = v15
-              end
-              do
-                local v15_2 = v13
-                v15_2 = v15_2 and 0
-                v15_2 = v15_2 or 1
-                arg1.in_forward = v15_2
+          diff = v13_2.clamp(diff, -89, 89)
+          local abs = math.abs(v7)
+          local v10 = -90
+          do
+            local v11 = -89
+            v11 = diff < -45
+            local v12 = 89
+            v12 = v7 > 0
+            local v13 = arg1.sidemove
+            v13 = 0 < arg1.sidemove
+            local v14 = arg1.forwardmove
+            v14 = 0 < arg1.forwardmove
+            if abs > 70 and abs < 135 then
+              if arg1.forwardmove == 0 and arg1.sidemove ~= 0 then
+                if not v12 then
+                  v10 = -v10
+                end
                 if v12 then
                   v13 = not v13
                 end
+                do
+                  local v15 = v13
+                  v15 = v15 and 1
+                  v15 = v15 or 0
+                  arg1.in_back = v15
+                end
+                do
+                  local v15_2 = v13
+                  v15_2 = v15_2 and 0
+                  v15_2 = v15_2 or 1
+                  arg1.in_forward = v15_2
+                  if v12 then
+                    v13 = not v13
+                  end
+                end
+                do
+                  local v15_3 = v13
+                  v15_3 = v15_3 and 1
+                  v15_3 = v15_3 or 0
+                  arg1.in_moveleft = v15_3
+                end
+                do
+                  local v15_4 = v13
+                  v15_4 = v15_4 and 0
+                  v15_4 = v15_4 or 1
+                  arg1.in_moveright = v15_4
+                  arg1.pitch = 89
+                end
+                arg1.yaw = v13_2.normalize(vec_3.y + v10, -180, 180)
+                return
               end
-              do
-                local v15_3 = v13
-                v15_3 = v15_3 and 1
-                v15_3 = v15_3 or 0
-                arg1.in_moveleft = v15_3
-              end
-              do
-                local v15_4 = v13
-                v15_4 = v15_4 and 0
-                v15_4 = v15_4 or 1
-                arg1.in_moveright = v15_4
-                arg1.pitch = 89
-              end
-              arg1.yaw = v13_2.normalize(vec_3.y + v10, -180, 180)
               return
             end
-            return
-          end
-          if arg1.sidemove == 0 and arg1.forwardmove ~= 0 then
-            if not v12 then
-              v10 = -v10
-            end
-            if not v11 then
-              v14 = not v14
-            end
-            do
-              local v15_5 = v14
-              v15_5 = v15_5 and 0
-              v15_5 = v15_5 or 1
-              arg1.in_back = v15_5
-            end
-            do
-              local v15_6 = v14
-              v15_6 = v15_6 and 1
-              v15_6 = v15_6 or 0
-              arg1.in_forward = v15_6
+            if arg1.sidemove == 0 and arg1.forwardmove ~= 0 then
               if not v12 then
+                v10 = -v10
+              end
+              if not v11 then
                 v14 = not v14
               end
-            end
-            do
-              local v15_7 = v14
-              v15_7 = v15_7 and 1
-              v15_7 = v15_7 or 0
-              arg1.in_moveleft = v15_7
-            end
-            do
+              do
+                local v15_5 = v14
+                v15_5 = v15_5 and 0
+                v15_5 = v15_5 or 1
+                arg1.in_back = v15_5
+              end
+              do
+                local v15_6 = v14
+                v15_6 = v15_6 and 1
+                v15_6 = v15_6 or 0
+                arg1.in_forward = v15_6
+                if not v12 then
+                  v14 = not v14
+                end
+              end
+              do
+                local v15_7 = v14
+                v15_7 = v15_7 and 1
+                v15_7 = v15_7 or 0
+                arg1.in_moveleft = v15_7
+              end
               local v15_8 = v14
               v15_8 = v15_8 and 0
               v15_8 = v15_8 or 1
               arg1.in_moveright = v15_8
               arg1.pitch = 89
+              arg1.yaw = v13_2.normalize(vec_3.y + v10, -180, 180)
+              return
             end
-            arg1.yaw = v13_2.normalize(vec_3.y + v10, -180, 180)
-            return
           end
         end
         return
@@ -4821,7 +4875,7 @@ do
   end, true)
 end
 
--- ===== блок 70 =====
+-- ===== блок 72 =====
 do
   local animation_breaker = v29_4.misc.animation_breaker
   local v40_22 = {}
@@ -4857,7 +4911,7 @@ do
     local find_signature = client.find_signature("client.dll", "U\139\236\131\228\204\131\236\204VW\139\249\137|$\204\131\191\204\204\204\204\204u")
     find_signature = find_signature or "Invalid ClampBonesInBBox signature"
   end
-  local v42_29 = function(arg1)
+  local v42_28 = function(arg1)
     if v23_5.is_onground then
       local v1 = animation_breaker.onground:get()
       if v1 == "static" then
@@ -4872,6 +4926,7 @@ do
         local m_fl_pose_parameter = "m_flPoseParameter"
         local v5 = 1
         do
+          local v6 = globals.tickcount() % 4
           v6 = 1 < globals.tickcount() % 4
           v6 = v6 and 0.5
           v6 = v6 or 1
@@ -4906,7 +4961,7 @@ do
     v30_4.unset(v14_2.antiaimbot.other.leg_movement)
     return
   end
-  local v43_27 = function(arg1)
+  local v43_26 = function(arg1)
     local v1 = animation_breaker.in_air:get()
     if v1 == "off" then
       return
@@ -4975,7 +5030,7 @@ do
     end
     return
   end
-  local v46_17 = function()
+  local v46_16 = function()
     local me = entity.get_local_player()
     if me == nil then
       return
@@ -4988,16 +5043,18 @@ do
       return
     end
     if not v23_5.is_onground then
-      v43_27(me)
+      v43_26(me)
     else
-      v42_29(me)
+      v42_28(me)
       v45_23(me)
     end
     local servertickcount = globals.servertickcount()
     local sqrt = math.sqrt(entity.get_prop(me, "m_vecVelocity") * entity.get_prop(me, "m_vecVelocity") + entity.get_prop(me, "m_vecVelocity") * entity.get_prop(me, "m_vecVelocity"))
     local duck_amount = entity.get_prop(me, "m_flDuckAmount")
     do
+      local v8 = entity.get_prop(me, "m_bDucking")
       v8 = entity.get_prop(me, "m_bDucking") == 1
+      local v9 = bit.band(entity.get_prop(me, "m_fFlags"), 1)
       v9 = bit.band(entity.get_prop(me, "m_fFlags"), 1) == 1
       local player_weapon = entity.get_player_weapon(me)
       if sqrt < 0.1 then
@@ -5021,14 +5078,14 @@ do
           }
         end
       end
+      table.insert(v41_25.server_anim_states, v11)
     end
-    table.insert(v41_25.server_anim_states, v11)
     if #v41_25.server_anim_states > 60 then
       table.remove(v41_25.server_anim_states, 1)
     end
     return
   end
-  local v47_21 = function()
+  local v47_19 = function()
     if animation_breaker.smooth_animfix:get() then
       local me = entity.get_local_player()
       if me == nil then
@@ -5088,24 +5145,24 @@ do
       return
     end
     local movetype = entity.get_prop(me, "m_movetype")
-    v47_21()
+    v47_19()
     if movetype == 2 then
-      v42_29(me)
-      v43_27(me)
+      v42_28(me)
+      v43_26(me)
       v45_23(me)
     end
     v44_26(me)
     return
   end
   local v49_17 = function(arg1)
-    v13_2.event_callback("setup_command", v46_17, arg1:get())
+    v13_2.event_callback("setup_command", v46_16, arg1:get())
     return
   end
   animation_breaker.enabled:set_callback(function(arg1)
     local v1 = arg1:get()
     if not v1 then
       v30_4.unset(v14_2.antiaimbot.other.leg_movement)
-      v13_2.event_callback("setup_command", v46_17, false)
+      v13_2.event_callback("setup_command", v46_16, false)
     end
     if not v1 then
       animation_breaker.smooth_animfix:unset_callback(v49_17)
