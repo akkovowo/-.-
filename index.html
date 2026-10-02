@@ -194,15 +194,31 @@
   </button>
 </div>
 
-<aside class="drawer glass" id="drawer" aria-label="Корзина">
-  <div class="drawer-head"><h3>Корзина</h3><button id="closeCart" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-  <div class="drawer-body" id="cartItems"></div>
-  <div class="drawer-foot">
-    <div class="total"><span>Итого</span><b id="cartTotal">0 ₽</b></div>
-    <a class="btn" href="https://jjstore.ru/index.php?route=checkout/simplecheckout" target="_blank" rel="noopener">Оформить заказ</a>
-  </div>
-</aside>
-<div class="scrim" id="scrim"></div>
+<div class="modal" id="cartModal" aria-hidden="true">
+  <div class="modal-scrim" data-close></div>
+  <section class="modal-card glass" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+    <header class="m-head">
+      <h3 id="cartTitle">Корзина</h3><span class="m-count" id="cartMeta"></span>
+      <button class="m-x" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </header>
+    <div class="m-body">
+      <div class="m-list" id="cartItems"></div>
+      <aside class="m-side" id="cartSide">
+        <div class="sum">
+          <div class="sum-row"><span>Товаров</span><b id="sumQty">0</b></div>
+          <div class="sum-total"><span>Итого</span><b id="cartTotal">0 ₽</b></div>
+          <a class="btn" id="checkout" href="https://jjstore.ru/index.php?route=checkout/simplecheckout" target="_blank" rel="noopener">Оформить заказ</a>
+          <button class="m-clear" id="cartClear"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>Очистить корзину</button>
+        </div>
+        <div class="info">
+          <div class="info-b"><span class="i-ico"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><div><b>Самовывоз</b><small>ул. Театральная, 19 · 11:00–20:00</small></div></div>
+          <a class="info-b" href="https://jjstore.ru/delivery" target="_blank" rel="noopener"><span class="i-ico"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.8"/></svg></span><div><b>Доставка и оплата</b><small>Условия на сайте</small></div></a>
+          <a class="info-b" href="https://jjstore.ru/kredit" target="_blank" rel="noopener"><span class="i-ico"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M3 10h18M7 15h3"/></svg></span><div><b>Кредит</b><small>Покупка в рассрочку</small></div></a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</div>
 
 <script src="assets/script.js"></script>
 </body>

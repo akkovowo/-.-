@@ -29,7 +29,7 @@
       <a class="img" href="${link(p)}" target="_blank" rel="noopener"><img src="${IMG + p.img}" alt="${p.name}" loading="lazy"></a>
       <h4>${p.name}</h4>
       <div class="price">${fmt(p.price)}</div>
-      <button class="buy" data-id="${p.id}">В корзину</button>
+      <div class="slot" data-id="${p.id}"></div>
     </article>`;
   $('#trackNew').innerHTML = NEW_IDS.map(id => card(byId(id), true)).join('');
   $('#trackPop').innerHTML = POP_IDS.map(id => card(byId(id), false)).join('');
@@ -66,36 +66,69 @@
     mark(); play();
   })();
 
-  /* Cart */
-  let cart = [];
-  try { cart = JSON.parse(localStorage.getItem('jj-cart') || '[]'); } catch (e) {}
-  const save = () => { try { localStorage.setItem('jj-cart', JSON.stringify(cart)); } catch (e) {} };
-  function renderCart() {
-    const box = $('#cartItems');
-    box.innerHTML = cart.length ? '' : '<div class="empty">В корзине пусто</div>';
-    cart.forEach((id, i) => {
-      const p = byId(id); if (!p) return;
-      const d = document.createElement('div'); d.className = 'ci';
-      d.innerHTML = `<img src="${IMG + p.img}" alt=""><div><b>${p.name}</b><span>${fmt(p.price)}</span></div><button data-i="${i}" aria-label="Удалить">×</button>`;
-      box.appendChild(d);
+  /* Cart: { id: qty } */
+  let cart = {};
+  try {
+    const raw = JSON.parse(localStorage.getItem('jj-cart2') || 'null');
+    if (raw && typeof raw === 'object') cart = raw;
+    else { (JSON.parse(localStorage.getItem('jj-cart') || '[]')).forEach(id => { cart[id] = (cart[id] || 0) + 1; }); }
+  } catch (e) {}
+  const TRASH = '<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>';
+  const save = () => { try { localStorage.setItem('jj-cart2', JSON.stringify(cart)); } catch (e) {} };
+  const qtyOf = id => cart[id] || 0;
+  const totalQty = () => Object.values(cart).reduce((s, n) => s + n, 0);
+  const totalSum = () => Object.entries(cart).reduce((s, [id, n]) => s + (byId(+id)?.price || 0) * n, 0);
+  const plural = (n, a, b, c) => { const m = n % 100, d = n % 10; return (m > 10 && m < 20) ? c : d === 1 ? a : (d > 1 && d < 5) ? b : c; };
+  const stepper = id => `<div class="step" data-id="${id}"><button data-act="dec" aria-label="Меньше">−</button><b>${qtyOf(id)}</b><button data-act="inc" aria-label="Больше">+</button></div>`;
+
+  /* card buttons turn into steppers once an item is in the cart */
+  function syncCards() {
+    document.querySelectorAll('.slot').forEach(s => {
+      const id = +s.dataset.id, n = qtyOf(id);
+      s.innerHTML = n ? stepper(id) : `<button class="buy" data-act="inc" data-id="${id}">В корзину</button>`;
     });
-    $('#cartTotal').textContent = fmt(cart.reduce((s, id) => s + (byId(id)?.price || 0), 0));
-    const c = $('#cartCount'); c.textContent = cart.length; c.classList.toggle('on', cart.length > 0);
   }
-  const drawer = $('#drawer'), scrim = $('#scrim');
-  const toggle = on => { drawer.classList.toggle('on', on); scrim.classList.toggle('on', on); };
-  $('#openCart').onclick = () => toggle(true);
-  $('#closeCart').onclick = $('#scrim').onclick = () => toggle(false);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') toggle(false); });
-  $('#cartItems').addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    cart.splice(+b.dataset.i, 1); save(); renderCart();
-  });
+  function renderCart() {
+    const ids = Object.keys(cart).map(Number).filter(id => byId(id));
+    const qty = totalQty(), box = $('#cartItems');
+    $('#cartModal').classList.toggle('is-empty', !ids.length);
+    box.innerHTML = ids.length ? ids.map(id => {
+      const p = byId(id);
+      return `<article class="ci" data-id="${id}">
+        <a class="ci-img" href="${link(p)}" target="_blank" rel="noopener"><img src="${IMG + p.img}" alt=""></a>
+        <div class="ci-main"><b>${p.name}</b><small>${fmt(p.price)} за шт.</small>
+          <div class="ci-row">${stepper(id)}<span class="ci-sum">${fmt(p.price * qtyOf(id))}</span></div></div>
+        <button class="ci-del" data-act="del" aria-label="Удалить" title="Удалить">${TRASH}</button>
+      </article>`;
+    }).join('') : `<div class="empty">
+        <span class="e-ico"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></span>
+        <b>В корзине пока пусто</b><p>Добавьте товары, и они появятся здесь</p>
+        <button class="btn" data-close>К покупкам</button></div>`;
+    $('#sumQty').textContent = qty;
+    $('#cartTotal').textContent = fmt(totalSum());
+    $('#cartMeta').textContent = qty ? `${qty} ${plural(qty, 'товар', 'товара', 'товаров')}` : '';
+    const c = $('#cartCount'); c.textContent = qty; c.classList.toggle('on', qty > 0);
+    syncCards();
+  }
+  function bump() { const c = $('#cartCount'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
+
+  const modal = $('#cartModal');
+  const openCart = () => { modal.classList.add('on'); modal.setAttribute('aria-hidden', 'false'); document.body.classList.add('lock'); };
+  const closeCart = () => { modal.classList.remove('on'); modal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('lock'); };
+  $('#openCart').onclick = openCart;
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
+  $('#cartClear').onclick = () => { cart = {}; save(); renderCart(); };
+
   document.addEventListener('click', e => {
-    const b = e.target.closest('.buy'); if (!b) return;
-    cart.push(+b.dataset.id); save(); renderCart();
-    b.classList.add('done'); b.textContent = 'Добавлено';
-    setTimeout(() => { b.classList.remove('done'); b.textContent = 'В корзину'; }, 1200);
+    if (e.target.closest('[data-close]') && modal.contains(e.target)) { closeCart(); return; }
+    const a = e.target.closest('[data-act]'); if (!a) return;
+    const holder = a.closest('[data-id]'); const id = +(a.dataset.id || holder?.dataset.id);
+    if (!id) return;
+    const act = a.dataset.act;
+    if (act === 'inc') { cart[id] = Math.min(99, qtyOf(id) + 1); bump(); }
+    else if (act === 'dec') { cart[id] = qtyOf(id) - 1; if (cart[id] <= 0) delete cart[id]; }
+    else if (act === 'del') { delete cart[id]; }
+    save(); renderCart();
   });
 
   /* Search */
