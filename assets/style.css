@@ -224,3 +224,36 @@ body{background:var(--bg)}
 .tile.feat img{background:#fff;border-radius:32px;padding:10px;max-height:66%;mix-blend-mode:normal;
   filter:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),0 24px 50px rgba(60,40,60,.22)}
 @media(max-width:560px){.icons a{display:none}.head-row{flex-wrap:wrap;gap:10px}.logo span{font-size:13.5px}}
+
+/* photos are now transparent PNGs: no plates, no blend tricks */
+.card .img{background:none}
+.card .img img{mix-blend-mode:normal;filter:drop-shadow(0 14px 14px rgba(30,40,80,.2))}
+.ci img{mix-blend-mode:normal}
+.tile img,.tile.feat img{background:none;border-radius:0;padding:0;mix-blend-mode:normal;box-shadow:none;
+  filter:drop-shadow(0 14px 14px rgba(30,40,80,.22))}
+.tile.feat img{max-height:70%;max-width:56%}
+
+/* opening-hours block */
+.topbar{align-items:center;padding:14px 0 16px}
+.hours{display:flex;align-items:center;gap:12px;padding:9px 20px 9px 16px;border-radius:99px}
+.hours b{display:block;font-weight:600;font-size:13px;line-height:1.2}
+.hours small{display:block;font-size:11.5px;color:var(--muted);line-height:1.3}
+.state{width:10px;height:10px;border-radius:50%;background:#a3a7b0;flex:none}
+.hours.open .state{background:#2fae66;box-shadow:0 0 0 0 rgba(47,174,102,.5);animation:ping 2.2s infinite}
+.hours.open small{color:#23834c}
+@keyframes ping{70%{box-shadow:0 0 0 9px rgba(47,174,102,0)}100%{box-shadow:0 0 0 0 rgba(47,174,102,0)}}
+.contact{display:flex;gap:10px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:99px;font-size:13px;font-weight:500}
+.chip svg{font-size:16px;color:var(--muted)}
+.chip.phone{font-weight:700;color:var(--accent)}
+.chip.phone svg{color:var(--accent)}
+.chip.phone:hover{background:#fff}
+@media(max-width:760px){
+  .topbar{flex-direction:column;align-items:stretch;gap:8px;font-size:12px}
+  .contact{gap:8px}.chip{flex:1;justify-content:center;padding:9px 10px;font-size:12px}
+  .hours{padding:8px 16px}
+}
+@media(prefers-reduced-motion:reduce){.state{animation:none!important}}
+/* slightly cool card tint so white products (charger, AirPods) stay visible */
+.card{background:rgba(232,236,246,.62)}
+.card .img img{filter:drop-shadow(0 12px 14px rgba(30,40,80,.28))}

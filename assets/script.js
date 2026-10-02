@@ -4,18 +4,18 @@
   const fmt = n => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₽';
 
   const PRODUCTS = [
-    { id: 1, name: 'iPhone 15 Black 128Gb ( без RuStore )', price: 56990, img: 'apple/iphone15/i15black-400x280.jpg', url: 'apple/iphone/iphone-15/128gb-21/iphone-15-black-128gb-bez-rustore' },
-    { id: 2, name: 'Блок USB-C 20W iPhone', price: 2990, img: 'iphone/aksessuary/blok-usb-c-20w-iphone-400x280.jpg', url: 'apple/aksessuary-1/blok-pitaniya/apple-10/blok-usb-c-20w-iphone' },
+    { id: 1, name: 'iPhone 15 Black 128Gb ( без RuStore )', price: 56990, img: 'apple/iphone15/i15black-400x280.png', url: 'apple/iphone/iphone-15/128gb-21/iphone-15-black-128gb-bez-rustore' },
+    { id: 2, name: 'Блок USB-C 20W iPhone', price: 2990, img: 'iphone/aksessuary/blok-usb-c-20w-iphone-400x280.png', url: 'apple/aksessuary-1/blok-pitaniya/apple-10/blok-usb-c-20w-iphone' },
     { id: 3, name: 'iPhone 17 Pro Deep Blue 256Gb ( без RuStore)', price: 98990, img: 'apple/17pro/iphone-17-pro-deepblue-400x280.png', url: 'apple/iphone/iphone-17-pro-1/256gb-55/iphone-17-pro-deep-blue-256gb-bez' },
     { id: 4, name: 'AirPods 4', price: 10490, img: 'airpods4/airpods_4-400x280.png', url: 'apple/airpods/airpods-4/airpods-4-1' },
-    { id: 5, name: 'iPhone 15 Blue 128Gb ( без Rustore )', price: 56990, img: 'apple/iphone15/i15blue-400x280.jpg', url: 'apple/iphone/iphone-15/128gb-21/iphone-15-blue-128gb-bez-rustore' },
+    { id: 5, name: 'iPhone 15 Blue 128Gb ( без Rustore )', price: 56990, img: 'apple/iphone15/i15blue-400x280.png', url: 'apple/iphone/iphone-15/128gb-21/iphone-15-blue-128gb-bez-rustore' },
     { id: 6, name: 'iPhone 17 Pro Silver 256Gb ( без RuStore)', price: 99990, img: 'apple/17pro/iphone-17-pro-silver-400x280.png', url: 'apple/iphone/iphone-17-pro-1/256gb-55/iphone-17-pro-silver-256gb-bez-ru' },
     { id: 7, name: 'iPhone 16 Black 128Gb ( без RuStore )', price: 65990, img: 'iphone16/black/iphone_16_black-transformed-400x280.png', url: 'apple/iphone/iphone-16/128gb-7/iphone-16-black-128gb-bez-rustore' },
     { id: 8, name: 'AirPods 4 с активным шумоподавлением', price: 13490, img: 'airpods4/airpods_4_noise-400x280.png', url: 'apple/airpods/airpods-4/airpods-4-s-aktivnym-shumopodavleniem' },
-    { id: 9, name: 'iPhone 17 Black 256Gb ( без RuStore)', price: 78990, img: 'apple/iphone17/08ed48e6-8718-4703-91bd-35e0c0490348-400x280.jpg', url: 'apple/iphone/iphone-17-1/256gb-24/iphone-17-black-256gb-bez-rustore' },
-    { id: 10, name: 'Sony PlayStation 5 Slim DVD', price: 71990, img: 'sony/a6d2fe363c2044d784357374213b0218-400x280.jpg', url: 'sony/playstation-1/ps5/sony-playstation-5-slim-dvd' },
+    { id: 9, name: 'iPhone 17 Black 256Gb ( без RuStore)', price: 78990, img: 'apple/iphone17/08ed48e6-8718-4703-91bd-35e0c0490348-400x280.png', url: 'apple/iphone/iphone-17-1/256gb-24/iphone-17-black-256gb-bez-rustore' },
+    { id: 10, name: 'Sony PlayStation 5 Slim DVD', price: 71990, img: 'sony/a6d2fe363c2044d784357374213b0218-400x280.png', url: 'sony/playstation-1/ps5/sony-playstation-5-slim-dvd' },
     { id: 11, name: 'iPhone 17 Pro Max Silver 256Gb ( без RuStore)', price: 106990, img: 'apple/17pro/iphone-17-pro-silver-400x280.png', url: 'apple/iphone/iphone-17-pro-max-1/256gb-56/iphone-17-pro-max-silver-256g' },
-    { id: 12, name: 'iPhone 15 Black 256Gb ( без RuStore )', price: 66990, img: 'apple/iphone15/i15black-400x280.jpg', url: 'apple/iphone/iphone-15/256gb-25/iphone-15-black-256gb-bez-rustore' },
+    { id: 12, name: 'iPhone 15 Black 256Gb ( без RuStore )', price: 66990, img: 'apple/iphone15/i15black-400x280.png', url: 'apple/iphone/iphone-15/256gb-25/iphone-15-black-256gb-bez-rustore' },
   ];
   const byId = id => PRODUCTS.find(p => p.id === id);
   const link = p => 'https://jjstore.ru/' + p.url;
@@ -86,6 +86,16 @@
       g.style.setProperty('--mx', (e.clientX - r.left) + 'px'); g.style.setProperty('--my', (e.clientY - r.top) + 'px');
     }, { passive: true });
   }
+
+  /* opening hours: Voronezh time (MSK), 11:00–20:00 */
+  (function () {
+    const el = $('#hoursState'), box = $('#hours'); if (!el) return;
+    const parts = new Intl.DateTimeFormat('ru-RU', { timeZone: 'Europe/Moscow', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date());
+    const mins = +parts.find(p => p.type === 'hour').value * 60 + +parts.find(p => p.type === 'minute').value;
+    const open = mins >= 11 * 60 && mins < 20 * 60;
+    box.classList.toggle('open', open);
+    el.textContent = open ? `Открыто · закрываемся в 20:00` : (mins < 11 * 60 ? 'Закрыто · откроемся в 11:00' : 'Закрыто · откроемся завтра в 11:00');
+  })();
 
   renderCart();
 })();
