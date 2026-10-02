@@ -266,3 +266,31 @@ footer{padding:28px 0 48px}
   html{scroll-behavior:auto}
   .card,.btn,.provider{transition:none}
 }
+
+/* motion */
+@keyframes rise{from{opacity:0;transform:translate3d(0,18px,0) scale(.985)}to{opacity:1;transform:none}}
+@keyframes markIn{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:none}}
+@keyframes drift{0%,100%{transform:scale(1.12) translate3d(0,-2.5%,0)}50%{transform:scale(1.16) translate3d(-1.2%,0,0)}}
+@keyframes pulse{0%,100%{box-shadow:0 14px 34px rgba(0,0,0,.19),0 0 0 1px color-mix(in srgb,var(--accent) 18%,transparent),inset 0 1px 0 rgba(255,255,255,.22)}50%{box-shadow:0 14px 34px rgba(0,0,0,.19),0 0 0 1px color-mix(in srgb,var(--accent) 38%,transparent),0 0 38px color-mix(in srgb,var(--accent) 22%,transparent),inset 0 1px 0 rgba(255,255,255,.22)}}
+
+.scene::before{animation:drift 38s ease-in-out infinite}
+.hero-mark{animation:markIn .7s var(--lg-ease) both}
+.hero h1{animation:rise .7s .08s var(--lg-ease) both}
+.hero .lead{animation:rise .7s .16s var(--lg-ease) both}
+.hero-actions,.hero-note{animation:rise .7s .24s var(--lg-ease) both}
+.providers{animation:rise .7s .32s var(--lg-ease) both}
+.header .bar{animation:rise .6s var(--lg-ease) both}
+.header.stuck .bar{box-shadow:var(--lg-shadow-hover),inset 0 1px 0 rgba(255,255,255,.26),inset 0 -1px 0 rgba(255,255,255,.05)}
+
+.js .reveal{opacity:0;transform:translate3d(0,22px,0);transition:opacity .7s var(--lg-ease-soft),transform .7s var(--lg-ease),border-color var(--lg-motion) var(--lg-ease-soft),box-shadow var(--lg-slow) var(--lg-ease-soft),filter var(--lg-motion) var(--lg-ease-soft);transition-delay:var(--d,0ms)}
+.js .reveal.in{opacity:1;transform:none}
+.js .reveal.in.hover:hover{transform:translateY(-1px);transition-delay:0ms}
+.plan.card-active{animation:pulse 4.5s ease-in-out infinite}
+.device svg,.ico svg{transition:transform var(--lg-motion) var(--lg-ease)}
+.device:hover svg,.feature:hover .ico svg{transform:translateY(-2px) scale(1.08)}
+.faq details>p{animation:rise .35s var(--lg-ease) both}
+
+@media (prefers-reduced-motion:reduce){
+  .scene::before,.hero-mark,.hero h1,.hero .lead,.hero-actions,.hero-note,.providers,.header .bar,.plan.card-active,.faq details>p{animation:none}
+  .js .reveal{opacity:1;transform:none;transition:none}
+}
