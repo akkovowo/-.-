@@ -78,18 +78,7 @@ do
     local v22_2 = v22(arg2)
     for _FORV_6_, _FORV_7_ in pairs(arg1) do
       local v8 = v20_3[_FORV_6_]
-      do
-        local v9
-        v9 = v8 ~= nil
-        if v9 then
-          v9 = arg2 == nil
-          if not v9 then
-            v9 = v22_2[_FORV_6_]
-            v9 = v9 ~= nil
-          end
-        end
-      end
-      if v9 then
+      if v8 ~= nil and (arg2 == nil or v22_2[_FORV_6_] ~= nil) then
         for _FORV_13_, _FORV_14_ in pairs(_FORV_7_) do
           local v15 = v8[_FORV_13_]
           if v15 ~= nil then
@@ -104,15 +93,7 @@ do
     local v1 = {}
     local v22_2 = v22(arg1)
     for _FORV_6_, _FORV_7_ in pairs(v20_3) do
-      do
-        local v8
-        v8 = arg1 == nil
-        if not v8 then
-          v8 = v22_2[_FORV_6_]
-          v8 = v8 ~= nil
-        end
-      end
-      if v8 then
+      if arg1 == nil or v22_2[_FORV_6_] ~= nil then
         local v9 = {}
         for _FORV_13_, _FORV_14_ in pairs(_FORV_7_) do
           if _FORV_14_.type ~= "hotkey" then

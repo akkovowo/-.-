@@ -167,6 +167,7 @@ def _is_temp(w,targets,code,pseudo,uses_,defs_):
     # non-final uses must be stores into this very table (constructor)
     for pc in us[:-1]:
         op,A,B,C=code[pc]
+        if code[d][0]!='NEWTABLE': return False
         if not ((op=='SETTABLE' and A==r) or (op=='SETLIST' and A==r)): return False
         if op=='SETTABLE' and (B==r or C==r): return False
     if u in pseudo: return False

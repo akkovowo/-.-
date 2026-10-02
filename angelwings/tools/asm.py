@@ -106,6 +106,52 @@ def translate(F, kids, ALLOWED=None):
                     continue
             k+=1
         return sites
+    def thread_tests(code):
+        """jump threading through TEST r chains (value of r known after a taken TEST-jump)"""
+        cnt=[0]
+        def build():
+            lab={}
+            for k,it in enumerate(code):
+                if it[0]=='LABEL' and not(isinstance(it[4],tuple) and it[4][0]=='ALIAS'): lab.setdefault(it[4],k)
+            return lab
+        def nxt(k):
+            k+=1
+            while k<len(code) and code[k][0]=='LABEL': k+=1
+            return k
+        def first_real(k):
+            while k<len(code) and code[k][0]=='LABEL': k+=1
+            return k
+        changed=0
+        for i,it in enumerate(code):
+            if it[0]!='TEST': continue
+            j=nxt(i)
+            if j>=len(code) or code[j][0]!='JMP' or code[j][4] is None: continue
+            r=it[1];c=it[3]
+            tgt=code[j][4]
+            for _ in range(8):
+                lab=build()
+                if tgt not in lab: break
+                k=first_real(lab[tgt])
+                if k>=len(code) or code[k][0]!='TEST' or code[k][1]!=r: break
+                k2=nxt(k)
+                if k2>=len(code) or code[k2][0]!='JMP' or code[k2][4] is None: break
+                if code[k][3]==c:
+                    tgt=code[k2][4]
+                else:
+                    # falls through past the JMP: need a label after k2
+                    k3=k2+1
+                    # reuse existing label at k3 if present
+                    if k3<len(code) and code[k3][0]=='LABEL' and not(isinstance(code[k3][4],tuple) and code[k3][4][0]=='ALIAS'):
+                        tgt=code[k3][4]
+                    else:
+                        cnt[0]+=1;nm=('TH',id(code),cnt[0],i)
+                        code.insert(k3,['LABEL',0,0,0,nm])
+                        # inserting shifts indices; restart scanning for this TEST
+                        tgt=nm
+                if tgt!=code[j][4]: changed+=1
+            code[j][4]=tgt
+        return changed
+    if F.id not in (155,400,169,188,494): thread_tests(code)
     SITES=fuse_cmp(code,ALLOWED)
     def resolve(code):
         labels={};aliases={}

@@ -168,9 +168,7 @@ do
     return
   end
   function v24_5.get()
-    local L0_46, L1_47, L2_48, L3_49, L4_50, L5_51
-    L0_46 = v27_5
-    return L0_46
+    do return v27_5 end
   end
   local v32 = function(arg1)
     local me = entity.get_local_player()
@@ -384,8 +382,7 @@ do
         end
         if v4 then
           v2.bomb_e_fix = v18_2.push("antiaim", v6("bomb_e_fix"), v21_4.new(ui.new_checkbox, "AA", "Anti-aimbot angles", v31_3(v30_3("  ${~}  bomb e fix"), v6("bomb_e_fix"))))
-        end
-        if not v4 then
+        elseif not v4 then
           v2.pitch = v18_2.push("antiaim", v6("pitch"), v21_4.new(ui.new_combobox, "AA", "Anti-aimbot angles", v7("pitch"), {
             "off",
             "down",
@@ -939,7 +936,7 @@ do
     end
     local v47_4 = function()
       database.write(str, v42_3)
-      return
+      do return end
     end
     local v48_2 = function()
       for _FORV_3_ = 1, #v43_2 do
@@ -951,8 +948,9 @@ do
       end
       for _FORV_3_ = 1, #v42_3 do
         local v4_2 = v42_3[_FORV_3_]
-        v45_6(v4_2.name, v4_2.data, false).data_index = _FORV_3_
-        table.insert(v43_2, (v45_6(v4_2.name, v4_2.data, false)))
+        local v45_6_2 = v45_6(v4_2.name, v4_2.data, false)
+        v45_6_2.data_index = _FORV_3_
+        table.insert(v43_2, v45_6_2)
       end
       return
     end
@@ -1530,7 +1528,7 @@ do
   local v44_6 = function()
     v40_4(true)
     v41_3(true)
-    return
+    do return end
   end
   local v45_7 = function()
     local v0 = not v34_2.enabled:get()
@@ -1609,7 +1607,7 @@ do
       v30_4.unset(angles.pitch[2])
       v30_4.unset(angles.pitch[1])
       v30_4.unset(angles.enabled)
-      return
+      do return end
     end
     function v48_3.set(arg1)
       if arg1.pitch_offset ~= nil then
@@ -1654,18 +1652,12 @@ do
     local v47_6 = false
     local v48_4 = 0
     local v49_3 = function()
-      local L0_70, L1_71, L2_72, L3_73, L4_74, L5_75, L6_76
-      L0_70 = v47_6
-      L0_70 = not L0_70
-      v47_6 = L0_70
-      return
+      v47_6 = not v47_6
+      do return end
     end
     local v50_2 = function()
-      local L0_77, L1_78, L2_79, L3_80, L4_81, L5_82, L6_83, L7_84, L8_85, L9_86, L10_87, L11_88, L12_89, L13_90, L14_91, L15_92, L16_93, L17_94, L18_95, L19_96, L20_97, L21_98, L22_99, L23_100, L24_101, L25_102, L26_103
-      L0_77 = v48_4
-      L0_77 = L0_77 + 1
-      v48_4 = L0_77
-      return
+      v48_4 = v48_4 + 1
+      do return end
     end
     local v51_2 = function(arg1)
       if arg1.force_target_yaw:get() then
@@ -1695,11 +1687,16 @@ do
         return
       end
       if v2 == "jitter" then
-        local v47_6_2 = v47_6
-        v47_6_2 = v47_6_2 and v5
-        v47_6_2 = v47_6_2 or v4
-        arg1.pitch = "Custom"
-        arg1.pitch_offset = v47_6_2
+        do
+          local v6 = v47_6
+          if v47_6 then
+            v6 = v5
+          else
+            v6 = v6 or v4
+          end
+          arg1.pitch = "Custom"
+          arg1.pitch_offset = v6
+        end
         return
       end
       if v2 == "spin" then
@@ -1729,10 +1726,13 @@ do
       if v2 == "offset" then
         do
           local yaw_offset = arg1.yaw_offset
-          local v40_5_2 = v40_5
-          v40_5_2 = v40_5_2 and 0
-          v40_5_2 = v40_5_2 or v3
-          yaw_offset = yaw_offset + v40_5_2
+          local v5 = v40_5
+          if v40_5 then
+            v5 = 0
+          else
+            v5 = v5 or v3
+          end
+          yaw_offset = yaw_offset + v5
           arg1.yaw_offset = yaw_offset
         end
         return
@@ -1742,13 +1742,14 @@ do
           local v4 = bit.band(v48_4, 1)
           v4 = bit.band(v48_4, 1) ~= 0
           local yaw_offset_2 = arg1.yaw_offset
-          local v6 = v4
-          v6 = v6 and v3 * 0.5
-          if not v6 then
-            v6 = -v3
-            v6 = v6 * 0.5
+          local prod = v4
+          if v4 then
+            prod = v3 * 0.5
+          elseif not prod then
+            prod = -v3
+            prod = prod * 0.5
           end
-          yaw_offset_2 = yaw_offset_2 + v6
+          yaw_offset_2 = yaw_offset_2 + prod
           arg1.yaw_offset = yaw_offset_2
         else
           arg1.yaw_left = arg1.yaw_left - v3 * 0.5
@@ -1765,9 +1766,11 @@ do
       return
     end
     local v54 = function(arg1, arg2)
+      local sum_2, sum
       local v2 = arg2.yaw:get()
       local v3 = arg2.yaw_speed:get()
-      local v4 = arg2.yaw_offset:get()
+      sum_2 = arg2.yaw_offset
+      local v4 = arg2.yaw_offset.get(sum_2)
       if v2 == "off" then
         return
       end
@@ -1778,23 +1781,36 @@ do
       arg1.delay = 1
       arg1.yaw_jitter = "Off"
       arg1.jitter_offset = nil
-      v51_2(arg2)
+      sum_2 = v51_2
+      sum = arg2
+      sum_2(sum)
       if v2 == "static" then
         arg1.yaw = "180"
         arg1.yaw_offset = v4
       end
       if v2 == "spin" then
+        sum_2 = globals
+        sum_2 = sum_2.curtime
+        sum_2 = sum_2()
+        sum_2 = sum_2 * v3
+        sum_2 = sum_2 * 0.1
         do
-          local prod = v4 * 0.5
-          local sum = 180 + v13_2.lerp(-prod, prod, globals.curtime() * v3 * 0.1 % 1)
+          sum = v4 * 0.5
+          sum = 180 + v13_2.lerp(-sum, sum, sum_2 % 1)
         end
         arg1.yaw = "180"
         arg1.yaw_offset = sum
       end
       if v2 == "random" then
+        sum_2 = math
+        sum_2 = sum_2.abs
+        sum = v4 * 0.5
         do
-          local abs = math.abs(v4 * 0.5)
-          local sum_2 = 180 + v13_2.random_int(-abs, abs)
+          sum_2 = sum_2(sum)
+          sum = v13_2
+          sum = sum.random_int
+          sum = sum(-sum_2, sum_2)
+          sum_2 = 180 + sum
         end
         arg1.yaw = "180"
         arg1.yaw_offset = sum_2
@@ -1802,16 +1818,40 @@ do
       if v2 == "left/right" then
         arg1.yaw = "180"
         arg1.yaw_offset = 0
-        arg1.yaw_left = arg1.yaw_left + arg2.yaw_left:get()
-        arg1.yaw_right = arg1.yaw_right + arg2.yaw_right:get()
+        sum_2 = arg1.yaw_left
+        sum = arg2.yaw_left
+        sum = sum.get
+        sum = sum(sum)
+        sum_2 = sum_2 + sum
+        arg1.yaw_left = sum_2
+        sum_2 = arg1.yaw_right
+        sum = arg2.yaw_right
+        sum = sum.get
+        sum = sum(sum)
+        sum_2 = sum_2 + sum
+        arg1.yaw_right = sum_2
       end
       if v2 == "side-based" then
         arg1.yaw = "180"
         arg1.yaw_offset = 0
-        arg1.yaw_left = arg1.yaw_left - 90 + v13_2.random_int(-v4, v4)
-        arg1.yaw_right = arg1.yaw_right + 90 + v13_2.random_int(-v4, v4)
+        sum_2 = arg1.yaw_left
+        sum_2 = sum_2 - 90
+        sum = v13_2
+        sum = sum.random_int
+        sum = sum(-v4, v4)
+        sum_2 = sum_2 + sum
+        arg1.yaw_left = sum_2
+        sum_2 = arg1.yaw_right
+        sum_2 = sum_2 + 90
+        sum = v13_2
+        sum = sum.random_int
+        sum = sum(-v4, v4)
+        sum_2 = sum_2 + sum
+        arg1.yaw_right = sum_2
       end
-      v53_2(arg1, arg2)
+      sum_2 = v53_2
+      sum = arg1
+      sum_2(sum, arg2)
       return
     end
     local v55 = function(arg1, arg2)
@@ -1830,23 +1870,28 @@ do
       return
     end
     function v46_3.apply(arg1, arg2, arg3)
-      if arg3.force_break_lc ~= nil then
-        arg2.force_defensive = arg3.force_break_lc:get()
+      local is_double_tap_active, is_duck_peek_assist, v7 = arg3.force_break_lc, nil, nil
+      if is_double_tap_active ~= nil then
+        is_double_tap_active = arg3.force_break_lc
+        is_duck_peek_assist = is_double_tap_active
+        is_double_tap_active = is_double_tap_active.get
+        is_double_tap_active = is_double_tap_active(is_duck_peek_assist)
+        arg2.force_defensive = is_double_tap_active
       end
-      do
-        local is_double_tap_active = v14_2.is_double_tap_active()
-        if not is_double_tap_active then
-          is_double_tap_active = v14_2
-          is_double_tap_active = is_double_tap_active.is_on_shot_antiaim_active
-          is_double_tap_active = is_double_tap_active()
-        end
-        local is_duck_peek_assist = v14_2.is_duck_peek_assist()
+      is_double_tap_active = v14_2
+      is_double_tap_active = is_double_tap_active.is_double_tap_active
+      is_double_tap_active = is_double_tap_active()
+      if not is_double_tap_active then
+        is_double_tap_active = v14_2
+        is_double_tap_active = is_double_tap_active.is_on_shot_antiaim_active
+        is_double_tap_active = is_double_tap_active()
       end
+      is_duck_peek_assist = v14_2
+      is_duck_peek_assist = is_duck_peek_assist.is_duck_peek_assist
+      is_duck_peek_assist = is_duck_peek_assist()
       if is_double_tap_active and not is_duck_peek_assist then
-        do
-          local v7 = v24_5.get().defensive.left
-          v7 = v24_5.get().defensive.left > 0
-        end
+        v7 = v24_5.get().defensive.left
+        v7 = v7 > 0
         if arg3.enabled:get() and v7 then
           local v8 = {}
           v52_2(v8, arg3)
@@ -1988,13 +2033,7 @@ do
         return
       end
       local v1 = arg1.body_yaw:get()
-      do
-        local v2 = arg1.body_yaw
-        v2 = v1 == "jitter"
-        v2 = v2 or v1 == "random"
-        v2 = v2 or v1 == "min/max"
-      end
-      if v2 then
+      if v1 == "jitter" or v1 == "random" or v1 == "min/max" then
         local v3 = arg1.delay_mode:get()
         if v3 == "default" then
           v45_8.delay = v13_2.random_int(arg1.delays[1]:get(), (arg1.delays[2]:get()))
@@ -2016,13 +2055,7 @@ do
         return
       end
       local v1 = arg1.body_yaw:get()
-      do
-        local v2 = arg1.body_yaw
-        v2 = v1 == "jitter"
-        v2 = v2 or v1 == "random"
-        v2 = v2 or v1 == "min/max"
-      end
-      if v2 then
+      if v1 == "jitter" or v1 == "random" or v1 == "min/max" then
         v45_8.invert_chance = arg1.invert_chance:get()
         return
       end
@@ -2101,16 +2134,11 @@ do
       return nil
     end
     local v57 = function()
-      local L0_104, L1_105, L2_106, L3_107, L4_108, L5_109, L6_110, L7_111, L8_112, L9_113, L10_114, L11_115, L12_116, L13_117, L14_118, L15_119, L16_120, L17_121, L18_122, L19_123, L20_124, L21_125, L22_126, L23_127, L24_128
-      L20_124 = nil
-      v50_4 = L20_124
-      L20_124 = nil
-      v51_4 = L20_124
-      L20_124 = nil
-      v52_4 = L20_124
-      L20_124 = nil
-      v53_4 = L20_124
-      return
+      v50_4 = nil
+      v51_4 = nil
+      v52_4 = nil
+      v53_4 = nil
+      do return end
     end
     function v48_5.update()
       if antibrute.enabled:get() then
@@ -2129,7 +2157,7 @@ do
         end
         return true
       end
-      return false
+      do return false end
     end
     local v58 = function()
       local v0_2 = antibrute.duration:get()
@@ -2174,7 +2202,7 @@ do
         end
         return "crouching"
       end
-      return "air"
+      do return "air" end
     end
     local v55_4 = function(arg1)
       local current_threat = client.current_threat()
@@ -2223,7 +2251,7 @@ do
         end
         return false
       end
-      return false
+      do return false end
     end
     local v60 = function(arg1)
       local v1 = v47_7:get("freestanding")
@@ -2418,12 +2446,10 @@ do
       v58_3(manual_yaw.forward_hotkey.ref, "forward")
       v58_3(manual_yaw.backward_hotkey.ref, "backward")
       v58_3(manual_yaw.reset_hotkey.ref, nil)
-      return
+      do return end
     end
     function v51_7.get()
-      local L0_129, L1_130, L2_131, L3_132, L4_133, L5_134
-      L0_129 = v53_6
-      return L0_129
+      do return v53_6 end
     end
     function v51_7.update(arg1, arg2)
       local v2 = v55_5[v53_6]
@@ -2513,14 +2539,7 @@ do
         end
         return "air crouch knife"
       end
-      do
-        local v8 = not v23_5.is_moving
-        if not v8 then
-          v8 = v23_5
-          v8 = v8.is_crouched
-        end
-      end
-      if v8 and v6 >= 10 and v7 > 1000000 then
+      if (not v23_5.is_moving or v23_5.is_crouched) and v6 >= 10 and v7 > 1000000 then
         return "distance"
       end
       if not v23_5.is_crouched then
@@ -2562,8 +2581,11 @@ do
         v4 = 0.5 < entity.get_prop(arg1, "m_flDuckAmount")
         local z = vec.z
         local v6 = v4
-        v6 = v6 and 45
-        v6 = v6 or 60
+        if v4 then
+          v6 = 45
+        else
+          v6 = v6 or 60
+        end
         z = z + v6
         vec.z = z
       end
@@ -2639,6 +2661,7 @@ do
       return false
     end
     local v65 = function(arg1, arg2)
+      local v7, v10
       local v2 = entity.get_prop(arg1, "m_iTeamNum")
       v2 = entity.get_prop(arg1, "m_iTeamNum") == 3
       local v56_5_2 = v56_5((entity.get_player_weapon(arg1)))
@@ -2647,40 +2670,55 @@ do
         is_onground = v23_5
         is_onground = is_onground.is_moving
         is_onground = not is_onground
+        if is_onground then
+          is_onground = v23_5
+          is_onground = is_onground.is_crouched
+          is_onground = not is_onground
+        end
       end
-      if is_onground then
-        is_onground = v23_5
-        is_onground = is_onground.is_crouched
-        is_onground = not is_onground
-      end
-      local v59_3_2 = v59_3(arg1, arg2)
-      if not v56_5_2 or v23_5.is_onground or not v23_5.is_crouched then
-        do
-          local v7 = is_onground
+      v7 = arg1
+      local v59_3_2 = v59_3(v7, arg2)
+      if v56_5_2 then
+        v7 = v23_5
+        v7 = v7.is_onground
+        if not v7 then
+          v7 = v23_5
+          v7 = v7.is_crouched
+        end
+      elseif not v7 then
+        v7 = is_onground
+        if v7 then
+          v7 = v2
           if v7 then
-            v7 = v2
-            v7 = v7 and -6
+            v7 = -6
+          else
             v7 = v7 or 20
-            v7 = v59_3_2 >= v7
           end
-          if not v7 then
+          v7 = v59_3_2 >= v7
+        elseif not v7 then
+          v7 = v23_5
+          v7 = v7.is_crouched
+          if v7 then
             v7 = v23_5
-            v7 = v7.is_crouched
-            if v7 then
-              v7 = v23_5
-              v7 = v7.is_onground
-            end
+            v7 = v7.is_onground
             if v7 then
               v7 = v2
-              v7 = v7 and -20
-              v7 = v7 or -4
+              if v7 then
+                v7 = -20
+              else
+                v7 = v7 or -4
+              end
               v7 = v59_3_2 >= v7
             end
           end
+        end
+        do
           local v61_2 = v61(arg2)
-          local v10 = not v62(arg2)
-          v10 = v10 and v61_2 > 75
-          if not v10 then
+          v10 = arg2
+          v10 = not v62(v10)
+          if v10 then
+            v10 = v61_2 > 75
+          elseif not v10 then
             v10 = v63
             v10 = v10(arg2, arg1)
             v10 = not v10
@@ -2703,9 +2741,13 @@ do
         v13 = tickcount <= v55_6
         return v13
       end
+      v7 = v2
       local v7_2 = v2
-      v7_2 = v7_2 and -35
-      v7_2 = v7_2 or -20
+      if v7 then
+        v7_2 = -35
+      else
+        v7_2 = v7_2 or -20
+      end
       v7_2 = v59_3_2 > v7_2
       return v7_2
     end
@@ -2746,58 +2788,61 @@ do
             v9 = v58_4_2 - v9
             v9 = v3 < v9
           end
-          do
-            local is_onground = v23_5.is_onground
-            if is_onground then
-              is_onground = v23_5
-              is_onground = is_onground.is_moving
-              is_onground = not is_onground
-            end
-            if is_onground then
-              is_onground = v23_5
-              is_onground = is_onground.is_crouched
-              is_onground = not is_onground
-            end
-          end
-          if not is_onground then
+          if not v23_5.is_onground or not not v23_5.is_moving or not not v23_5.is_crouched then
             if v23_5.is_onground then
               if not v6 then
                 if not v5 then
                   local v11 = v8
-                  v11 = v11 and 38
-                  if not v11 then
+                  if v8 then
+                    v11 = 38
+                  elseif not v11 then
                     v11 = v7
-                    v11 = v11 and 20
+                    if v11 then
+                      v11 = 20
+                    else
+                      v11 = v11 or 32
+                    end
                   end
-                  v11 = v11 or 32
                   return v11
                 end
                 local v11_2 = v8
-                v11_2 = v11_2 and 30
-                if not v11_2 then
+                if v8 then
+                  v11_2 = 30
+                elseif not v11_2 then
                   v11_2 = v7
-                  v11_2 = v11_2 and 20
+                  if v11_2 then
+                    v11_2 = 20
+                  else
+                    v11_2 = v11_2 or 30
+                  end
                 end
-                v11_2 = v11_2 or 30
                 return v11_2
               end
               if not v9 then
                 local v11_3 = v8
-                v11_3 = v11_3 and 38
-                if not v11_3 then
+                if v8 then
+                  v11_3 = 38
+                elseif not v11_3 then
                   v11_3 = v7
-                  v11_3 = v11_3 and 14
+                  if v11_3 then
+                    v11_3 = 14
+                  else
+                    v11_3 = v11_3 or 26
+                  end
                 end
-                v11_3 = v11_3 or 26
                 return v11_3
               end
               local v11_4 = v8
-              v11_4 = v11_4 and 33
-              if not v11_4 then
+              if v8 then
+                v11_4 = 33
+              elseif not v11_4 then
                 v11_4 = v7
-                v11_4 = v11_4 and 20
+                if v11_4 then
+                  v11_4 = 20
+                else
+                  v11_4 = v11_4 or 20
+                end
               end
-              v11_4 = v11_4 or 20
               return v11_4
             end
             return 32
@@ -3017,7 +3062,7 @@ do
       if not v23_5.is_crouched then
         return "air"
       end
-      return "air-crouching"
+      do return "air-crouching" end
     end
     local v60_4 = function()
       if v24_5.get().shift then
@@ -3072,98 +3117,107 @@ do
       if trace_bullet_3 ~= current_threat then
         trace_bullet_4 = 0
       end
-      do
-        local v13 = sum_2.x
-        v13 = trace_bullet_2 > 0
-        v13 = v13 or trace_bullet_4 > 0
-        v13 = v13 and trace_bullet_2 ~= trace_bullet_4
-      end
-      if v13 then
+      if (trace_bullet_2 > 0 or trace_bullet_4 > 0) and trace_bullet_2 ~= trace_bullet_4 then
         local v14 = sum_2.y
-        v14 = trace_bullet_2 > trace_bullet_4
-        v14 = v14 and -1
-        v14 = v14 or 1
+        if trace_bullet_2 > trace_bullet_4 then
+          v14 = -1
+        else
+          v14 = v14 or 1
+        end
         v58_7 = v14
       end
       return
     end
     function v56_7.update(arg1, arg2)
-      if defensive_flick.enabled:get() then
-        if v60_4() then
-          v62_3(arg2)
+      local v2 = defensive_flick
+      v2 = v2.enabled
+      v2 = v2.get
+      v2 = v2(v2)
+      if v2 then
+        v2 = v60_4
+        v2 = v2()
+        if v2 then
+          v2 = v62_3
+          v2(arg2)
+          v2 = v58_7
+          v2 = v2 == -1
           do
-            local v2 = v58_7
-            v2 = v58_7 == -1
+            local v4 = v24_5.get().defensive.left
+            v4 = v24_5.get().defensive.left ~= 0
             do
-              local v4 = v24_5.get().defensive.left
-              v4 = v24_5.get().defensive.left ~= 0
-              do
-                local v5 = arg2.command_number % 7
-                v5 = arg2.command_number % 7 == 0
-                arg2.force_defensive = v5
-              end
-              do
-                local v5_2 = v4
-                v5_2 = v5_2 and "Custom"
-                v5_2 = v5_2 or "Default"
-                v45_8.pitch = v5_2
-                v45_8.pitch_offset = 0
-                v45_8.yaw_base = "At targets"
-                v45_8.yaw = "180"
-              end
-              do
-                local v5_3 = v4
-                v5_3 = v5_3 and 90
-                v5_3 = v5_3 or 0
-                v45_8.yaw_offset = v5_3
-                v45_8.yaw_left = 0
-                v45_8.yaw_right = 0
-                v45_8.yaw_jitter = "Off"
-                v45_8.jitter_offset = 0
-                v45_8.body_yaw = "Static"
-              end
-              local v5_4 = v4
-              v5_4 = v5_4 and -1
-              v5_4 = v5_4 or 1
-              v45_8.body_yaw_offset = v5_4
+              local v5 = arg2.command_number % 7
+              v5 = arg2.command_number % 7 == 0
+              arg2.force_defensive = v5
             end
-            v45_8.freestanding_body_yaw = false
-            v45_8.edge_yaw = false
-            v45_8.freestanding = false
-            v45_8.roll = 0
+            do
+              local custom = v4
+              if v4 then
+                custom = "Custom"
+              else
+                custom = custom or "Default"
+              end
+              v45_8.pitch = custom
+            end
+            v45_8.pitch_offset = 0
+            v45_8.yaw_base = "At targets"
+            v45_8.yaw = "180"
+            do
+              local v5_2 = v4
+              if v4 then
+                v5_2 = 90
+              else
+                v5_2 = v5_2 or 0
+              end
+              v45_8.yaw_offset = v5_2
+            end
+            v45_8.yaw_left = 0
+            v45_8.yaw_right = 0
+            v45_8.yaw_jitter = "Off"
+            v45_8.jitter_offset = 0
+            v45_8.body_yaw = "Static"
+            local v5_3 = v4
+            if v4 then
+              v5_3 = -1
+            else
+              v5_3 = v5_3 or 1
+            end
+            v45_8.body_yaw_offset = v5_3
           end
+          v45_8.freestanding_body_yaw = false
+          v45_8.edge_yaw = false
+          v45_8.freestanding = false
+          v45_8.roll = 0
           if v2 then
             v45_8.yaw_offset = -v45_8.yaw_offset
           end
           return
         end
-        return false
+        v2 = false
+        return v2
       end
-      return false
+      v2 = false
+      return v2
     end
   end
   local v57_6 = function()
     local defensive = v45_8.defensive
     local defensive_2 = v24_5.get().defensive
-    do
-      local v3
-      v3 = defensive ~= nil
-      if v3 then
-        v3 = defensive_2.left
-        v3 = v3 > 0
-      end
-    end
-    if v3 then
+    if defensive ~= nil and defensive_2.left > 0 then
       v45_8:copy(defensive)
       return true
     end
     return false
   end
   local v58_8 = function(arg1)
-    if v24_5.get().shift then
+    local max, v2 = v24_5, nil
+    max = max.get
+    max = max()
+    max = max.shift
+    if max then
+      max = math
+      max = max.max
+      v2 = 1
       do
-        local max = math.max
-        local v2 = 1
         local delay = v45_8.delay
         delay = delay or 1
         max = max(v2, delay)
@@ -3179,15 +3233,30 @@ do
       end
     end
     local v1 = true
-    if v45_8.body_yaw == "Random" then
-      v1 = v13_2.random_int(0, 1) == 0
+    v2 = v45_8
+    v2 = v2.body_yaw
+    if v2 == "Random" then
+      v2 = v13_2
+      v2 = v2.random_int
+      v2 = v2(0, 1)
+      v1 = v2 == 0
     end
-    if v45_8.invert_chance ~= nil and v45_8.invert_chance < v13_2.random_int(0, 100) then
-      v1 = false
+    v2 = v45_8
+    v2 = v2.invert_chance
+    if v2 ~= nil then
+      v2 = v45_8
+      v2 = v2.invert_chance
+      if v2 < v13_2.random_int(0, 100) then
+        v1 = false
+      end
     end
-    v39_6 = v39_6 + 1
+    v2 = v39_6
+    v2 = v2 + 1
+    v39_6 = v2
     if v1 then
-      v40_5 = not v40_5
+      v2 = v40_5
+      v2 = not v2
+      v40_5 = v2
     end
     v44_7[arg1] = 0
     return
@@ -3243,11 +3312,14 @@ do
       v45_8.yaw_jitter = "Off"
       v45_8.jitter_offset = 0
       do
-        local v40_5_2 = v40_5
-        v40_5_2 = v40_5_2 and jitter_offset_3
-        v40_5_2 = v40_5_2 or 0
-        v40_5_2 = yaw_offset + v40_5_2
-        v45_8.yaw_offset = v40_5_2
+        local v2 = v40_5
+        if v40_5 then
+          v2 = jitter_offset_3
+        else
+          v2 = v2 or 0
+        end
+        v2 = yaw_offset + v2
+        v45_8.yaw_offset = v2
       end
       return
     end
@@ -3319,10 +3391,13 @@ do
         body_yaw_offset = 1
       end
       v45_8.body_yaw = "Static"
-      local v40_5_2 = v40_5
-      v40_5_2 = v40_5_2 and body_yaw_offset
-      v40_5_2 = v40_5_2 or -body_yaw_offset
-      v45_8.body_yaw_offset = v40_5_2
+      local v1 = v40_5
+      if v40_5 then
+        v1 = body_yaw_offset
+      else
+        v1 = v1 or -body_yaw_offset
+      end
+      v45_8.body_yaw_offset = v1
     end
     return
   end
@@ -3385,8 +3460,10 @@ do
       local v9
       v9 = idx == 64
       local force_defensive = arg1.force_defensive
-      force_defensive = force_defensive and not v8
-      force_defensive = force_defensive and not v9
+      if force_defensive then
+        force_defensive = not v8
+        force_defensive = force_defensive and not v9
+      end
       defensive.force = force_defensive
     end
     return
@@ -3394,7 +3471,7 @@ do
   local v65_2 = function()
     v45_8:clear()
     v45_8:unset()
-    return
+    do return end
   end
   local v66_2 = function(arg1)
     v45_8:clear()
@@ -3546,12 +3623,13 @@ do
       return true
     end
     local v61_6 = function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
-      local v9 = arg2
+      local v9, extend_vector_2 = arg2, nil
       v9 = v9 and arg2 - arg6
       v9 = v9 or arg1
+      extend_vector_2 = v13_2
       do
-        local extend_vector = v13_2.extend_vector
-        local extend_vector_2 = extend_vector(v9, arg5 == 0 and 0 or arg4, arg3)
+        extend_vector_2 = extend_vector_2.extend_vector
+        extend_vector_2 = extend_vector_2(v9, arg5 == 0 and 0 or arg4, arg3)
       end
       local end_pos = trace.hull(v9, v9 + vector(0, 0, arg9), arg7, arg8, {skip = v60_8, mask = 33636363}).end_pos
       local end_pos_2 = trace.hull(vector(v9.x, v9.y, end_pos.z), vector(extend_vector_2.x, extend_vector_2.y, end_pos.z), arg7, arg8, {skip = v60_8, mask = 33636363}).end_pos
@@ -3561,21 +3639,29 @@ do
       return trace.hull(end_pos_2, vector(end_pos_2.x, end_pos_2.y, arg1.z - 240), arg7, arg8, {skip = v60_8, mask = 33636363}).end_pos + arg6
     end
     local v62_6 = function(arg1, arg2, arg3, arg4, arg5)
+      local v13
+      v13 = entity.get_prop(arg1, "m_vecViewOffset")
       local vec = vector(entity.get_prop(arg1, "m_vecViewOffset"))
+      v13 = entity.get_prop(arg1, "m_vecMins")
       local vec_2 = vector(entity.get_prop(arg1, "m_vecMins"))
+      v13 = entity.get_prop(arg1, "m_vecMaxs")
       local vec_3 = vector(entity.get_prop(arg1, "m_vecMaxs"))
-      v57_9.pos[0] = v61_6(arg2, nil, 0, arg5, 0, vec, vec_2, vec_3, arg5)
+      v13 = arg5
+      v57_9.pos[0] = v61_6(arg2, nil, 0, v13, 0, vec, vec_2, vec_3, arg5)
       for _FORV_11_ = 1, arg4 do
-        local v12 = _FORV_11_ % 2
-        v12 = _FORV_11_ % 2 == 0
-        v12 = v12 and arg3 - 90
-        v12 = v12 or arg3 + 90
+        local diff = _FORV_11_ % 2
+        if _FORV_11_ % 2 == 0 then
+          diff = arg3 - 90
+        else
+          diff = diff or arg3 + 90
+        end
+        v13 = v57_9
         do
-          local pos = v57_9.pos
-          local v13 = pos[_FORV_11_ <= 2 and 0 or _FORV_11_ - 2]
+          v13 = v13.pos
+          v13 = v13[_FORV_11_ <= 2 and 0 or _FORV_11_ - 2]
         end
         if v13 then
-          local v61_6_2 = v61_6(arg2, v13, v12, arg5, _FORV_11_, vec, vec_2, vec_3, arg5)
+          local v61_6_2 = v61_6(arg2, v13, diff, arg5, _FORV_11_, vec, vec_2, vec_3, arg5)
           if not v61_6_2 or v13 and arg5 < math.abs(v13.z - v61_6_2.z) then
             for _FORV_18_ = _FORV_11_, arg4, 2 do
               v57_9.pos[_FORV_18_] = false
@@ -3587,11 +3673,16 @@ do
       return v57_9.pos
     end
     local v63_5 = function(arg1, arg2)
-      local next_attack = entity.get_prop(arg1, "m_flNextAttack")
-      local next_primary_attack = entity.get_prop(arg2, "m_flNextPrimaryAttack")
+      local max, v5
+      max = "m_flNextAttack"
+      local next_attack = entity.get_prop(arg1, max)
+      max = arg2
+      v5 = "m_flNextPrimaryAttack"
+      local next_primary_attack = entity.get_prop(max, v5)
+      max = math
+      max = max.max
+      v5 = 0
       do
-        local max = math.max
-        local v5 = 0
         local v6 = next_attack
         v6 = v6 or 0
         local v7 = next_primary_attack
@@ -3602,9 +3693,11 @@ do
         v5 = v5()
       end
       if not (max > v5) and not (0 >= entity.get_prop(arg2, "m_iClip1")) then
-        return true
+        max = true
+        return max
       end
-      return false
+      max = false
+      return max
     end
     local v64_5 = {
       "CWeaponSSG08",
@@ -3620,15 +3713,7 @@ do
             return false
           end
           local v3 = v24_5.get()
-          do
-            local is_double_tap_active = v14_2.is_double_tap_active()
-            if not is_double_tap_active then
-              is_double_tap_active = v14_2
-              is_double_tap_active = is_double_tap_active.is_on_shot_antiaim_active
-              is_double_tap_active = is_double_tap_active()
-            end
-          end
-          if not is_double_tap_active or v3.shift then
+          if not v14_2.is_double_tap_active() and not v14_2.is_on_shot_antiaim_active() or v3.shift then
             if entity.get_prop(arg1, "m_flVelocityModifier") ~= 1 then
               return false
             end
@@ -3649,37 +3734,39 @@ do
       return false
     end
     local v66_3 = function(arg1, arg2, arg3, arg4)
+      local trace_bullet_2
       local is_override_minimum_damage = v14_2.is_override_minimum_damage()
       local health = entity.get_prop(arg3, "m_iHealth")
       do
-        local v6 = is_override_minimum_damage
-        if v6 then
-          v6 = v14_2
-          v6 = v6.get_override_damage
-          v6 = v6()
-        end
-        if not v6 then
-          v6 = v14_2
-          v6 = v6.get_minimum_damage
-          v6 = v6()
+        local override_damage = is_override_minimum_damage
+        if is_override_minimum_damage then
+          override_damage = v14_2
+          override_damage = override_damage.get_override_damage
+          override_damage = override_damage()
+        elseif not override_damage then
+          override_damage = v14_2
+          override_damage = override_damage.get_minimum_damage
+          override_damage = override_damage()
         end
         for _FORV_10_ = 1, #arg1 do
           local v11 = arg1[_FORV_10_]
           if v11 then
             for _FORV_15_ = 1, #arg4 do
               local v16 = arg4[_FORV_15_]
-              local vec = vector(entity.hitbox_position(arg3, v16))
+              trace_bullet_2 = arg3
+              trace_bullet_2 = entity.hitbox_position(trace_bullet_2, v16)
+              local vec = vector(entity.hitbox_position(trace_bullet_2, v16))
               do
                 local trace_bullet = client.trace_bullet
                 do
-                  local v19 = arg2
-                  local trace_bullet_2 = trace_bullet(v19, v11.x, v11.y, v11.z, vec.x, vec.y, vec.z, v16 == 0)
+                  trace_bullet_2 = arg2
+                  trace_bullet_2 = trace_bullet(trace_bullet_2, v11.x, v11.y, v11.z, vec.x, vec.y, vec.z, v16 == 0)
                 end
                 if v16 == 0 then
                   trace_bullet_2 = trace_bullet_2 * 4
                 end
               end
-              if trace_bullet_2 >= math.min(v6, health) and trace_bullet_2 > 0 then
+              if trace_bullet_2 >= math.min(override_damage, health) and trace_bullet_2 > 0 then
                 return v11, _FORV_10_
               end
             end
@@ -3716,6 +3803,7 @@ do
       return nil
     end
     local v68 = function(arg1)
+      local v5, v19
       local me = entity.get_local_player()
       if me == nil then
         return
@@ -3725,11 +3813,23 @@ do
         return
       end
       local v67_2 = v67(player_weapon)
-      if v67_2 ~= nil and ai_peek.weapon:get(v67_2) then
-        v59_9(v14_2.ragebot.aimbot.target_hitboxes)
-        local v4 = ui.get(v14_2.ragebot.aimbot.force_baim)
-        do
-          local v5 = ai_peek.enabled:get()
+      if v67_2 ~= nil then
+        v5 = ai_peek.weapon
+        if ai_peek.weapon.get(v5, v67_2) then
+          v5 = v14_2
+          v5 = v5.ragebot
+          v5 = v5.aimbot
+          v5 = v5.target_hitboxes
+          v59_9(v5)
+          v5 = v14_2
+          v5 = v5.ragebot
+          v5 = v5.aimbot
+          v5 = v5.force_baim
+          local v4 = ui.get(v5)
+          v5 = ai_peek
+          v5 = v5.enabled
+          v5 = v5.get
+          v5 = v5(v5)
           if v5 then
             v5 = v14_2
             v5 = v5.is_quick_peek_assist
@@ -3741,6 +3841,7 @@ do
             end
           else
             local me_2 = entity.get_local_player()
+            v19 = entity.get_origin(me_2)
             v57_9.mid = v13_2.extrapolate_position(me_2, vector(entity.get_origin(me_2)), 13, true)
             v58_11.main = true
           end
@@ -3753,174 +3854,188 @@ do
             v59_9(v14_2.ragebot.aimbot.target_hitboxes, true)
             v58_11.force_baim = true
           end
-        end
-        if v5 then
-          local velocity2d_sqr = v23_5.velocity2d_sqr
-          local tickcount = globals.tickcount()
-          local me_3 = entity.get_local_player()
-          do
-            local v9 = bit.band(entity.get_prop(me_3, "m_fFlags"), 1)
-            v9 = bit.band(entity.get_prop(me_3, "m_fFlags"), 1) ~= 1
-            if not v9 then
-              v9 = arg1.in_forward
-              v9 = v9 == 1
-            end
-            if not v9 then
-              v9 = arg1.in_moveleft
-              v9 = v9 == 1
-            end
-            if not v9 then
-              v9 = arg1.in_moveright
-              v9 = v9 == 1
-            end
-            if not v9 then
-              v9 = arg1.in_back
-              v9 = v9 == 1
-            end
-            if not v9 then
-              v9 = arg1.in_jump
-              v9 = v9 == 1
-            end
-            local vec = vector(entity.get_origin(me_3))
-            local mid = v57_9.mid
-            local v12 = mid:dist2d(vec)
-            if not v51_10 or velocity2d_sqr < 1.011 and velocity2d_sqr ~= 0 then
-              v57_9.mid = vec
-            end
-            local current_threat = client.current_threat()
-            v57_9.current_target = current_threat
+          if v5 then
+            local velocity2d_sqr = v23_5.velocity2d_sqr
+            local tickcount = globals.tickcount()
+            local me_3 = entity.get_local_player()
             do
-              local v14 = current_threat
-              if v14 then
-                v14 = vector
-                v14 = v14(entity.get_origin(current_threat))
+              local v9 = bit.band(entity.get_prop(me_3, "m_fFlags"), 1)
+              v9 = bit.band(entity.get_prop(me_3, "m_fFlags"), 1) ~= 1
+              if not v9 then
+                v9 = arg1.in_forward
+                v9 = v9 == 1
               end
-              if not v14 then
-                v14 = vector
-                v14 = v14()
+              if not v9 then
+                v9 = arg1.in_moveleft
+                v9 = v9 == 1
               end
-              local v15 = current_threat
-              if v15 then
-                v15 = vector
-                v15 = v15(mid:to(v14):angles())
-                v15 = v15.y
+              if not v9 then
+                v9 = arg1.in_moveright
+                v9 = v9 == 1
               end
-              if not v15 then
-                v15 = vector
-                v15 = v15(client.camera_angles())
-                v15 = v15.y
+              if not v9 then
+                v9 = arg1.in_back
+                v9 = v9 == 1
               end
-              local v62_6_2 = v62_6(me_3, mid, v15, 4, 18)
-              local v17
-              local v18 = 0
-              if not v9 and not v52_10 and not v54_8 and v65_4(me_3, current_threat) then
-                local v66_3_2, v66_3_3 = v66_3(v62_6_2, me_3, current_threat, v50_8)
-                v18 = v66_3_3
-                v17 = v66_3_2
+              if not v9 then
+                v9 = arg1.in_jump
+                v9 = v9 == 1
               end
+              v19 = entity.get_origin(me_3)
+              local vec = vector(entity.get_origin(me_3))
+              local mid = v57_9.mid
+              local v12 = mid:dist2d(vec)
+              if not v51_10 or velocity2d_sqr < 1.011 and velocity2d_sqr ~= 0 then
+                v57_9.mid = vec
+              end
+              local current_threat = client.current_threat()
+              v57_9.current_target = current_threat
               do
-                local v19 = arg1.in_attack
-                v19 = arg1.in_attack == 1
+                local v14 = current_threat
+                if v14 then
+                  v14 = vector
+                  v19 = entity.get_origin(current_threat)
+                  v14 = v14(entity.get_origin(current_threat))
+                end
+                if not v14 then
+                  v14 = vector
+                  v14 = v14()
+                end
+                local v15 = current_threat
+                if v15 then
+                  v15 = vector
+                  v19 = mid:to(v14):angles()
+                  v15 = v15(mid:to(v14):angles())
+                  v15 = v15.y
+                end
+                if not v15 then
+                  v15 = vector
+                  v19 = client.camera_angles()
+                  v15 = v15(client.camera_angles())
+                  v15 = v15.y
+                end
+                v19 = v15
+                local v62_6_2 = v62_6(me_3, mid, v19, 4, 18)
+                local v17
+                local v18 = 0
+                if not v9 then
+                  v19 = v52_10
+                  if not v19 then
+                    v19 = v54_8
+                    if not v19 then
+                      v19 = v65_4
+                      v19 = v19(me_3, current_threat)
+                      if v19 then
+                        v19 = v66_3
+                        local v66_3_3 = v19(v62_6_2, me_3, current_threat, v50_8)
+                        v18 = v66_3_3
+                        v17 = v19
+                      end
+                    end
+                  end
+                end
+                v19 = arg1.in_attack
+                v19 = v19 == 1
                 if v19 then
                   v19 = v63_5
                   v19 = v19(me_3, entity.get_player_weapon(me_3))
                 end
-              end
-              if v19 then
-                v54_8 = true
-                v53_10 = true
-              end
-              do
-                local v20 = me_3
-                v20 = v17 ~= nil
-                v51_10 = v20
-              end
-              v57_9.active_point_index = v18
-              if not v51_10 then
-                if not v9 or v52_10 or v53_10 or v54_8 then
-                  if not v53_10 and not v54_8 then
-                    v57_9.draw_point = nil
+                if v19 then
+                  v54_8 = true
+                  v53_10 = true
+                end
+                do
+                  local v20 = me_3
+                  v20 = v17 ~= nil
+                  v51_10 = v20
+                end
+                v57_9.active_point_index = v18
+                if not v51_10 then
+                  if not v9 or v52_10 or v53_10 or v54_8 then
+                    if not v53_10 and not v54_8 then
+                      v57_9.draw_point = nil
+                    else
+                      v52_10 = true
+                      v53_10 = false
+                      v57_9.draw_point = nil
+                      v55_10 = true
+                    end
                   else
-                    v52_10 = true
+                    v52_10 = false
                     v53_10 = false
                     v57_9.draw_point = nil
-                    v55_10 = true
+                    v55_10 = false
+                    v56_10 = false
                   end
                 else
+                  if v57_9.draw_point == nil then
+                    v57_9.draw_point = v17
+                  end
+                  v13_2.set_movement(arg1, v17, me_3)
                   v52_10 = false
-                  v53_10 = false
-                  v57_9.draw_point = nil
+                  v53_10 = true
                   v55_10 = false
                   v56_10 = false
                 end
-              else
-                if v57_9.draw_point == nil then
-                  v57_9.draw_point = v17
+              end
+              if not v52_10 then
+                v57_9.last_returning_time = tickcount
+              end
+              if v52_10 then
+                if not (v12 < 0.15) then
+                  if v55_10 then
+                    if not v14_2.is_double_tap_active() or not v63_5(me_3, entity.get_player_weapon(me_3)) then
+                      if not v14_2.is_double_tap_active() and v14_2.is_on_shot_antiaim_active() and 0 >= v24_5.get().defensive.left then
+                        v55_10 = false
+                        v56_10 = true
+                        v30_4.set(v14_2.antiaimbot.other.on_shot_antiaim[1], false)
+                      end
+                    elseif tickcount - v57_9.last_returning_time == 1 then
+                      arg1.force_defensive = true
+                    elseif tickcount - v57_9.last_returning_time >= 7 then
+                      v55_10 = false
+                      v56_10 = false
+                      v30_4.set(v14_2.ragebot.aimbot.double_tap[1], false)
+                      v30_4.set(v14_2.antiaimbot.other.on_shot_antiaim[1], false)
+                    end
+                  end
+                else
+                  v52_10 = false
+                  v54_8 = false
+                  v55_10 = false
+                  v56_10 = false
                 end
-                v13_2.set_movement(arg1, v17, me_3)
-                v52_10 = false
-                v53_10 = true
-                v55_10 = false
-                v56_10 = false
               end
             end
             if not v52_10 then
-              v57_9.last_returning_time = tickcount
+              v30_4.unset(v14_2.ragebot.other.quick_peek_assist_mode)
+            else
+              v30_4.set(v14_2.ragebot.other.quick_peek_assist_mode, {
+                "Retreat on shot",
+                "Retreat on key release"
+              })
             end
-            if v52_10 then
-              if not (v12 < 0.15) then
-                if v55_10 then
-                  if not v14_2.is_double_tap_active() or not v63_5(me_3, entity.get_player_weapon(me_3)) then
-                    if not v14_2.is_double_tap_active() and v14_2.is_on_shot_antiaim_active() and 0 >= v24_5.get().defensive.left then
-                      v55_10 = false
-                      v56_10 = true
-                      v30_4.set(v14_2.antiaimbot.other.on_shot_antiaim[1], false)
-                    end
-                  elseif tickcount - v57_9.last_returning_time == 1 then
-                    arg1.force_defensive = true
-                  elseif tickcount - v57_9.last_returning_time >= 7 then
-                    v55_10 = false
-                    v56_10 = false
-                    v30_4.set(v14_2.ragebot.aimbot.double_tap[1], false)
-                    v30_4.set(v14_2.antiaimbot.other.on_shot_antiaim[1], false)
-                  end
-                end
-              else
-                v52_10 = false
-                v54_8 = false
-                v55_10 = false
-                v56_10 = false
-              end
+            if not v56_10 then
+              v30_4.unset(v14_2.ragebot.aimbot.double_tap[1])
+              v30_4.unset(v14_2.antiaimbot.other.on_shot_antiaim[1])
+            else
+              v30_4.set(v14_2.antiaimbot.other.on_shot_antiaim[1], false)
+              v30_4.set(v14_2.ragebot.aimbot.double_tap[1], false)
             end
+            return
           end
-          if not v52_10 then
-            v30_4.unset(v14_2.ragebot.other.quick_peek_assist_mode)
-          else
-            v30_4.set(v14_2.ragebot.other.quick_peek_assist_mode, {
-              "Retreat on shot",
-              "Retreat on key release"
-            })
-          end
-          if not v56_10 then
-            v30_4.unset(v14_2.ragebot.aimbot.double_tap[1])
-            v30_4.unset(v14_2.antiaimbot.other.on_shot_antiaim[1])
-          else
-            v30_4.set(v14_2.antiaimbot.other.on_shot_antiaim[1], false)
-            v30_4.set(v14_2.ragebot.aimbot.double_tap[1], false)
-          end
+          v51_10 = false
+          v52_10 = false
+          v53_10 = false
+          v54_8 = false
+          v56_10 = false
+          v57_9.draw_point = nil
+          v55_10 = false
+          v30_4.unset(v14_2.ragebot.other.quick_peek_assist_mode)
+          v30_4.unset(v14_2.ragebot.aimbot.double_tap[1])
+          v30_4.unset(v14_2.antiaimbot.other.on_shot_antiaim[1])
           return
         end
-        v51_10 = false
-        v52_10 = false
-        v53_10 = false
-        v54_8 = false
-        v56_10 = false
-        v57_9.draw_point = nil
-        v55_10 = false
-        v30_4.unset(v14_2.ragebot.other.quick_peek_assist_mode)
-        v30_4.unset(v14_2.ragebot.aimbot.double_tap[1])
-        v30_4.unset(v14_2.antiaimbot.other.on_shot_antiaim[1])
-        return
       end
       return
     end
@@ -4015,18 +4130,18 @@ do
       if v1 then
         v1 = arg1.type
         v1 = v1 ~= "grenade"
-      end
-      if v1 then
-        v1 = arg1.type
-        v1 = v1 ~= "knife"
-      end
-      if v1 then
-        v1 = arg1.type
-        v1 = v1 ~= "taser"
-      end
-      if v1 then
-        v1 = arg1.type
-        v1 = v1 ~= "stackbleitem"
+        if v1 then
+          v1 = arg1.type
+          v1 = v1 ~= "knife"
+          if v1 then
+            v1 = arg1.type
+            v1 = v1 ~= "taser"
+            if v1 then
+              v1 = arg1.type
+              v1 = v1 ~= "stackbleitem"
+            end
+          end
+        end
       end
       return v1
     end
@@ -4059,7 +4174,7 @@ do
     end
     local v51_11 = function()
       v31_5.set(v14_2.ragebot.aimbot.double_tap[1], false)
-      return
+      do return end
     end
     function v47_10.update()
       if teleport_fix.enabled:get() then
@@ -4069,7 +4184,7 @@ do
         end
         return
       end
-      return
+      do return end
     end
   end
   do
@@ -4099,7 +4214,7 @@ do
       end
       v30_4.set(v14_2.misc.movement.strafe, v51_12)
       v51_12 = nil
-      return
+      do return end
     end
     local v53_11 = cvar.cl_sidespeed
     local v54_9 = function(arg1)
@@ -4170,6 +4285,7 @@ do
       return v1
     end
     local v60_9 = function(arg1)
+      local prod
       if air_autostop.enabled:get() and air_autostop.hotkey:get() then
         local me = entity.get_local_player()
         if me == nil then
@@ -4183,65 +4299,89 @@ do
             local v52_11_3 = v52_11
             return v52_11_3()
           end
+          prod = entity.hitbox_position(me, 0)
           local vec = vector(entity.hitbox_position(me, 0))
+          prod = entity.hitbox_position(me, 2)
           local vec_2 = vector(entity.hitbox_position(me, 2))
+          prod = entity.hitbox_position(current_threat, 0)
           local vec_3 = vector(entity.hitbox_position(current_threat, 0))
+          prod = entity.hitbox_position(current_threat, 0)
           local vec_4 = vector(entity.hitbox_position(current_threat, 0))
           vec_3:dist(vec)
+          prod = entity.get_prop(me, "m_vecVelocity")
           vector(entity.get_prop(me, "m_vecVelocity"))
           local v8 = entity_2(me):get_anim_state()
           if v8 ~= nil and not v8.on_ground then
             do
               local v10 = entity.get_prop(me, "m_bIsScoped")
               v10 = entity.get_prop(me, "m_bIsScoped") ~= 0
-              local v12 = v14_2.is_override_minimum_damage()
-              if v12 then
-                v12 = v14_2
-                v12 = v12.get_override_damage
-                v12 = v12()
-              end
-              if not v12 then
-                v12 = v14_2
-                v12 = v12.get_minimum_damage
-                v12 = v12()
+              local override_damage = v14_2.is_override_minimum_damage()
+              if v14_2.is_override_minimum_damage() then
+                override_damage = v14_2
+                override_damage = override_damage.get_override_damage
+                override_damage = override_damage()
+              elseif not override_damage then
+                override_damage = v14_2
+                override_damage = override_damage.get_minimum_damage
+                override_damage = override_damage()
               end
               local trace_bullet = client.trace_bullet(me, vec.x, vec.y, vec.z, vec_3.x, vec_3.y, vec_3.z)
               local trace_bullet_2 = client.trace_bullet(me, vec.x, vec.y, vec.z, vec_4.x, vec_4.y, vec_4.z)
-              local trace_bullet_3 = client.trace_bullet(me, vec_2.x, vec_2.y, vec_2.z, vec_3.x, vec_3.y, vec_3.z)
-              local trace_bullet_4 = client.trace_bullet(me, vec_2.x, vec_2.y, vec_2.z, vec_4.x, vec_4.y, vec_4.z)
+              prod = vec_3.z
+              local trace_bullet_3 = client.trace_bullet(me, vec_2.x, vec_2.y, vec_2.z, vec_3.x, vec_3.y, prod)
+              prod = vec_4.x
+              local trace_bullet_4 = client.trace_bullet(me, vec_2.x, vec_2.y, vec_2.z, prod, vec_4.y, vec_4.z)
               local health = entity.get_prop(current_threat, "m_iHealth")
-              if v12 >= 100 then
-                v12 = health + (v12 - 100)
+              if override_damage >= 100 then
+                override_damage = health + (override_damage - 100)
               end
               local classname = entity.get_classname(player_weapon)
-              if classname ~= "CKnife" and classname ~= "CWeaponTaser" and not string.match(classname, "nade") then
-                if classname == "CWeaponSSG08" then
-                  if arg1.quick_stop == false and v46_5() < ui.get(v14_2.ragebot.aimbot.minimum_hit_chance) then
-                    local v52_11_4 = v52_11
-                    do return v52_11_4() end
-                    if v46_5() < ui.get(v14_2.ragebot.aimbot.minimum_hit_chance) then
-                      local v52_11_5 = v52_11
-                      return v52_11_5()
+              if classname ~= "CKnife" and classname ~= "CWeaponTaser" then
+                prod = classname
+                if not string.match(prod, "nade") then
+                  if classname == "CWeaponSSG08" then
+                    if arg1.quick_stop == false then
+                      prod = v46_5
+                      prod = prod()
+                      if prod < ui.get(v14_2.ragebot.aimbot.minimum_hit_chance) then
+                        local v52_11_4 = v52_11
+                        do return v52_11_4() end
+                        prod = ui
+                        prod = prod.get
+                        prod = prod(v14_2.ragebot.aimbot.minimum_hit_chance)
+                        if v46_5() < prod then
+                          local v52_11_5 = v52_11
+                          return v52_11_5()
+                        end
+                      end
                     end
                   end
-                end
-                if v54_9(current_threat) and not entity.is_dormant(current_threat) then
-                  local csgo_weapons_2 = csgo_weapons(player_weapon)
-                  do
-                    local v24 = v10
-                    v24 = v24 and csgo_weapons_2.max_player_speed_alt
-                    v24 = v24 or csgo_weapons_2.max_player_speed
-                    local prod = v24 * 0.34
+                  prod = current_threat
+                  if v54_9(prod) then
+                    prod = current_threat
+                    if not entity.is_dormant(prod) then
+                      prod = player_weapon
+                      local csgo_weapons_2 = csgo_weapons(prod)
+                      prod = v10
+                      do
+                        if prod then
+                          prod = csgo_weapons_2.max_player_speed_alt
+                        else
+                          prod = prod or csgo_weapons_2.max_player_speed
+                        end
+                        prod = prod * 0.34
+                      end
+                      if trace_bullet < override_damage and trace_bullet_2 < override_damage and trace_bullet_3 < override_damage and trace_bullet_4 < override_damage then
+                        local v52_11_6 = v52_11
+                        return v52_11_6()
+                      end
+                      v56_11(arg1, prod)
+                      return
+                    end
                   end
-                  if trace_bullet < v12 and trace_bullet_2 < v12 and trace_bullet_3 < v12 and trace_bullet_4 < v12 then
-                    local v52_11_6 = v52_11
-                    return v52_11_6()
-                  end
-                  v56_11(arg1, prod)
-                  return
+                  local v52_11_7 = v52_11
+                  return v52_11_7()
                 end
-                local v52_11_7 = v52_11
-                return v52_11_7()
               end
             end
             local v52_11_8 = v52_11
@@ -4270,7 +4410,7 @@ do
     local force_shot = v29_4.ragebot.force_shot
     local v50_11 = function()
       v31_5.set(v14_2.ragebot.aimbot.minimum_hit_chance, 0)
-      return
+      do return end
     end
     local v51_13 = function()
       local me = entity.get_local_player()
@@ -4305,43 +4445,26 @@ do
       return false
     end
     local v53_12 = function()
-      local L0_194, L1_195, L2_196, L3_197
-      L0_194 = force_shot
-      L0_194 = L0_194.enabled
-      L1_195 = L0_194
-      L0_194 = L0_194.get
-      L0_194 = L0_194(L1_195)
-      if L0_194 then
-        L0_194 = v52_12
-        L0_194 = L0_194()
-        if L0_194 then
-          L0_194, L1_195, L2_196, L3_197 = nil, nil, nil, nil
-          if not client.current_threat() then
-            L3_197 = 200
-            L2_196 = 255
-            L1_195 = 255
-            L0_194 = 255
-          elseif not v51_13() then
-            L3_197 = 255
-            L2_196 = 10
-            L1_195 = 10
-            L0_194 = 255
-          else
-            L3_197 = 255
-            L2_196 = 43
-            L1_195 = 202
-            L0_194 = 159
-          end
-          renderer.indicator(L0_194, L1_195, L2_196, L3_197, "SHOT")
-          return
-        end
+      if not force_shot.enabled:get() then
         return
       end
+      if not v52_12() then
+        return
+      end
+      local r, g, b, a
+      if not client.current_threat() then
+        r, g, b, a = 255, 255, 255, 200
+      elseif not v51_13() then
+        r, g, b, a = 255, 10, 10, 255
+      else
+        r, g, b, a = 159, 202, 43, 255
+      end
+      renderer.indicator(r, g, b, a, "SHOT")
       return
     end
     client.set_event_callback("paint_ui", function()
       v53_12()
-      return
+      do return end
     end)
     function v48_9.update()
       if force_shot.enabled:get() then
@@ -4354,7 +4477,7 @@ do
         end
         return
       end
-      return
+      do return end
     end
   end
   local v49_11 = {}
@@ -4379,7 +4502,7 @@ do
       if not v23_5.is_crouched then
         return "air"
       end
-      return "air-crouching"
+      do return "air-crouching" end
     end
     local v52_13 = function(arg1)
       local csgo_weapons_2 = csgo_weapons(arg1)
@@ -4412,19 +4535,11 @@ do
       v31_5.set(v14_2.ragebot.aimbot.double_tap[1], false)
       v30_4.set(v14_2.antiaimbot.other.on_shot_antiaim[1], true)
       v30_4.set(v14_2.antiaimbot.other.on_shot_antiaim[2], "Always on")
-      return
+      do return end
     end
     local v54_10 = function()
       if not ui.get(v14_2.ragebot.other.duck_peek_assist) then
-        do
-          local v0_2 = ui.get(v14_2.ragebot.other.quick_peek_assist[1])
-          if v0_2 then
-            v0_2 = ui
-            v0_2 = v0_2.get
-            v0_2 = v0_2(v14_2.ragebot.other.quick_peek_assist[2])
-          end
-        end
-        if not v0_2 then
+        if not ui.get(v14_2.ragebot.other.quick_peek_assist[1]) or not ui.get(v14_2.ragebot.other.quick_peek_assist[2]) then
           if ui.get(v14_2.ragebot.aimbot.double_tap[2]) then
             local me = entity.get_local_player()
             if me == nil then
@@ -4457,7 +4572,7 @@ do
         end
         return
       end
-      return
+      do return end
     end
   end
   local v50_12 = {}
@@ -4474,7 +4589,7 @@ do
         end
         return
       end
-      return
+      do return end
     end
   end
   local v51_15 = {}
@@ -4544,7 +4659,7 @@ do
         v55_12:set_float(v58_13)
         v58_13 = nil
       end
-      return
+      do return end
     end
     local v61_7 = function()
       if not interpolation.unsafe:get() then
@@ -4602,17 +4717,17 @@ do
     end
     local v63_6 = function()
       v60_10()
-      return
+      do return end
     end
     local v64_6 = function()
       v61_7()
       v62_7()
-      return
+      do return end
     end
     local v65_5 = function()
       v60_10()
       v61_7()
-      return
+      do return end
     end
     interpolation.enabled:set_callback(function(arg1)
       local v1 = arg1:get()
@@ -4635,17 +4750,18 @@ do
       v30_4.unset(v14_2.antiaimbot.fake_lag.amount)
       v30_4.unset(v14_2.antiaimbot.fake_lag.limit)
       v30_4.unset(v14_2.antiaimbot.fake_lag.variance)
-      return
+      do return end
     end
     local v56_13 = function()
       v55_13()
-      return
+      do return end
     end
     local v57_12 = function()
       v55_13()
-      return
+      do return end
     end
     function v52_14.update(arg1, arg2)
+      local v5_2
       if fakelags.enabled:get() then
         local me = entity.get_local_player()
         if me == nil then
@@ -4655,32 +4771,28 @@ do
         if player_weapon == nil then
           return
         end
-        local csgo_weapons_2 = csgo_weapons(player_weapon)
+        v5_2 = player_weapon
+        local csgo_weapons_2 = csgo_weapons(v5_2)
         if csgo_weapons_2 == nil then
           return
         end
         do
-          local v5 = 0
+          v5_2 = 0
           do
             local v10 = fakelags.limit:get()
             local v11 = fakelags.amount:get()
             if v11 == "angelic" then
-              v5 = v10 - v54_12 % 5
+              v5_2 = v10 - v54_12 % 5
             elseif v11 == "random" then
-              v5 = v10 - v13_2.random_int(0, 5)
+              v5_2 = v10 - v13_2.random_int(0, 5)
             end
             if v23_5.is_peeking then
-              v5 = 15
+              v5_2 = 15
             end
           end
-          local v5_2 = v13_2.clamp(v5, 1, 15)
+          v5_2 = v13_2.clamp(v5_2, 1, 15)
         end
-        local v13 = not v14_2.is_duck_peek_assist()
-        if v13 then
-          v13 = v14_2.is_double_tap_active()
-          v13 = v13 or v14_2.is_on_shot_antiaim_active()
-        end
-        if not v13 and not (csgo_weapons_2.type == "grenade") then
+        if (not not v14_2.is_duck_peek_assist() or not v14_2.is_double_tap_active() and not v14_2.is_on_shot_antiaim_active()) and not (csgo_weapons_2.type == "grenade") then
           if v5_2 > arg2.chokedcommands then
             arg2.allow_send_packet = false
           else
@@ -4716,11 +4828,11 @@ do
     v30_4.unset(v14_2.antiaimbot.fake_lag.enabled[2])
     v30_4.unset(v14_2.antiaimbot.other.on_shot_antiaim[1])
     v30_4.unset(v14_2.antiaimbot.other.on_shot_antiaim[2])
-    return
+    do return end
   end
   local v54_13 = function()
     v53_16()
-    return
+    do return end
   end
   local v55_14 = function(arg1)
     v53_16()
@@ -4750,6 +4862,7 @@ do
     return true
   end
   local v41_20 = function(arg1)
+    local v7
     local me = entity.get_local_player()
     if me == nil then
       return
@@ -4762,15 +4875,22 @@ do
         return
       end
       if not v40_18(player_weapon) then
-        local vec = vector(entity.get_prop(me, "m_vecLadderNormal"))
+        v7 = "m_vecLadderNormal"
+        v7 = entity.get_prop(me, v7)
+        local vec = vector(entity.get_prop(me, v7))
         if vec:lengthsqr() == 0 then
           return
         end
+        v7 = client.camera_angles()
         local vec_2 = vector(client.camera_angles())
-        local vec_3 = vector(vec:angles())
+        v7 = vec.angles
+        v7 = v7(vec)
+        local vec_3 = vector(v7, v7(vec))
+        v7 = vec_3.y
+        v7 = v7 - vec_2.y
         do
-          local sum = vec_3.y - vec_2.y + 180
-          local v7 = v13_2.normalize(sum, -180, 180)
+          v7 = v7 + 180
+          v7 = v13_2.normalize(v7, -180, 180)
         end
         local v8 = v13_2.clamp(vec_3.x - vec_2.x, -89, 89)
         local abs = math.abs(v7)
@@ -4788,38 +4908,49 @@ do
             if arg1.forwardmove == 0 and arg1.sidemove ~= 0 then
               if not v12 then
                 v10 = -v10
+              elseif v12 then
+                v13 = not v13
+              end
+              do
+                local v15 = v13
+                if v13 then
+                  v15 = 1
+                else
+                  v15 = v15 or 0
+                end
+                arg1.in_back = v15
+              end
+              do
+                local v15_2 = v13
+                if v13 then
+                  v15_2 = 0
+                else
+                  v15_2 = v15_2 or 1
+                end
+                arg1.in_forward = v15_2
               end
               if v12 then
                 v13 = not v13
               end
               do
-                local v15 = v13
-                v15 = v15 and 1
-                v15 = v15 or 0
-                arg1.in_back = v15
-              end
-              do
-                local v15_2 = v13
-                v15_2 = v15_2 and 0
-                v15_2 = v15_2 or 1
-                arg1.in_forward = v15_2
-                if v12 then
-                  v13 = not v13
-                end
-              end
-              do
                 local v15_3 = v13
-                v15_3 = v15_3 and 1
-                v15_3 = v15_3 or 0
+                if v13 then
+                  v15_3 = 1
+                else
+                  v15_3 = v15_3 or 0
+                end
                 arg1.in_moveleft = v15_3
               end
               do
                 local v15_4 = v13
-                v15_4 = v15_4 and 0
-                v15_4 = v15_4 or 1
+                if v13 then
+                  v15_4 = 0
+                else
+                  v15_4 = v15_4 or 1
+                end
                 arg1.in_moveright = v15_4
-                arg1.pitch = 89
               end
+              arg1.pitch = 89
               arg1.yaw = v13_2.normalize(vec_3.y + v10, -180, 180)
               return
             end
@@ -4834,28 +4965,40 @@ do
             end
             do
               local v15_5 = v14
-              v15_5 = v15_5 and 0
-              v15_5 = v15_5 or 1
+              if v14 then
+                v15_5 = 0
+              else
+                v15_5 = v15_5 or 1
+              end
               arg1.in_back = v15_5
             end
             do
               local v15_6 = v14
-              v15_6 = v15_6 and 1
-              v15_6 = v15_6 or 0
-              arg1.in_forward = v15_6
-              if not v12 then
-                v14 = not v14
+              if v14 then
+                v15_6 = 1
+              else
+                v15_6 = v15_6 or 0
               end
+              arg1.in_forward = v15_6
+            end
+            if not v12 then
+              v14 = not v14
             end
             do
               local v15_7 = v14
-              v15_7 = v15_7 and 1
-              v15_7 = v15_7 or 0
+              if v14 then
+                v15_7 = 1
+              else
+                v15_7 = v15_7 or 0
+              end
               arg1.in_moveleft = v15_7
             end
             local v15_8 = v14
-            v15_8 = v15_8 and 0
-            v15_8 = v15_8 or 1
+            if v14 then
+              v15_8 = 0
+            else
+              v15_8 = v15_8 or 1
+            end
             arg1.in_moveright = v15_8
             arg1.pitch = 89
             arg1.yaw = v13_2.normalize(vec_3.y + v10, -180, 180)
@@ -4930,9 +5073,11 @@ do
         local v5 = 1
         do
           local v6 = globals.tickcount() % 4
-          v6 = 1 < globals.tickcount() % 4
-          v6 = v6 and 0.5
-          v6 = v6 or 1
+          if 1 < globals.tickcount() % 4 then
+            v6 = 0.5
+          else
+            v6 = v6 or 1
+          end
           set_prop(v3, m_fl_pose_parameter, v5, v6)
         end
         return
@@ -5166,9 +5311,9 @@ do
     if not v1 then
       v30_4.unset(v14_2.antiaimbot.other.leg_movement)
       v13_2.event_callback("setup_command", v46_16, false)
-    end
-    if not v1 then
-      animation_breaker.smooth_animfix:unset_callback(v49_17)
+      if not v1 then
+        animation_breaker.smooth_animfix:unset_callback(v49_17)
+      end
     else
       animation_breaker.smooth_animfix:set_callback(v49_17, true)
     end

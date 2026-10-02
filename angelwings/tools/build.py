@@ -66,6 +66,7 @@ def process_tree():
             L=LV.make_locals(P,kn,None,GLOBALS)
             nn=len(P.code)
             P.locvars=[(reg,name,min(st,nn-1),min(en,nn-1)) for reg,name,st,en in L]
+            if not P.locvars: P.locvars=[(min(P.maxstack-1,250),'_unused',nn-1,nn-1)]
         for pc,ins in enumerate(P.code):
             if ins[0]=='CLOSURE':
                 cid=P.kids[ins[2][1]]
@@ -80,6 +81,10 @@ def process_tree():
     go(407)
 FALLBACK=[169,188]
 process_tree()
+import os as _os,pickle as _pk
+if _os.environ.get('USE_REPAIR') and _os.path.exists('locvars_repaired.pkl'):
+    for _f,_lv in _pk.load(open('locvars_repaired.pkl','rb')).items():
+        if _f in protos and _lv: protos[_f].locvars=_lv
 def child(cid):
     return encode(protos[cid],None,child)
 def chunk(root):
