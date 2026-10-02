@@ -718,3 +718,18 @@ img.rm{mix-blend-mode:multiply;filter:none!important}
   .modal .m-body{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;min-height:0}
   .wish-card .m-list{max-height:none}
 }
+
+/* ---------- mini cart: never let content overflow the tap target ---------- */
+.minicart{width:max-content;max-width:calc(100vw - 24px);white-space:nowrap}
+.minicart .mc-text{min-width:0}
+.mc-text b{white-space:nowrap}
+@media(max-width:760px){
+  .minicart{left:12px;right:12px;width:auto;max-width:none;translate:0 140%;justify-content:space-between;bottom:calc(12px + env(safe-area-inset-bottom));padding:8px 8px 8px 10px;background:rgba(255,255,255,.94)}
+  .minicart.on{translate:0 0}
+  .mc-text{flex:1;align-items:flex-start;padding-left:2px}
+  .mc-go{padding:11px 16px 11px 20px;background:var(--accent);color:#fff;box-shadow:inset 1px 1px 0 rgba(255,255,255,.5),0 6px 14px rgba(246,71,71,.3)}
+  /* keep the floating buttons clear of the bar */
+  body:has(.minicart.on) .help{bottom:calc(86px + env(safe-area-inset-bottom))}
+  body:has(.minicart.on) .cookie{bottom:calc(86px + env(safe-area-inset-bottom))}
+  body:has(.minicart.on){padding-bottom:92px}
+}
