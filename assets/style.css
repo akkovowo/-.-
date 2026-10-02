@@ -146,3 +146,81 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 /* product photos have white backgrounds: keep cards near-opaque so they blend */
 .card{background:rgba(255,255,255,.94)}
 .track{padding-bottom:30px;margin-bottom:-20px}
+
+/* =====================================================================
+   v3 — iOS "liquid glass" over a calm pastel field (flat colors only)
+   ===================================================================== */
+:root{--bg:#eef0f5;--glass:rgba(255,255,255,.42);--stroke:rgba(255,255,255,.7);--r:30px}
+body{background:var(--bg)}
+.orbs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.orbs i{position:absolute;border-radius:50%;filter:blur(70px)}
+.o1{width:520px;height:520px;left:-120px;top:120px;background:#ffc9c4;opacity:.8}
+.o2{width:600px;height:600px;right:-160px;top:420px;background:#cfd9ff;opacity:.85}
+.o3{width:480px;height:480px;left:30%;bottom:-160px;background:#ffe1c2;opacity:.8}
+
+.glass,.glass-bar{
+  background:var(--glass);
+  backdrop-filter:blur(26px) saturate(190%);-webkit-backdrop-filter:blur(26px) saturate(190%);
+  border:1px solid var(--stroke);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.25),0 10px 34px rgba(40,50,90,.10);
+}
+/* cursor-following specular light */
+.glass{position:relative;overflow:hidden}
+.glass::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:0;transition:opacity .3s;
+  background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.75),transparent 65%)}
+.glass:hover::before{opacity:1}
+.glass>*{position:relative}
+
+/* floating header pill */
+.head{position:sticky;top:12px;z-index:30;width:min(1180px,100% - 24px);margin:0 auto;border:0;background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.head .bar{border-radius:34px;padding:8px 14px 8px 18px}
+.head-row{padding:2px 0 6px;gap:24px}
+.search{background:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(0,0,0,.04);max-width:480px}
+.brands{padding:4px 0 2px;justify-content:space-between}
+.brands a{border-radius:99px;padding:8px 15px}
+.brands a:hover{background:rgba(255,255,255,.8);color:var(--text)}
+.icons a,.icons button{background:rgba(255,255,255,.5);box-shadow:inset 0 1px 0 #fff}
+.topbar{padding:14px 0 18px}
+
+/* category wall → bento of glass tiles */
+.wall{grid-template-columns:repeat(5,1fr);grid-auto-rows:176px;gap:18px;margin-top:22px}
+.tile{height:auto;border-radius:var(--r);padding:0;justify-content:flex-end;align-items:stretch;gap:0;color:var(--text);isolation:isolate;
+  transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s}
+.tile img{position:absolute;left:50%;top:44%;height:auto;width:auto;max-height:58%;max-width:62%;transform:translate(-50%,-50%);object-fit:contain;
+  filter:drop-shadow(0 14px 14px rgba(30,40,80,.22));transition:transform .6s cubic-bezier(.22,1,.36,1)}
+.tile span{position:relative;align-self:center;margin-bottom:14px;padding:6px 14px;border-radius:99px;font-size:12.5px;font-weight:600;
+  background:rgba(255,255,255,.6);box-shadow:inset 0 1px 0 #fff,0 2px 8px rgba(40,50,90,.08);transition:.3s}
+.tile:hover{transform:translateY(-6px) scale(1.015);box-shadow:inset 0 1.5px 0 #fff,0 26px 50px rgba(40,50,90,.18)}
+.tile:hover img{transform:translate(-50%,-54%) scale(1.1) rotate(-2deg)}
+.tile:hover span{background:var(--accent);color:#fff}
+.tile.feat{grid-column:span 2;grid-row:span 2}
+.tile.feat img{max-height:70%;max-width:56%;top:46%}
+.tile.feat span{font-size:16px;padding:9px 22px;margin-bottom:22px}
+.tile.wide{grid-column:span 2}
+.tile.wide img{max-height:60%}
+
+.quick a{border-radius:99px;padding:15px}
+.sec-title{font-size:30px;font-weight:700;letter-spacing:-.02em;margin:64px 0 0}
+.products{margin-top:20px}
+.card{background:rgba(255,255,255,.72);border-radius:var(--r);padding:16px 16px 20px}
+.card .img{height:190px;border-radius:22px;background:#fff;margin-bottom:16px}
+.card h4{font-weight:500;font-size:13.5px}
+.price{font-size:18px;font-weight:700}
+.buy{padding:10px 24px;font-size:13px}
+.foot{background:rgba(255,255,255,.45);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid #fff}
+
+@media(max-width:980px){.wall{grid-template-columns:repeat(4,1fr);grid-auto-rows:150px;gap:14px}.tile.feat{grid-column:span 2}}
+@media(max-width:760px){
+  .head{top:8px}.head .bar{border-radius:28px;padding:8px 12px}
+  .wall{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px;gap:12px}
+  .tile.feat{grid-column:span 2;grid-row:span 2}.tile.wide{grid-column:span 2}
+  .sec-title{font-size:24px;margin-top:44px}
+}
+.drawer{position:fixed}
+.tile{isolation:auto}
+.tile img{mix-blend-mode:multiply}
+.glass>img{position:absolute}
+.tile img{filter:brightness(1.07) contrast(1.02) drop-shadow(0 14px 14px rgba(30,40,80,.2))}
+.tile.feat img{background:#fff;border-radius:32px;padding:10px;max-height:66%;mix-blend-mode:normal;
+  filter:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),0 24px 50px rgba(60,40,60,.22)}
+@media(max-width:560px){.icons a{display:none}.head-row{flex-wrap:wrap;gap:10px}.logo span{font-size:13.5px}}

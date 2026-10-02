@@ -78,5 +78,14 @@
   });
   document.addEventListener('click', e => { if (!e.target.closest('.search')) res.classList.remove('on'); });
 
+  /* specular light follows the cursor on glass surfaces */
+  if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    document.addEventListener('pointermove', e => {
+      const g = e.target.closest && e.target.closest('.glass'); if (!g) return;
+      const r = g.getBoundingClientRect();
+      g.style.setProperty('--mx', (e.clientX - r.left) + 'px'); g.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    }, { passive: true });
+  }
+
   renderCart();
 })();

@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+<div class="orbs" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i></div>
 
 <div class="topbar wrap">
   <span>Работаем с 11:00 до 20:00</span>
@@ -21,8 +22,9 @@
   </span>
 </div>
 
-<header class="head glass-bar" id="head">
-  <div class="wrap head-row">
+<header class="head" id="head">
+  <div class="bar glass">
+  <div class="head-row">
     <a href="#" class="logo"><img src="assets/brand/logo.png" alt="JJstore"><span>ДжейДжей | JJstore</span></a>
     <div class="search glass">
       <input id="search" type="search" placeholder="Поиск по сайту" autocomplete="off">
@@ -36,7 +38,7 @@
       <button id="openCart" aria-label="Корзина"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><i class="badge" id="cartCount">0</i></button>
     </div>
   </div>
-  <nav class="wrap brands" aria-label="Бренды">
+  <nav class="brands" aria-label="Бренды">
       <a href="https://jjstore.ru/apple" target="_blank" rel="noopener">Apple</a>
       <a href="https://jjstore.ru/samsung" target="_blank" rel="noopener">Samsung</a>
       <a href="https://jjstore.ru/dyson" target="_blank" rel="noopener">Dyson</a>
@@ -49,12 +51,13 @@
       <a href="https://jjstore.ru/native-union" target="_blank" rel="noopener">Native Union</a>
       <a href="https://jjstore.ru/aksessuary-3" target="_blank" rel="noopener">Аксессуары</a>
   </nav>
+  </div>
 </header>
 
 <main class="wrap">
 
   <section class="wall" aria-label="Каталог">
-    <a class="tile glass" href="https://jjstore.ru/apple" target="_blank" rel="noopener"><img src="assets/cat/apple.png" alt="Apple" loading="lazy"><span>Apple</span></a>
+    <a class="tile glass feat" href="https://jjstore.ru/apple" target="_blank" rel="noopener"><img src="assets/cat/apple.png" alt="Apple" loading="lazy"><span>Apple</span></a>
     <a class="tile glass" href="https://jjstore.ru/samsung" target="_blank" rel="noopener"><img src="assets/cat/samsung.png" alt="Samsung" loading="lazy"><span>Samsung</span></a>
     <a class="tile glass" href="https://jjstore.ru/dyson" target="_blank" rel="noopener"><img src="assets/cat/dyson.png" alt="Dyson" loading="lazy"><span>Dyson</span></a>
     <a class="tile glass" href="https://jjstore.ru/android" target="_blank" rel="noopener"><img src="assets/cat/android.png" alt="Android" loading="lazy"><span>Android</span></a>
@@ -74,7 +77,7 @@
     <a class="tile glass" href="https://jjstore.ru/whoop" target="_blank" rel="noopener"><img src="assets/cat/whoop.png" alt="Whoop" loading="lazy"><span>Whoop</span></a>
     <a class="tile glass" href="https://jjstore.ru/ray-ban" target="_blank" rel="noopener"><img src="assets/cat/ray-ban.png" alt="Ray-Ban" loading="lazy"><span>Ray-Ban</span></a>
     <a class="tile glass" href="https://jjstore.ru/google-fit-pro" target="_blank" rel="noopener"><img src="assets/cat/google-fit-pro.png" alt="Google Fit Pro" loading="lazy"><span>Google Fit Pro</span></a>
-    <a class="tile glass" href="https://jjstore.ru/uslugi" target="_blank" rel="noopener"><img src="assets/cat/uslugi.png" alt="Услуги" loading="lazy"><span>Услуги</span></a>
+    <a class="tile glass wide" href="https://jjstore.ru/uslugi" target="_blank" rel="noopener"><img src="assets/cat/uslugi.png" alt="Услуги" loading="lazy"><span>Услуги</span></a>
   </section>
 
   <section class="quick">
@@ -84,6 +87,7 @@
     <a class="glass" href="https://jjstore.ru/delivery" target="_blank" rel="noopener">Оплата</a>
   </section>
 
+  <h2 class="sec-title">Популярное</h2>
   <section class="products">
     <button class="arrow prev" id="prev" aria-label="Назад"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button>
     <div class="track" id="track"></div>
