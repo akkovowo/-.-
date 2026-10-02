@@ -16,12 +16,17 @@
     { id: 10, name: 'Sony PlayStation 5 Slim DVD', price: 71990, img: 'sony/a6d2fe363c2044d784357374213b0218-400x280.png', url: 'sony/playstation-1/ps5/sony-playstation-5-slim-dvd' },
     { id: 11, name: 'iPhone 17 Pro Max Silver 256Gb ( без RuStore)', price: 106990, img: 'apple/17pro/iphone-17-pro-silver-400x280.png', url: 'apple/iphone/iphone-17-pro-max-1/256gb-56/iphone-17-pro-max-silver-256g' },
     { id: 12, name: 'iPhone 15 Black 256Gb ( без RuStore )', price: 66990, img: 'apple/iphone15/i15black-400x280.png', url: 'apple/iphone/iphone-15/256gb-25/iphone-15-black-256gb-bez-rustore' },
+    { id: 13, name: 'iPhone 18 Pro Max 256Gb Burgundy ( без RuStore )', price: 149990, img: 'apple/18pro/burgundy.png', url: 'apple/iphone/iphone-18-pro-max/iphone-18-pro-max-256gb-burgundy-bez-rustore' },
+    { id: 14, name: 'iPhone 18 Pro Max 256Gb Silver ( без RuStore )', price: 137990, img: 'apple/18pro/silver.png', url: 'apple/iphone/iphone-18-pro-max/iphone-18-pro-max-256gb-silver-bez-rustore' },
+    { id: 15, name: 'iPhone 18 Pro 256Gb Burgundy ( без RuStore )', price: 125990, img: 'apple/18pro/burgundy.png', url: 'apple/iphone/iphone-18-pro/iphone-18-pro-256gb-burgundy-bez-rustore' },
+    { id: 16, name: 'iPhone 18 Pro 256Gb Glacier ( без RuStore )', price: 118990, img: 'apple/18pro/glacier.png', url: 'apple/iphone/iphone-18-pro/iphone-18-pro-256gb-glacier-bez-rustore' },
+    { id: 17, name: 'iPhone 18 Pro 256Gb Black ( без RuStore )', price: 118990, img: 'apple/18pro/black.png', url: 'apple/iphone/iphone-18-pro/iphone-18-pro-256gb-black-bez-rustore' },
   ];
   const byId = id => PRODUCTS.find(p => p.id === id);
   const link = p => 'https://jjstore.ru/' + p.url;
 
   /* Product scrollers: Новинки / Популярное */
-  const NEW_IDS = [11, 6, 3, 9];
+  const NEW_IDS = [13, 15, 16, 14, 17, 11, 6, 3, 9];
   const POP_IDS = [1, 2, 4, 8, 7, 5, 10, 12];
   const card = (p, isNew) => `
     <article class="card">
