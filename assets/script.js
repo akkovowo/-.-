@@ -87,15 +87,5 @@
     }, { passive: true });
   }
 
-  /* opening hours: Voronezh time (MSK), 11:00–20:00 */
-  (function () {
-    const el = $('#hoursState'), box = $('#hours'); if (!el) return;
-    const parts = new Intl.DateTimeFormat('ru-RU', { timeZone: 'Europe/Moscow', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date());
-    const mins = +parts.find(p => p.type === 'hour').value * 60 + +parts.find(p => p.type === 'minute').value;
-    const open = mins >= 11 * 60 && mins < 20 * 60;
-    box.classList.toggle('open', open);
-    el.textContent = open ? `Открыто · закрываемся в 20:00` : (mins < 11 * 60 ? 'Закрыто · откроемся в 11:00' : 'Закрыто · откроемся завтра в 11:00');
-  })();
-
   renderCart();
 })();
