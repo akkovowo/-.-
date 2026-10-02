@@ -18,13 +18,12 @@
     card: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M3 10h18M7 15h3"/></svg>'
   };
 
-  /* ================= DATA ================= */
   const DB = window.CATALOG || { c: {}, p: [] };
-  const cats = DB.c;                                   // slug -> [title, parent]
-  const kids = {};                                      // parent -> [slug]
+  const cats = DB.c;
+  const kids = {};
   Object.keys(cats).forEach(k => { (kids[cats[k][1] || ''] = kids[cats[k][1] || ''] || []).push(k); });
   const products = DB.p.map(a => ({ id: a[2], name: a[0], price: a[1], url: a[2], img: a[3], cats: a[4], cat: a[4][0] }));
-  /* featured products shown on the home page keep their local (cut-out) photos */
+
   const FEATURED = [
     [1, 'iPhone 15 Black 128Gb ( без RuStore )', 56990, 'apple/iphone15/i15black-400x280.png', 'apple/iphone/iphone-15/128gb-21/iphone-15-black-128gb-bez-rustore'],
     [2, 'Блок USB-C 20W iPhone', 2990, 'iphone/aksessuary/blok-usb-c-20w-iphone-400x280.png', 'apple/aksessuary-1/blok-pitaniya/apple-10/blok-usb-c-20w-iphone'],
@@ -58,10 +57,9 @@
   const catCount = {};
   products.forEach(p => { const seen = new Set(); p.cats.forEach(c0 => { let c = c0; while (c && cats[c] && !seen.has(c)) { seen.add(c); catCount[c] = (catCount[c] || 0) + 1; c = cats[c][1]; } }); });
   const prodsOf = slug => { const set = new Set(descendants(slug)); return products.filter(p => p.cats.some(c => set.has(c))); };
-  /* broken photo -> neutral placeholder */
+
   document.addEventListener('error', e => { const t = e.target; if (t && t.tagName === 'IMG') { if (t.dataset.hide) { t.remove(); return; } if (!t.dataset.fb) { t.dataset.fb = 1; t.src = PLACE; } } }, true);
 
-  /* ================= CARDS ================= */
   const card = (p, o = {}) => `
     <article class="card" data-id="${esc(p.id)}">
       ${o.isNew ? '<span class="badge-new">Новинка</span>' : ''}
@@ -72,12 +70,10 @@
       <div class="slot" data-id="${esc(p.id)}"></div>
     </article>`;
 
-  /* ================= WISHLIST ================= */
   let wish = new Set();
   try { wish = new Set(JSON.parse(localStorage.getItem('jj-wish') || '[]')); } catch (e) {}
   const saveWish = () => { try { localStorage.setItem('jj-wish', JSON.stringify([...wish])); } catch (e) {} };
 
-  /* ================= CART ================= */
   let cart = {};
   try {
     const raw = JSON.parse(localStorage.getItem('jj-cart2') || 'null');
@@ -93,12 +89,11 @@
   const syncSlots = only => $$('.slot').forEach(s => {
     const id = s.dataset.id; if (only && id !== only) return;
     const n = qtyOf(id), has = !!s.querySelector('.step');
-    if (n && has) { s.querySelector('.step b').textContent = n; return; }          // just update the number
+    if (n && has) { s.querySelector('.step b').textContent = n; return; }
     s.innerHTML = n ? stepper(id) : `<button class="buy" data-act="inc" data-id="${esc(id)}">В корзину</button>`;
   });
   const syncHearts = () => $$('[data-act="wish"]').forEach(b => b.classList.toggle('on', wish.has(b.dataset.id)));
 
-  /* ================= MODALS ================= */
   const cartModal = $('#cartModal'), wModal = $('#wModal'), pModal = $('#pModal');
   const openModal = m => { $$('.modal.on').forEach(x => x.classList.remove('on')); m.classList.add('on'); m.setAttribute('aria-hidden', 'false'); document.body.classList.add('lock'); };
   const closeModals = () => { $$('.modal.on').forEach(x => { x.classList.remove('on'); x.setAttribute('aria-hidden', 'true'); }); document.body.classList.remove('lock'); };
@@ -149,7 +144,6 @@
   }
   function bump(sel) { const c = $(sel); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
 
-  /* ----- product descriptions (scraped from the product pages) ----- */
   const DESC = window.DESC || { c: {}, m: {}, d: {} };
   const nameKey = p => norm(p.name).replace(/\s+/g, ' ');
   const byName = new Map(products.map(p => [nameKey(p) + '|' + p.price, p]));
@@ -177,7 +171,6 @@
     </section>`;
   }
 
-  /* ----- product quick view ----- */
   function openProduct(id) {
     const p = byId.get(id); if (!p) return;
     const chain = chainOf(p.cat);
@@ -206,7 +199,6 @@
     syncSlots(); openModal(pModal); $('#pBody').scrollTop = 0;
   }
 
-  /* ----- global click delegation ----- */
   document.addEventListener('click', e => {
     if (e.target.closest('#descMore')) { const t = $('#descTxt'); const o = t.classList.toggle('open'); e.target.closest('#descMore').textContent = o ? 'Свернуть' : 'Читать полностью'; return; }
     const close = e.target.closest('[data-close]');
@@ -230,7 +222,7 @@
       saveCart(); renderCart(id);
       return;
     }
-    /* internal navigation for category links */
+
     const l = e.target.closest('a[href^="https://jjstore.ru/"]');
     if (l && !e.metaKey && !e.ctrlKey) {
       const path = l.getAttribute('href').replace('https://jjstore.ru/', '').split('?')[0].split('/').filter(Boolean).join('/');
@@ -239,7 +231,6 @@
   });
   $('#cartClear').onclick = () => { cart = {}; saveCart(); renderCart(); };
 
-  /* ================= HOME ================= */
   const NEW_IDS = [13, 15, 16, 14, 17, 11, 6, 3, 9], POP_IDS = [1, 2, 4, 8, 7, 5, 10, 12];
   $('#trackNew').innerHTML = NEW_IDS.map(n => card(feat(n), { isNew: true })).join('');
   $('#trackPop').innerHTML = POP_IDS.map(n => card(feat(n))).join('');
@@ -254,10 +245,9 @@
     tr.addEventListener('scroll', upd, { passive: true }); upd();
   });
 
-  /* "Новинки": slow endless ping-pong scroll (left <-> right); pauses while the user touches / hovers it */
   (function () {
     const tr = $('#trackNew'); if (!tr || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-    const SPEED = 38;                       // px per second
+    const SPEED = 38;
     let pos = 0, dir = 1, last = 0, paused = false, resumeT, visible = false, raf = 0;
     const pause = () => { paused = true; clearTimeout(resumeT); };
     const resume = (ms = 1800) => { clearTimeout(resumeT); resumeT = setTimeout(() => { paused = false; pos = tr.scrollLeft; }, ms); };
@@ -270,7 +260,7 @@
       const dt = Math.min(64, t - (last || t)); last = t;
       if (paused || !visible || !tr.offsetParent) return;
       const max = tr.scrollWidth - tr.clientWidth; if (max <= 0) return;
-      if (Math.abs(tr.scrollLeft - pos) > 2) pos = tr.scrollLeft;        // the user moved it: follow
+      if (Math.abs(tr.scrollLeft - pos) > 2) pos = tr.scrollLeft;
       pos += dir * SPEED * dt / 1000;
       if (pos >= max) { pos = max; dir = -1; } else if (pos <= 0) { pos = 0; dir = 1; }
       tr.scrollLeft = pos;
@@ -280,7 +270,6 @@
     raf = requestAnimationFrame(tick);
   })();
 
-  /* Hero banners: snap scroller, dots, arrows, autoplay */
   (function () {
     const box = $('#slides'), slides = [...box.children], dots = $('#dots');
     dots.innerHTML = slides.map((_, i) => `<button aria-label="Слайд ${i + 1}"></button>`).join('');
@@ -305,7 +294,7 @@
     let last = -1;
     const onChange = () => { if (cur !== last) { last = cur; ds.forEach(x => { x.classList.remove('on'); }); void dots.offsetWidth; ds[cur].classList.add('on'); if (!box.classList.contains('paused')) play(); } };
     box.addEventListener('scroll', () => requestAnimationFrame(onChange), { passive: true });
-    /* subtle parallax on the banner photo */
+
     if (matchMedia('(hover:hover) and (pointer:fine)').matches) slides.forEach(s => {
       const im = s.querySelector('img');
       s.addEventListener('pointermove', e => { const r = s.getBoundingClientRect(); im.style.translate = `${((e.clientX - r.left) / r.width - .5) * -18}px ${((e.clientY - r.top) / r.height - .5) * -12}px`; });
@@ -315,8 +304,6 @@
     window.addEventListener('homeshown', () => requestAnimationFrame(() => { go(cur); mark(); }));
   })();
 
-
-  /* ================= CATALOG PAGE ================= */
   const home = $('#home'), catalog = $('#catalog');
   const PAGE = 24;
   function searchProducts(q) {
@@ -330,7 +317,7 @@
     return out.sort((a, b) => b[0] - a[0]).map(x => x[1]);
   }
   const SORTS = [['pop', 'Популярные'], ['asc', 'Дешевле'], ['desc', 'Дороже'], ['az', 'А–Я']];
-  let CS = null;   // catalog state
+  let CS = null;
   function showCatalog(route) {
     home.hidden = true; catalog.hidden = false; document.body.classList.add('in-catalog');
     catalog.classList.remove('view-in'); void catalog.offsetWidth; catalog.classList.add('view-in');
@@ -400,7 +387,6 @@
   }
   addEventListener('hashchange', route);
 
-  /* ================= MEGA MENU (brands -> subcategories) ================= */
   const mega = $('#mega'), headEl = $('#head');
   let megaT, megaFor = '';
   function hideMega() { clearTimeout(megaT); mega.classList.remove('on'); mega.setAttribute('aria-hidden', 'true'); megaFor = ''; }
@@ -424,10 +410,9 @@
     mega.addEventListener('click', () => hideMega());
   }
   headEl.addEventListener('click', e => { if (e.target.closest('.brands a')) hideMega(); });
-  /* logo -> home */
+
   $('.logo').addEventListener('click', e => { e.preventDefault(); if (location.hash && location.hash !== '#/') location.hash = '#/'; else scrollTo({ top: 0, behavior: 'smooth' }); });
 
-  /* ================= SEARCH (whole catalog) ================= */
   const input = $('#search'), res = $('#results');
   const sugg = ['iPhone 18', 'iPhone 17', 'AirPods', 'PlayStation', 'Dyson', 'MacBook'];
   const showSugg = () => { res.innerHTML = '<div class="sugg"><small>Популярные запросы</small>' + sugg.map(s => `<button type="button" data-q="${s}">${s}</button>`).join('') + '</div>'; res.classList.add('on'); };
@@ -450,7 +435,6 @@
   document.addEventListener('click', e => { if (!e.target.closest('.search')) res.classList.remove('on'); });
   document.addEventListener('keydown', e => { if (e.key === '/' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); input.focus(); } });
 
-  /* specular light follows the cursor on glass surfaces */
   if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
     document.addEventListener('pointermove', e => {
       const g = e.target.closest && e.target.closest('.glass'); if (!g) return;
@@ -459,9 +443,6 @@
     }, { passive: true });
   }
 
-
-  /* ---------- UX polish ---------- */
-  /* reveal on scroll (starts once the intro is done) */
   function startReveal() {
     document.querySelectorAll('.wall .tile').forEach((t, i) => { t.dataset.reveal = ''; t.style.setProperty('--d', (i % 6) * 55 + 'ms'); });
     const all = document.querySelectorAll('[data-reveal]');
@@ -470,7 +451,6 @@
     all.forEach(el => io.observe(el));
   }
 
-  /* intro loader */
   (function () {
     const root = document.documentElement, loader = $('#loader'), t0 = performance.now();
     let done = false;
@@ -486,7 +466,6 @@
     setTimeout(finish, 3500);
   })();
 
-  /* sliding highlight under the brand menu (segmented-control feel) */
   (function () {
     const nav = $('.brands'); if (!nav || !matchMedia('(hover:hover)').matches) return;
     const ind = document.createElement('i'); ind.className = 'ind'; nav.prepend(ind);
@@ -496,7 +475,6 @@
     nav.addEventListener('pointerleave', () => { ind.style.opacity = 0; });
   })();
 
-  /* header condenses on scroll down, expands on scroll up (flow height is reserved, so nothing jumps) */
   (function () {
     const head = $('#head'); let y = scrollY, ticking = false;
     const measure = () => { if (head.classList.contains('compact')) return; const h = head.firstElementChild.offsetHeight; if (h) { head.style.setProperty('--bh', h + 'px'); head.style.setProperty('--hh', (h + 22) + 'px'); } };
@@ -512,7 +490,6 @@
     }, { passive: true });
   })();
 
-  /* mini cart bar */
   const mini = $('#miniCart');
   function syncMini() {
     const q = totalQty(); mini.classList.toggle('on', q > 0 && !cartModal.classList.contains('on'));
@@ -522,7 +499,6 @@
   mini.onclick = openCart;
   new MutationObserver(syncMini).observe(cartModal, { attributes: true, attributeFilter: ['class'] });
 
-  /* cookie notice (remembered) */
   (function () {
     const c = $('#cookie'); let ok = false;
     try { ok = localStorage.getItem('jj-cookie') === '1'; } catch (e) {}
@@ -530,7 +506,6 @@
     $('#cookieOk').onclick = () => { c.hidden = true; try { localStorage.setItem('jj-cookie', '1'); } catch (e) {} };
   })();
 
-  /* help button */
   (function () {
     const h = $('#help'), b = $('#helpBtn'), p = $('#helpPanel');
     const set = on => { h.classList.toggle('open', on); b.setAttribute('aria-expanded', on); p.setAttribute('aria-hidden', !on); };

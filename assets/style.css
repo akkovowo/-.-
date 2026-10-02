@@ -1,9 +1,8 @@
-/* JJstore — iOS 26 "Liquid Glass": transparent lenses over a vivid backdrop, no frosted-white cards */
 :root{
   --bg:#f6f7fa;
   --text:#1b1c22;
   --muted:#7a7f8a;
-  --accent:#f64747;            /* brand red from jjstore.ru */
+  --accent:#f64747;
   --r:30px;
   --ease:cubic-bezier(.22,1,.36,1);
 }
@@ -16,7 +15,6 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .wrap{width:min(1180px,100% - 32px);margin-inline:auto}
 
-/* ---------- backdrop the glass bends ---------- */
 .orbs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
 .orbs i{position:absolute;border-radius:50%;filter:blur(80px);will-change:transform}
 .o1{width:26vmax;height:26vmax;left:-8vmax;top:4vmax;background:#f64747;opacity:.16;animation:d1 28s ease-in-out infinite}
@@ -28,9 +26,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 @keyframes d2{50%{transform:translate(-10vmax,6vmax) scale(.92)}}
 @keyframes d3{50%{transform:translate(8vmax,-9vmax) scale(1.18)}}
 
-/* ---------- Liquid Glass material ----------
-   thin tint, light blur, boosted saturation, SVG lens refraction at the edges (Chromium),
-   specular rim on top-left and soft counter-light bottom-right */
 .glass,.glass-bar{
   position:relative;
   background:rgba(255,255,255,.5);
@@ -46,18 +41,16 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
     0 1px 3px rgba(40,50,80,.06);
 }
 .glass{overflow:hidden}
-/* gloss that follows the pointer */
+
 .glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;
   background:radial-gradient(240px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.9),transparent 62%)}
 .glass:hover::before{opacity:1}
 .glass>*{position:relative}
 
-/* ---------- Top bar ---------- */
 .topbar{display:flex;justify-content:space-between;gap:16px;padding:16px 0 14px;font-size:13px;color:#5d616b}
 .topbar-r{display:flex;gap:20px}
 .topbar a{font-weight:600;color:var(--text)}
 
-/* ---------- Floating header ---------- */
 .head{position:sticky;top:12px;z-index:30;width:min(1180px,100% - 24px);margin:0 auto}
 .bar{border-radius:36px;padding:10px 14px 8px 18px}
 .head-row{display:flex;align-items:center;gap:24px;padding:2px 0 6px}
@@ -89,7 +82,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .brands a{padding:8px 15px;border-radius:99px;font-weight:500;white-space:nowrap;color:#3b3e47;transition:background .25s,color .25s}
 .brands a:hover{background:rgba(255,255,255,.85);color:var(--accent);box-shadow:inset 1px 1px 0 #fff,0 2px 8px rgba(40,50,80,.08)}
 
-/* ---------- Category wall ---------- */
 .wall{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:176px;gap:18px;margin-top:22px}
 .tile{border-radius:var(--r);display:flex;flex-direction:column;justify-content:flex-end;align-items:center;transition:transform .6s var(--ease),box-shadow .6s}
 .tile.feat{grid-column:span 2;grid-row:span 2}
@@ -104,12 +96,10 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .tile:hover img{transform:translate(-50%,-55%) scale(1.1) rotate(-2deg)}
 .tile:hover span{background:var(--accent);color:#fff;box-shadow:inset 1px 1px 0 rgba(255,255,255,.5),0 6px 16px rgba(246,71,71,.4)}
 
-/* ---------- Quick links ---------- */
 .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
 .quick a{text-align:center;padding:15px;border-radius:99px;font-weight:600;font-size:13px;transition:transform .4s var(--ease)}
 .quick a:hover{transform:translateY(-3px)}
 
-/* ---------- Products ---------- */
 .sec-title{font-size:32px;font-weight:700;letter-spacing:-.03em;margin:64px 0 0}
 .products{position:relative;margin:20px 0 80px}
 .track{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:6px 4px 34px;margin:0 -4px -22px}
@@ -129,7 +119,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .arrow{position:absolute;top:42%;z-index:2;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px}
 .arrow.prev{left:-20px}.arrow.next{right:-20px}
 
-/* ---------- Footer ---------- */
 .foot{padding:50px 0 24px;background:rgba(255,255,255,.55);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 1.5px 0 #fff}
 .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;padding-bottom:40px}
 .cols div{display:flex;flex-direction:column;gap:9px;align-items:flex-start}
@@ -139,7 +128,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .muted{color:var(--muted);font-size:13px}
 .copy{display:flex;flex-direction:column;gap:2px;font-size:11px;color:var(--muted)}
 
-/* ---------- Cart drawer ---------- */
 .scrim{position:fixed;inset:0;z-index:90;background:rgba(30,35,60,.25);opacity:0;pointer-events:none;transition:.4s}
 .scrim.on{opacity:1;pointer-events:auto}
 .drawer{position:fixed;z-index:95;top:12px;right:12px;bottom:12px;width:min(400px,100% - 24px);border-radius:34px;display:flex;flex-direction:column;
@@ -160,7 +148,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
   box-shadow:inset 1.5px 1.5px 0 rgba(255,255,255,.55),inset -1px -1px 0 rgba(255,255,255,.15),0 8px 20px rgba(246,71,71,.32)}
 .btn:hover{filter:brightness(1.1)}
 
-/* ---------- Responsive ---------- */
 @media(max-width:980px){
   .wall{grid-template-columns:repeat(4,1fr);grid-auto-rows:150px;gap:14px}
   .card{flex-basis:calc((100% - 36px)/3)}
@@ -186,7 +173,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .ti{display:inline-flex;align-items:center;gap:7px}
 .ti svg{font-size:16px;color:var(--accent);flex:none}
 
-/* iOS-style search field */
 .search{max-width:440px;border-radius:14px;background:rgba(118,120,135,.13);box-shadow:none;border:0;transition:background .25s,box-shadow .25s,max-width .4s var(--ease)}
 .search::before,.search::after{display:none}
 .search input{height:40px;padding:0 40px 0 42px;font-size:14px;font-weight:400;letter-spacing:-.01em}
@@ -196,7 +182,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .search:focus-within{background:rgba(255,255,255,.95);box-shadow:0 0 0 3px rgba(246,71,71,.22),0 8px 24px rgba(40,50,80,.1);max-width:520px}
 .search:focus-within>svg{color:var(--accent)}
 
-/* compact category wall: 6 columns, smaller tiles */
 .wall{grid-template-columns:repeat(6,1fr);grid-auto-rows:136px;gap:14px;margin-top:20px}
 .tile{--r:26px;border-radius:26px}
 .tile img{max-height:54%;max-width:60%;top:42%}
@@ -206,7 +191,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 @media(max-width:980px){.wall{grid-template-columns:repeat(4,1fr);grid-auto-rows:124px;gap:12px}}
 @media(max-width:760px){.wall{grid-template-columns:repeat(2,1fr);grid-auto-rows:124px;gap:10px}.tile.feat{grid-column:span 2;grid-row:span 2}}
 
-/* mobile: vertical product grid (no horizontal scroller — backdrop-filter cards can fail to paint inside it on iOS Safari) + compact header */
 @media(max-width:760px){
   .products{margin:14px 0 60px}
   .track{display:grid;grid-template-columns:1fr 1fr;gap:12px;overflow:visible;scroll-snap-type:none;padding:0;margin:0}
@@ -223,7 +207,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
   .sec-title{margin-top:36px}
 }
 
-/* =============== hero banners, promo cards, scroll rows =============== */
 .hero{margin-top:20px}
 .slides{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:6px 0 18px;margin:0 -16px;padding-inline:16px;scroll-padding-inline:16px}
 .slides::-webkit-scrollbar{display:none}
@@ -254,7 +237,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .scroller .track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding:6px 16px 30px;margin:0 -16px -18px;scroll-padding-inline:16px}
 .scroller .track::-webkit-scrollbar{display:none}
 
-/* promo banners */
 .promo{flex:0 0 232px;height:178px;scroll-snap-align:start;border-radius:28px;padding:20px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;transition:transform .5s var(--ease),box-shadow .5s}
 .promo:hover{transform:translateY(-5px);box-shadow:inset 1.5px 1.5px 0 #fff,0 24px 44px rgba(40,50,80,.16)}
 .p-ico{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;font-size:23px;color:var(--accent);background:rgba(246,71,71,.1);box-shadow:inset 1px 1px 0 rgba(255,255,255,.9);margin-bottom:auto}
@@ -263,7 +245,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .p-go{position:absolute;right:16px;top:18px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:16px;background:rgba(255,255,255,.8);box-shadow:inset 1px 1px 0 #fff;transition:.3s}
 .promo:hover .p-go{background:var(--accent);color:#fff;transform:translateX(3px)}
 
-/* product cards in scrollers: near-opaque, no backdrop-filter (reliable on iOS Safari) */
 .scroller .card{flex:0 0 232px;scroll-snap-align:start;position:relative;background:rgba(255,255,255,.86);backdrop-filter:none;-webkit-backdrop-filter:none;
   border-radius:28px;padding:14px 14px 18px;text-align:center;display:flex;flex-direction:column;
   box-shadow:inset 1.5px 1.5px 0 #fff,0 0 0 1px rgba(40,50,80,.05),0 10px 26px rgba(40,50,80,.08);transition:transform .5s var(--ease),box-shadow .5s}
@@ -295,7 +276,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
   .sec-title{margin-top:0}
 }
 
-/* cookie notice + help button */
 .cookie{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:10px;padding:7px 8px 7px 14px;border-radius:99px;font-size:12px;color:#4a4e59}
 .cookie[hidden]{display:none}
 .cookie>svg{font-size:16px;color:var(--accent);flex:none}
@@ -313,7 +293,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .help-panel a svg{font-size:17px;color:var(--accent)}
 @media(max-width:760px){.cookie{max-width:calc(100% - 92px);font-size:11.5px;padding-left:12px}}
 
-/* ---------- card stepper ---------- */
 .slot{margin-top:auto;display:flex;justify-content:center;min-height:38px}
 .step{display:inline-flex;align-items:center;gap:2px;padding:3px;border-radius:99px;background:rgba(246,71,71,.1);box-shadow:inset 1px 1px 0 rgba(255,255,255,.9)}
 .step button{width:32px;height:32px;border-radius:50%;font-size:18px;font-weight:500;line-height:1;display:grid;place-items:center;background:#fff;color:var(--accent);box-shadow:0 2px 6px rgba(40,50,80,.12);transition:transform .25s var(--ease)}
@@ -323,7 +302,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 @keyframes bump{40%{transform:scale(1.5)}}
 body.lock{overflow:hidden}
 
-/* ---------- cart modal (centered) ---------- */
 .modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .35s}
 .modal.on{opacity:1;pointer-events:auto}
 .modal-scrim{position:absolute;inset:0;background:rgba(30,35,60,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
@@ -372,7 +350,7 @@ a.info-b:hover{transform:translateX(3px);background:rgba(255,255,255,.95)}
 .e-ico{width:72px;height:72px;border-radius:26px;display:grid;place-items:center;font-size:34px;color:var(--accent);background:rgba(246,71,71,.1);margin-bottom:8px;box-shadow:inset 1px 1px 0 #fff}
 .empty b{font-size:18px}.empty p{color:var(--muted);font-size:13px;margin-bottom:12px}
 .empty .btn{padding:12px 28px}
-/* empty state: single column, no summary */
+
 .modal.is-empty .m-body{grid-template-columns:1fr}
 .modal.is-empty .m-side{display:none}
 
@@ -388,16 +366,13 @@ a.info-b:hover{transform:translateX(3px);background:rgba(255,255,255,.95)}
 .ci .step,.ci-row{flex:none}.ci-row{flex:0 0 auto;width:100%}
 .ci-main{flex:1}
 
-/* =============== polish pass: motion, UX, details =============== */
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:12px}
 input:focus-visible{outline:none}
 
-/* reveal on scroll (individual `translate` so it never fights hover transforms) */
 .js [data-reveal]{opacity:0;translate:0 22px;transition:opacity .8s var(--ease) var(--d,0ms),translate .8s var(--ease) var(--d,0ms)}
 .js [data-reveal].in{opacity:1;translate:0 0}
 @media(prefers-reduced-motion:reduce){.js [data-reveal]{opacity:1;translate:none}}
 
-/* header: collapses the brand row while scrolling down */
 .head .bar{transition:padding .4s var(--ease),box-shadow .4s}
 .brands{position:relative;max-height:48px;transition:max-height .45s var(--ease),opacity .3s,padding .3s}
 .head.compact .brands{max-height:0;opacity:0;padding-top:0;padding-bottom:0;pointer-events:none}
@@ -407,7 +382,6 @@ input:focus-visible{outline:none}
   box-shadow:inset 1px 1px 0 #fff,0 2px 10px rgba(40,50,80,.14);transition:transform .45s var(--ease),width .45s var(--ease),height .45s var(--ease),opacity .25s}
 .brands a:hover{background:none;box-shadow:none;color:var(--accent)}
 
-/* search extras */
 .search .k{position:absolute;right:12px;top:10px;font:inherit;font-size:11px;font-weight:600;color:#8a8e99;padding:3px 8px;border-radius:7px;background:rgba(255,255,255,.7);box-shadow:inset 1px 1px 0 #fff;pointer-events:none;transition:opacity .2s}
 .search:focus-within .k,.search input:not(:placeholder-shown)~.k{opacity:0}
 @media(hover:none){.search .k{display:none}}
@@ -416,7 +390,6 @@ input:focus-visible{outline:none}
 .sugg button{padding:7px 14px;border-radius:99px;font-size:13px;font-weight:500;background:rgba(255,255,255,.9);box-shadow:inset 1px 1px 0 #fff,0 1px 4px rgba(40,50,80,.12);transition:.25s var(--ease)}
 .sugg button:hover{background:var(--accent);color:#fff;transform:translateY(-1px)}
 
-/* hero: progress dots (story-style) */
 .dots{gap:6px}
 .dots button{position:relative;width:34px;height:6px;overflow:hidden;background:rgba(40,50,80,.16)}
 .dots button.on{width:34px;background:rgba(40,50,80,.16)}
@@ -426,18 +399,15 @@ input:focus-visible{outline:none}
 @keyframes fill{to{transform:scaleX(1)}}
 .slide img{transition:transform .7s var(--ease),translate .25s ease-out}
 
-/* section head */
 .sec-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
 .sec-head .sec-title{margin:0}
 .sec-all{display:inline-flex;align-items:center;gap:2px;font-size:13px;font-weight:600;color:var(--accent);padding:7px 8px 7px 14px;border-radius:99px;transition:background .25s}
 .sec-all svg{font-size:16px;transition:transform .3s var(--ease)}
 .sec-all:hover{background:rgba(246,71,71,.1)}.sec-all:hover svg{transform:translateX(3px)}
 
-/* tiles & cards: crisper depth */
 .tile{will-change:transform}
 .tile:active,.promo:active,.scroller .card:active{transform:scale(.985)}
 
-/* mini cart bar */
 .minicart{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));z-index:55;display:flex;align-items:center;gap:14px;padding:8px 8px 8px 10px;border-radius:99px;
   translate:-50% 140%;opacity:0;pointer-events:none;transition:translate .6s var(--ease),opacity .3s,transform .3s var(--ease);background:rgba(255,255,255,.72)}
 .minicart.on{translate:-50% 0;opacity:1;pointer-events:auto}
@@ -450,7 +420,6 @@ input:focus-visible{outline:none}
 .mc-go svg{font-size:16px}
 @media(max-width:760px){.minicart{bottom:calc(72px + env(safe-area-inset-bottom));gap:10px}.mc-go{padding-left:14px}}
 
-/* ---------- compact footer ---------- */
 .foot{padding:0;margin:48px auto 72px;background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border:0}
 .foot-card{border-radius:30px;padding:18px 22px 14px;display:flex;flex-direction:column;gap:10px;background:rgba(255,255,255,.6)}
 .f-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -473,13 +442,11 @@ input:focus-visible{outline:none}
   .f-row a{padding:4px 9px}
 }
 
-/* ---------- bounce / spacing ---------- */
 html{overscroll-behavior-y:none}
 .foot{margin:44px auto 16px}
 body:has(.minicart.on){padding-bottom:84px}
 @media(max-width:760px){.foot{margin:32px auto 20px}}
 
-/* ---------- intro ---------- */
 .loader{display:none}
 .js .loader{position:fixed;inset:0;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--bg);
   transition:opacity .7s var(--ease) .1s,visibility 0s .8s,filter .7s;animation:ldFallback .01s 4s forwards}
@@ -497,7 +464,7 @@ body:has(.minicart.on){padding-bottom:84px}
 @keyframes ldPulse{50%{transform:scale(1.06)}}
 @keyframes ldGlow{to{transform:scale(1.25);opacity:.2}}
 @keyframes ldFallback{to{opacity:0;visibility:hidden;pointer-events:none}}
-/* page content entrance */
+
 .js:not(.ready) .topbar,.js:not(.ready) .head{opacity:0}
 .ready .topbar{animation:fadeUp .8s .15s var(--ease) backwards}
 .ready .head{animation:dropIn .9s .25s var(--ease) backwards}
@@ -511,7 +478,6 @@ body:has(.minicart.on){padding-bottom:84px}
 @keyframes heroPop{from{opacity:0;transform:translateY(24px) scale(.88) rotate(-4deg)}}
 @media(prefers-reduced-motion:reduce){.js .loader{display:none}.js:not(.ready) .topbar,.js:not(.ready) .head{opacity:1}}
 
-/* =============== catalog, mega menu, wishlist, quick view =============== */
 .card .img{display:grid;place-items:center;width:100%;background:none;cursor:pointer;padding:0}
 .card h4{cursor:pointer}
 .heart{position:absolute;right:12px;top:12px;z-index:2;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:18px;color:#9aa0ad;
@@ -522,7 +488,6 @@ body:has(.minicart.on){padding-bottom:84px}
 .ci-img{cursor:pointer}
 button.ci-img{padding:0}
 
-/* grid cards = scroller cards */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(222px,1fr));gap:16px}
 .grid .card{position:relative;background:rgba(255,255,255,.86);backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:28px;padding:14px 14px 18px;text-align:center;display:flex;flex-direction:column;
   box-shadow:inset 1.5px 1.5px 0 #fff,0 0 0 1px rgba(40,50,80,.05),0 10px 26px rgba(40,50,80,.08);transition:transform .5s var(--ease),box-shadow .5s;animation:pop .6s var(--ease) backwards}
@@ -562,7 +527,6 @@ button.ci-img{padding:0}
 .btn-more:hover{transform:translateY(-2px);color:var(--accent)}
 .empty.wide{grid-column:1/-1}
 
-/* mega menu */
 .mega{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:5;border-radius:28px;padding:18px 20px 20px;background:rgba(255,255,255,.82);
   backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);opacity:0;translate:0 -8px;pointer-events:none;transition:opacity .25s,translate .35s var(--ease)}
 .mega.on{opacity:1;translate:0 0;pointer-events:auto}
@@ -575,7 +539,6 @@ button.ci-img{padding:0}
 .mega-grid a:hover{background:rgba(246,71,71,.08);color:var(--accent)}
 .mega-grid em{font-style:normal;font-size:11px;font-weight:600;color:var(--muted)}
 
-/* search results as buttons */
 .sr{display:flex;align-items:center;gap:12px;width:100%;padding:8px 10px;border-radius:16px;text-align:left;transition:background .2s}
 .sr:hover{background:rgba(0,0,0,.05)}
 .sr img{width:46px;height:36px;object-fit:contain;flex:none}
@@ -583,7 +546,6 @@ button.ci-img{padding:0}
 .sr-all{display:flex;align-items:center;justify-content:center;gap:2px;padding:11px;margin-top:4px;border-radius:14px;font-size:13px;font-weight:600;color:var(--accent);background:rgba(246,71,71,.07)}
 .sr-all:hover{background:rgba(246,71,71,.14)}
 
-/* wishlist modal & quick view */
 .wish-card{width:min(640px,100%)}
 .m-body.one{grid-template-columns:1fr}
 .wish-card .m-list{max-height:min(520px,60vh)}
@@ -627,7 +589,6 @@ body.in-catalog .minicart{bottom:calc(16px + env(safe-area-inset-bottom))}
 .ci .slot{min-height:0;justify-content:flex-start}
 .price-f label{white-space:nowrap}
 
-/* ---------- carousel controls: joined glass pill instead of round arrows ---------- */
 .sec-ctl{display:flex;align-items:center;gap:10px}
 .pager{display:inline-flex;align-items:stretch;height:38px;border-radius:99px;padding:3px;background:rgba(255,255,255,.7)}
 .pager i{width:1px;margin:8px 2px;background:rgba(40,50,80,.14)}
@@ -643,27 +604,25 @@ body.in-catalog .minicart{bottom:calc(16px + env(safe-area-inset-bottom))}
 .hp-btn:hover{background:rgba(246,71,71,.1);color:var(--accent)}
 .hp-btn:active{transform:scale(.88)}
 .hero-pill .dots{padding:0 4px}
-/* auto-scrolling row must not fight scroll-snap; soft fade at both edges */
+
 .track.auto{scroll-snap-type:none;scroll-behavior:auto;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%)}
 @media(max-width:760px){.pager{height:34px}.pg{width:36px}}
 
-/* =============== smoothness pass =============== */
-/* system fonts only: no webfont swap, no layout shift */
 body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI Variable Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
-/* no content jump when a modal removes the scrollbar */
+
 html{scrollbar-gutter:stable}
-/* header: collapsing the brand row happens on an out-of-flow layer, page below never moves */
+
 .head{height:0;margin:0 auto var(--hh,128px)}
 .head .bar{position:absolute;left:0;right:0;top:0}
 .mega{top:calc(var(--bh,106px) + 8px)}
-/* background glow: cheap radial fades instead of animated blur filters */
+
 .orbs i{filter:none;will-change:transform;border-radius:50%}
 .o1{background:radial-gradient(circle,rgba(246,71,71,.9) 0,rgba(246,71,71,0) 68%)}
 .o2{background:radial-gradient(circle,rgba(255,154,77,.9) 0,rgba(255,154,77,0) 68%)}
 .o3{background:radial-gradient(circle,rgba(246,71,71,.9) 0,rgba(246,71,71,0) 68%)}
 .o4{background:radial-gradient(circle,rgba(255,154,77,.9) 0,rgba(255,154,77,0) 68%)}
 .o5{background:radial-gradient(circle,rgba(246,71,71,.9) 0,rgba(246,71,71,0) 68%)}
-/* many small glass surfaces: solid translucent fill instead of live backdrop blur (big scroll-perf win, same look on a pale page) */
+
 .tile,.promo,.slide,.foot-card,.toolbar,.pager,.hero-pill,.help-btn,.cookie,.pq-img,.info-b{backdrop-filter:none;-webkit-backdrop-filter:none}
 .tile,.promo{background:rgba(255,255,255,.82)}
 .slide.s-red{background:rgba(255,226,223,.92)}.slide.s-blue{background:rgba(224,234,255,.92)}.slide.s-sand{background:rgba(255,236,214,.92)}
@@ -672,24 +631,23 @@ html{scrollbar-gutter:stable}
 .help-btn,.cookie{background:rgba(255,255,255,.92)}
 .glass{contain:layout paint}
 .modal-card.glass,.mega.glass,.minicart.glass,.bar.glass,.glass.results{contain:none}
-/* white photo backgrounds vanish on the light cards */
+
 img.rm{mix-blend-mode:multiply;filter:none!important}
 .card .img{position:relative}
 .card .img:has(img.rm)::before{content:"";position:absolute;left:24%;right:24%;bottom:8px;height:14px;border-radius:50%;background:rgba(30,40,80,.2);filter:blur(9px)}
 .pq-img:has(img.rm){position:relative}
-/* view transitions */
+
 .view-in{animation:viewIn .5s var(--ease) both}
 @keyframes viewIn{from{opacity:0;transform:translateY(12px)}}
-/* never animate layout-affecting properties on scroll-driven elements */
+
 .card,.tile,.promo,.slide{backface-visibility:hidden}
-/* opaque plates behind photos so multiply-blended white backgrounds disappear completely */
+
 .rel{background:#fbfbfd}
 .ci-img{background:#eceff7}
 .pq-img{background:#eceff7}
 .results{background:rgba(255,255,255,.97)}
 .results .sr:hover{background:#f1f2f6}
 
-/* product description */
 .pq-desc{margin-top:22px;padding-top:18px;border-top:1px solid rgba(40,50,80,.08)}
 .pq-desc h3{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:19px;letter-spacing:-.02em;margin-bottom:12px}
 .pq-desc h3 small{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0}
@@ -707,7 +665,6 @@ img.rm{mix-blend-mode:multiply;filter:none!important}
 .txt h4{font-size:14px;font-weight:700;color:var(--text);margin:12px 0 4px;letter-spacing:-.01em}
 .txt h4:first-child{margin-top:0}
 
-/* modals must fit the *visible* viewport (mobile browsers: 100vh is taller than what you can see) */
 .modal{height:100%;max-height:100%}
 .modal-card{max-height:min(720px,100%)}
 @supports (height:100dvh){.modal{height:100dvh}}
@@ -719,7 +676,6 @@ img.rm{mix-blend-mode:multiply;filter:none!important}
   .wish-card .m-list{max-height:none}
 }
 
-/* ---------- mini cart: never let content overflow the tap target ---------- */
 .minicart{width:max-content;max-width:calc(100vw - 24px);white-space:nowrap}
 .minicart .mc-text{min-width:0}
 .mc-text b{white-space:nowrap}
@@ -728,7 +684,7 @@ img.rm{mix-blend-mode:multiply;filter:none!important}
   .minicart.on{translate:0 0}
   .mc-text{flex:1;align-items:flex-start;padding-left:2px}
   .mc-go{padding:11px 16px 11px 20px;background:var(--accent);color:#fff;box-shadow:inset 1px 1px 0 rgba(255,255,255,.5),0 6px 14px rgba(246,71,71,.3)}
-  /* keep the floating buttons clear of the bar */
+
   body:has(.minicart.on) .help{bottom:calc(86px + env(safe-area-inset-bottom))}
   body:has(.minicart.on) .cookie{bottom:calc(86px + env(safe-area-inset-bottom))}
   body:has(.minicart.on){padding-bottom:92px}
