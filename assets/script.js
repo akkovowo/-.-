@@ -120,5 +120,22 @@
     }, { passive: true });
   }
 
+  /* cookie notice (remembered) */
+  (function () {
+    const c = $('#cookie'); let ok = false;
+    try { ok = localStorage.getItem('jj-cookie') === '1'; } catch (e) {}
+    if (!ok) c.hidden = false;
+    $('#cookieOk').onclick = () => { c.hidden = true; try { localStorage.setItem('jj-cookie', '1'); } catch (e) {} };
+  })();
+
+  /* help button */
+  (function () {
+    const h = $('#help'), b = $('#helpBtn'), p = $('#helpPanel');
+    const set = on => { h.classList.toggle('open', on); b.setAttribute('aria-expanded', on); p.setAttribute('aria-hidden', !on); };
+    b.onclick = () => set(!h.classList.contains('open'));
+    document.addEventListener('click', e => { if (!e.target.closest('#help')) set(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
+  })();
+
   renderCart();
 })();
