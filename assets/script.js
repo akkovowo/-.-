@@ -1,44 +1,216 @@
 (() => {
   const $ = (s, c = document) => c.querySelector(s);
-  const IMG = 'assets/img/';
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const LOCAL = 'assets/img/', REMOTE = 'https://jjstore.ru/image/cache/catalog/';
   const fmt = n => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₽';
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const plural = (n, a, b, c) => { const m = n % 100, d = n % 10; return (m > 10 && m < 20) ? c : d === 1 ? a : (d > 1 && d < 5) ? b : c; };
+  const PLACE = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90"><rect x="38" y="14" width="44" height="62" rx="10" fill="#e6e9f2"/><rect x="46" y="22" width="28" height="40" rx="5" fill="#f6f7fa"/></svg>');
+  const ICON = {
+    trash: '<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>',
+    heart: '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.400-7-10a4 4 0 0 1 7-2.600A4 4 0 0 1 19 10c0 5.600-7 10-7 10Z"/></svg>',
+    ext: '<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg>',
+    chev: '<svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>',
+    bag: '<svg viewBox="0 0 24 24"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>',
+    pin: '<svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.500C5 14.800 12 21 12 21Z"/><circle cx="12" cy="9.500" r="2.500"/></svg>',
+    truck: '<svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.800"/><circle cx="17" cy="17" r="1.800"/></svg>',
+    card: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M3 10h18M7 15h3"/></svg>'
+  };
 
-  const PRODUCTS = [
-    { id: 1, name: 'iPhone 15 Black 128Gb ( без RuStore )', price: 56990, img: 'apple/iphone15/i15black-400x280.png', url: 'apple/iphone/iphone-15/128gb-21/iphone-15-black-128gb-bez-rustore' },
-    { id: 2, name: 'Блок USB-C 20W iPhone', price: 2990, img: 'iphone/aksessuary/blok-usb-c-20w-iphone-400x280.png', url: 'apple/aksessuary-1/blok-pitaniya/apple-10/blok-usb-c-20w-iphone' },
-    { id: 3, name: 'iPhone 17 Pro Deep Blue 256Gb ( без RuStore)', price: 98990, img: 'apple/17pro/iphone-17-pro-deepblue-400x280.png', url: 'apple/iphone/iphone-17-pro-1/256gb-55/iphone-17-pro-deep-blue-256gb-bez' },
-    { id: 4, name: 'AirPods 4', price: 10490, img: 'airpods4/airpods_4-400x280.png', url: 'apple/airpods/airpods-4/airpods-4-1' },
-    { id: 5, name: 'iPhone 15 Blue 128Gb ( без Rustore )', price: 56990, img: 'apple/iphone15/i15blue-400x280.png', url: 'apple/iphone/iphone-15/128gb-21/iphone-15-blue-128gb-bez-rustore' },
-    { id: 6, name: 'iPhone 17 Pro Silver 256Gb ( без RuStore)', price: 99990, img: 'apple/17pro/iphone-17-pro-silver-400x280.png', url: 'apple/iphone/iphone-17-pro-1/256gb-55/iphone-17-pro-silver-256gb-bez-ru' },
-    { id: 7, name: 'iPhone 16 Black 128Gb ( без RuStore )', price: 65990, img: 'iphone16/black/iphone_16_black-transformed-400x280.png', url: 'apple/iphone/iphone-16/128gb-7/iphone-16-black-128gb-bez-rustore' },
-    { id: 8, name: 'AirPods 4 с активным шумоподавлением', price: 13490, img: 'airpods4/airpods_4_noise-400x280.png', url: 'apple/airpods/airpods-4/airpods-4-s-aktivnym-shumopodavleniem' },
-    { id: 9, name: 'iPhone 17 Black 256Gb ( без RuStore)', price: 78990, img: 'apple/iphone17/08ed48e6-8718-4703-91bd-35e0c0490348-400x280.png', url: 'apple/iphone/iphone-17-1/256gb-24/iphone-17-black-256gb-bez-rustore' },
-    { id: 10, name: 'Sony PlayStation 5 Slim DVD', price: 71990, img: 'sony/a6d2fe363c2044d784357374213b0218-400x280.png', url: 'sony/playstation-1/ps5/sony-playstation-5-slim-dvd' },
-    { id: 11, name: 'iPhone 17 Pro Max Silver 256Gb ( без RuStore)', price: 106990, img: 'apple/17pro/iphone-17-pro-silver-400x280.png', url: 'apple/iphone/iphone-17-pro-max-1/256gb-56/iphone-17-pro-max-silver-256g' },
-    { id: 12, name: 'iPhone 15 Black 256Gb ( без RuStore )', price: 66990, img: 'apple/iphone15/i15black-400x280.png', url: 'apple/iphone/iphone-15/256gb-25/iphone-15-black-256gb-bez-rustore' },
-    { id: 13, name: 'iPhone 18 Pro Max 256Gb Burgundy ( без RuStore )', price: 149990, img: 'apple/18pro/burgundy.png', url: 'apple/iphone/iphone-18-pro-max/iphone-18-pro-max-256gb-burgundy-bez-rustore' },
-    { id: 14, name: 'iPhone 18 Pro Max 256Gb Silver ( без RuStore )', price: 137990, img: 'apple/18pro/silver.png', url: 'apple/iphone/iphone-18-pro-max/iphone-18-pro-max-256gb-silver-bez-rustore' },
-    { id: 15, name: 'iPhone 18 Pro 256Gb Burgundy ( без RuStore )', price: 125990, img: 'apple/18pro/burgundy.png', url: 'apple/iphone/iphone-18-pro/iphone-18-pro-256gb-burgundy-bez-rustore' },
-    { id: 16, name: 'iPhone 18 Pro 256Gb Glacier ( без RuStore )', price: 118990, img: 'apple/18pro/glacier.png', url: 'apple/iphone/iphone-18-pro/iphone-18-pro-256gb-glacier-bez-rustore' },
-    { id: 17, name: 'iPhone 18 Pro 256Gb Black ( без RuStore )', price: 118990, img: 'apple/18pro/black.png', url: 'apple/iphone/iphone-18-pro/iphone-18-pro-256gb-black-bez-rustore' },
-  ];
-  const byId = id => PRODUCTS.find(p => p.id === id);
+  /* ================= DATA ================= */
+  const DB = window.CATALOG || { c: {}, p: [] };
+  const cats = DB.c;                                   // slug -> [title, parent]
+  const kids = {};                                      // parent -> [slug]
+  Object.keys(cats).forEach(k => { (kids[cats[k][1] || ''] = kids[cats[k][1] || ''] || []).push(k); });
+  const products = DB.p.map(a => ({ id: a[2], name: a[0], price: a[1], url: a[2], img: a[3], cats: a[4], cat: a[4][0] }));
+  /* featured products shown on the home page keep their local (cut-out) photos */
+  const FEATURED = [
+    [1, 'iPhone 15 Black 128Gb ( без RuStore )', 56990, 'apple/iphone15/i15black-400x280.png', 'apple/iphone/iphone-15/128gb-21/iphone-15-black-128gb-bez-rustore'],
+    [2, 'Блок USB-C 20W iPhone', 2990, 'iphone/aksessuary/blok-usb-c-20w-iphone-400x280.png', 'apple/aksessuary-1/blok-pitaniya/apple-10/blok-usb-c-20w-iphone'],
+    [3, 'iPhone 17 Pro Deep Blue 256Gb ( без RuStore)', 98990, 'apple/17pro/iphone-17-pro-deepblue-400x280.png', 'apple/iphone/iphone-17-pro-1/256gb-55/iphone-17-pro-deep-blue-256gb-bez'],
+    [4, 'AirPods 4', 10490, 'airpods4/airpods_4-400x280.png', 'apple/airpods/airpods-4/airpods-4-1'],
+    [5, 'iPhone 15 Blue 128Gb ( без Rustore )', 56990, 'apple/iphone15/i15blue-400x280.png', 'apple/iphone/iphone-15/128gb-21/iphone-15-blue-128gb-bez-rustore'],
+    [6, 'iPhone 17 Pro Silver 256Gb ( без RuStore)', 99990, 'apple/17pro/iphone-17-pro-silver-400x280.png', 'apple/iphone/iphone-17-pro-1/256gb-55/iphone-17-pro-silver-256gb-bez-ru'],
+    [7, 'iPhone 16 Black 128Gb ( без RuStore )', 65990, 'iphone16/black/iphone_16_black-transformed-400x280.png', 'apple/iphone/iphone-16/128gb-7/iphone-16-black-128gb-bez-rustore'],
+    [8, 'AirPods 4 с активным шумоподавлением', 13490, 'airpods4/airpods_4_noise-400x280.png', 'apple/airpods/airpods-4/airpods-4-s-aktivnym-shumopodavleniem'],
+    [9, 'iPhone 17 Black 256Gb ( без RuStore)', 78990, 'apple/iphone17/08ed48e6-8718-4703-91bd-35e0c0490348-400x280.png', 'apple/iphone/iphone-17-1/256gb-24/iphone-17-black-256gb-bez-rustore'],
+    [10, 'Sony PlayStation 5 Slim DVD', 71990, 'sony/a6d2fe363c2044d784357374213b0218-400x280.png', 'sony/playstation-1/ps5/sony-playstation-5-slim-dvd'],
+    [11, 'iPhone 17 Pro Max Silver 256Gb ( без RuStore)', 106990, 'apple/17pro/iphone-17-pro-silver-400x280.png', 'apple/iphone/iphone-17-pro-max-1/256gb-56/iphone-17-pro-max-silver-256g'],
+    [12, 'iPhone 15 Black 256Gb ( без RuStore )', 66990, 'apple/iphone15/i15black-400x280.png', 'apple/iphone/iphone-15/256gb-25/iphone-15-black-256gb-bez-rustore'],
+    [13, 'iPhone 18 Pro Max 256Gb Burgundy ( без RuStore )', 149990, 'apple/18pro/burgundy.png', 'apple/iphone/iphone-18-pro-max/iphone-18-pro-max-256gb-burgundy-bez-rustore'],
+    [14, 'iPhone 18 Pro Max 256Gb Silver ( без RuStore )', 137990, 'apple/18pro/silver.png', 'apple/iphone/iphone-18-pro-max/iphone-18-pro-max-256gb-silver-bez-rustore'],
+    [15, 'iPhone 18 Pro 256Gb Burgundy ( без RuStore )', 125990, 'apple/18pro/burgundy.png', 'apple/iphone/iphone-18-pro/iphone-18-pro-256gb-burgundy-bez-rustore'],
+    [16, 'iPhone 18 Pro 256Gb Glacier ( без RuStore )', 118990, 'apple/18pro/glacier.png', 'apple/iphone/iphone-18-pro/iphone-18-pro-256gb-glacier-bez-rustore'],
+    [17, 'iPhone 18 Pro 256Gb Black ( без RuStore )', 118990, 'apple/18pro/black.png', 'apple/iphone/iphone-18-pro/iphone-18-pro-256gb-black-bez-rustore']
+  ].map(a => ({ n: a[0], id: a[4], name: a[1], price: a[2], local: a[3], url: a[4], cat: a[4].split('/').slice(0, 2).join('/'), cats: [a[4].split('/').slice(0, 2).join('/')] }));
+  const byId = new Map(products.map(p => [p.id, p]));
+  FEATURED.forEach(p => byId.set(p.id, p));
+  const feat = n => FEATURED.find(p => p.n === n);
+  const imgSrc = p => p.local ? LOCAL + p.local : REMOTE + p.img;
   const link = p => 'https://jjstore.ru/' + p.url;
+  const catUrl = slug => 'https://jjstore.ru/' + slug;
+  const isVariant = s => /^[\d.,\s]*(gb|tb|гб|тб|mm|мм|мл|"|дюйм)/i.test(cats[s][0].trim());
+  const visKids = s => (kids[s] || []).filter(k => !isVariant(k) && catCount[k]);
+  const chainOf = slug => { const chain = []; let c = slug; while (c && cats[c]) { chain.unshift(c); c = cats[c][1]; } return chain; };
+  const descendants = slug => { const out = [slug]; (kids[slug] || []).forEach(k => out.push(...descendants(k))); return out; };
+  const catCount = {};
+  products.forEach(p => { const seen = new Set(); p.cats.forEach(c0 => { let c = c0; while (c && cats[c] && !seen.has(c)) { seen.add(c); catCount[c] = (catCount[c] || 0) + 1; c = cats[c][1]; } }); });
+  const prodsOf = slug => { const set = new Set(descendants(slug)); return products.filter(p => p.cats.some(c => set.has(c))); };
+  /* broken photo -> neutral placeholder */
+  document.addEventListener('error', e => { const t = e.target; if (t && t.tagName === 'IMG' && !t.dataset.fb) { t.dataset.fb = 1; t.src = PLACE; } }, true);
 
-  /* Product scrollers: Новинки / Популярное */
-  const NEW_IDS = [13, 15, 16, 14, 17, 11, 6, 3, 9];
-  const POP_IDS = [1, 2, 4, 8, 7, 5, 10, 12];
-  const card = (p, isNew) => `
-    <article class="card">
-      ${isNew ? '<span class="badge-new">Новинка</span>' : ''}
-      <a class="img" href="${link(p)}" target="_blank" rel="noopener"><img src="${IMG + p.img}" alt="${p.name}" loading="lazy"></a>
-      <h4>${p.name}</h4>
+  /* ================= CARDS ================= */
+  const card = (p, o = {}) => `
+    <article class="card" data-id="${esc(p.id)}">
+      ${o.isNew ? '<span class="badge-new">Новинка</span>' : ''}
+      <button class="heart ${wish.has(p.id) ? 'on' : ''}" data-act="wish" data-id="${esc(p.id)}" aria-label="В закладки">${ICON.heart}</button>
+      <button class="img" data-act="view" data-id="${esc(p.id)}" aria-label="Быстрый просмотр"><img src="${esc(imgSrc(p))}" alt="${esc(p.name)}" loading="lazy"></button>
+      <h4 data-act="view" data-id="${esc(p.id)}">${esc(p.name)}</h4>
       <div class="price">${fmt(p.price)}</div>
-      <div class="slot" data-id="${p.id}"></div>
+      <div class="slot" data-id="${esc(p.id)}"></div>
     </article>`;
-  $('#trackNew').innerHTML = NEW_IDS.map(id => card(byId(id), true)).join('');
-  $('#trackPop').innerHTML = POP_IDS.map(id => card(byId(id), false)).join('');
-  document.querySelectorAll('.scroller').forEach(sc => {
+
+  /* ================= WISHLIST ================= */
+  let wish = new Set();
+  try { wish = new Set(JSON.parse(localStorage.getItem('jj-wish') || '[]')); } catch (e) {}
+  const saveWish = () => { try { localStorage.setItem('jj-wish', JSON.stringify([...wish])); } catch (e) {} };
+
+  /* ================= CART ================= */
+  let cart = {};
+  try {
+    const raw = JSON.parse(localStorage.getItem('jj-cart2') || 'null');
+    if (raw && typeof raw === 'object') {
+      Object.entries(raw).forEach(([k, n]) => { const id = /^\d+$/.test(k) ? feat(+k)?.id : k; if (id) cart[id] = (cart[id] || 0) + n; });
+    }
+  } catch (e) {}
+  const saveCart = () => { try { localStorage.setItem('jj-cart2', JSON.stringify(cart)); } catch (e) {} };
+  const qtyOf = id => cart[id] || 0;
+  const totalQty = () => Object.values(cart).reduce((s, n) => s + n, 0);
+  const totalSum = () => Object.entries(cart).reduce((s, [id, n]) => s + (byId.get(id)?.price || 0) * n, 0);
+  const stepper = id => `<div class="step" data-id="${esc(id)}"><button data-act="dec" aria-label="Меньше">−</button><b>${qtyOf(id)}</b><button data-act="inc" aria-label="Больше">+</button></div>`;
+  const syncSlots = () => $$('.slot').forEach(s => {
+    const id = s.dataset.id, n = qtyOf(id);
+    s.innerHTML = n ? stepper(id) : `<button class="buy" data-act="inc" data-id="${esc(id)}">В корзину</button>`;
+  });
+  const syncHearts = () => $$('[data-act="wish"]').forEach(b => b.classList.toggle('on', wish.has(b.dataset.id)));
+
+  /* ================= MODALS ================= */
+  const cartModal = $('#cartModal'), wModal = $('#wModal'), pModal = $('#pModal');
+  const openModal = m => { $$('.modal.on').forEach(x => x.classList.remove('on')); m.classList.add('on'); m.setAttribute('aria-hidden', 'false'); document.body.classList.add('lock'); };
+  const closeModals = () => { $$('.modal.on').forEach(x => { x.classList.remove('on'); x.setAttribute('aria-hidden', 'true'); }); document.body.classList.remove('lock'); };
+  const openCart = () => { renderCart(); openModal(cartModal); };
+  $('#openCart').onclick = openCart;
+  $('#openWish').onclick = () => { renderWish(); openModal(wModal); };
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModals(); hideMega(); } });
+
+  function renderCart() {
+    const ids = Object.keys(cart).filter(id => byId.get(id));
+    const qty = totalQty(), box = $('#cartItems');
+    cartModal.classList.toggle('is-empty', !ids.length);
+    box.innerHTML = ids.length ? ids.map(id => {
+      const p = byId.get(id);
+      return `<article class="ci" data-id="${esc(id)}">
+        <button class="ci-img" data-act="view" data-id="${esc(id)}"><img src="${esc(imgSrc(p))}" alt=""></button>
+        <div class="ci-main"><b>${esc(p.name)}</b><small>${fmt(p.price)} за шт.</small>
+          <div class="ci-row">${stepper(id)}<span class="ci-sum">${fmt(p.price * qtyOf(id))}</span></div></div>
+        <button class="ci-del" data-act="del" aria-label="Удалить" title="Удалить">${ICON.trash}</button>
+      </article>`;
+    }).join('') : `<div class="empty">
+        <span class="e-ico">${ICON.bag}</span>
+        <b>В корзине пока пусто</b><p>Добавьте товары, и они появятся здесь</p>
+        <button class="btn" data-close>К покупкам</button></div>`;
+    $('#sumQty').textContent = qty;
+    $('#cartTotal').textContent = fmt(totalSum());
+    $('#cartMeta').textContent = qty ? `${qty} ${plural(qty, 'товар', 'товара', 'товаров')}` : '';
+    const c = $('#cartCount'); c.textContent = qty; c.classList.toggle('on', qty > 0);
+    syncSlots(); syncMini();
+  }
+  function renderWish() {
+    const ids = [...wish].filter(id => byId.get(id)), box = $('#wishItems');
+    box.innerHTML = ids.length ? ids.map(id => {
+      const p = byId.get(id);
+      return `<article class="ci" data-id="${esc(id)}">
+        <button class="ci-img" data-act="view" data-id="${esc(id)}"><img src="${esc(imgSrc(p))}" alt=""></button>
+        <div class="ci-main"><b>${esc(p.name)}</b><small>${fmt(p.price)}</small>
+          <div class="ci-row"><div class="slot" data-id="${esc(id)}"></div></div></div>
+        <button class="ci-del" data-act="wish" data-id="${esc(id)}" aria-label="Убрать из закладок" title="Убрать из закладок">${ICON.trash}</button>
+      </article>`;
+    }).join('') : `<div class="empty">
+        <span class="e-ico">${ICON.heart}</span>
+        <b>В закладках пока пусто</b><p>Нажмите на сердечко у товара, чтобы сохранить его</p>
+        <button class="btn" data-close>К покупкам</button></div>`;
+    $('#wishMeta').textContent = ids.length ? `${ids.length} ${plural(ids.length, 'товар', 'товара', 'товаров')}` : '';
+    const c = $('#wishCount'); c.textContent = ids.length; c.classList.toggle('on', ids.length > 0);
+    syncSlots();
+  }
+  function bump(sel) { const c = $(sel); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
+
+  /* ----- product quick view ----- */
+  function openProduct(id) {
+    const p = byId.get(id); if (!p) return;
+    const chain = chainOf(p.cat);
+    const rel = products.filter(x => x.id !== p.id && x.cats.includes(p.cat)).slice(0, 4);
+    $('#pBody').innerHTML = `
+      <button class="m-x pq-x" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <div class="pq-grid">
+        <div class="pq-img"><img src="${esc(imgSrc(p))}" alt="${esc(p.name)}"></div>
+        <div class="pq-info">
+          <small class="pq-cat">${chain.map(c => esc(cats[c][0])).join(' · ') || 'Каталог'}</small>
+          <h2>${esc(p.name)}</h2>
+          <div class="pq-price">${fmt(p.price)}</div>
+          <div class="pq-actions">
+            <div class="slot" data-id="${esc(p.id)}"></div>
+            <button class="pq-wish ${wish.has(p.id) ? 'on' : ''}" data-act="wish" data-id="${esc(p.id)}">${ICON.heart}<span>В закладки</span></button>
+          </div>
+          <div class="info">
+            <div class="info-b"><span class="i-ico">${ICON.pin}</span><div><b>Самовывоз</b><small>ул. Театральная, 19 · 11:00–20:00</small></div></div>
+            <a class="info-b" href="https://jjstore.ru/delivery" target="_blank" rel="noopener"><span class="i-ico">${ICON.truck}</span><div><b>Доставка и оплата</b><small>Условия на сайте</small></div></a>
+          </div>
+          <a class="pq-ext" href="${esc(link(p))}" target="_blank" rel="noopener">Страница товара на jjstore.ru ${ICON.ext}</a>
+        </div>
+      </div>
+      ${rel.length ? `<div class="pq-rel"><b>Ещё в этой категории</b><div class="rel-row">${rel.map(r => `<button class="rel" data-act="view" data-id="${esc(r.id)}"><img src="${esc(imgSrc(r))}" alt="" loading="lazy"><span>${esc(r.name)}</span><em>${fmt(r.price)}</em></button>`).join('')}</div></div>` : ''}`;
+    syncSlots(); openModal(pModal);
+  }
+
+  /* ----- global click delegation ----- */
+  document.addEventListener('click', e => {
+    const close = e.target.closest('[data-close]');
+    if (close && close.closest('.modal')) { closeModals(); return; }
+    const a = e.target.closest('[data-act]');
+    if (a) {
+      const holder = a.closest('[data-id]'); const id = a.dataset.id || holder?.dataset.id;
+      const act = a.dataset.act;
+      if (act === 'view') { openProduct(id); return; }
+      if (!id) return;
+      if (act === 'inc') { cart[id] = Math.min(99, qtyOf(id) + 1); bump('#cartCount'); }
+      else if (act === 'dec') { cart[id] = qtyOf(id) - 1; if (cart[id] <= 0) delete cart[id]; }
+      else if (act === 'del') { delete cart[id]; }
+      else if (act === 'wish') {
+        if (wish.has(id)) wish.delete(id); else { wish.add(id); bump('#wishCount'); }
+        saveWish(); syncHearts();
+        const wc = $('#wishCount'); wc.textContent = [...wish].filter(x => byId.get(x)).length; wc.classList.toggle('on', wish.size > 0);
+        if (wModal.classList.contains('on')) renderWish();
+        return;
+      }
+      saveCart(); renderCart();
+      if (wModal.classList.contains('on')) syncSlots();
+      return;
+    }
+    /* internal navigation for category links */
+    const l = e.target.closest('a[href^="https://jjstore.ru/"]');
+    if (l && !e.metaKey && !e.ctrlKey) {
+      const path = l.getAttribute('href').replace('https://jjstore.ru/', '').split('?')[0].split('/').filter(Boolean).join('/');
+      if (path && cats[path] && !l.hasAttribute('data-ext')) { e.preventDefault(); closeModals(); location.hash = '#/c/' + path; }
+    }
+  });
+  $('#cartClear').onclick = () => { cart = {}; saveCart(); renderCart(); };
+
+  /* ================= HOME ================= */
+  const NEW_IDS = [13, 15, 16, 14, 17, 11, 6, 3, 9], POP_IDS = [1, 2, 4, 8, 7, 5, 10, 12];
+  $('#trackNew').innerHTML = NEW_IDS.map(n => card(feat(n), { isNew: true })).join('');
+  $('#trackPop').innerHTML = POP_IDS.map(n => card(feat(n))).join('');
+  $$('.scroller').forEach(sc => {
     const tr = sc.querySelector('.track'), pv = sc.querySelector('.prev'), nx = sc.querySelector('.next');
     if (!pv) return;
     const step = () => Math.max(tr.clientWidth * .8, 240);
@@ -80,85 +252,142 @@
       s.addEventListener('pointerleave', () => { im.style.translate = ''; });
     });
     mark(); onChange(); play();
+    window.addEventListener('homeshown', () => requestAnimationFrame(() => { go(cur); mark(); }));
   })();
 
-  /* Cart: { id: qty } */
-  let cart = {};
-  try {
-    const raw = JSON.parse(localStorage.getItem('jj-cart2') || 'null');
-    if (raw && typeof raw === 'object') cart = raw;
-    else { (JSON.parse(localStorage.getItem('jj-cart') || '[]')).forEach(id => { cart[id] = (cart[id] || 0) + 1; }); }
-  } catch (e) {}
-  const TRASH = '<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>';
-  const save = () => { try { localStorage.setItem('jj-cart2', JSON.stringify(cart)); } catch (e) {} };
-  const qtyOf = id => cart[id] || 0;
-  const totalQty = () => Object.values(cart).reduce((s, n) => s + n, 0);
-  const totalSum = () => Object.entries(cart).reduce((s, [id, n]) => s + (byId(+id)?.price || 0) * n, 0);
-  const plural = (n, a, b, c) => { const m = n % 100, d = n % 10; return (m > 10 && m < 20) ? c : d === 1 ? a : (d > 1 && d < 5) ? b : c; };
-  const stepper = id => `<div class="step" data-id="${id}"><button data-act="dec" aria-label="Меньше">−</button><b>${qtyOf(id)}</b><button data-act="inc" aria-label="Больше">+</button></div>`;
 
-  /* card buttons turn into steppers once an item is in the cart */
-  function syncCards() {
-    document.querySelectorAll('.slot').forEach(s => {
-      const id = +s.dataset.id, n = qtyOf(id);
-      s.innerHTML = n ? stepper(id) : `<button class="buy" data-act="inc" data-id="${id}">В корзину</button>`;
-    });
+  /* ================= CATALOG PAGE ================= */
+  const home = $('#home'), catalog = $('#catalog');
+  const PAGE = 24;
+  const norm = s => s.toLowerCase().replace(/ё/g, 'е');
+  function searchProducts(q) {
+    const toks = norm(q).split(/\s+/).filter(Boolean); if (!toks.length) return [];
+    const out = [];
+    for (const p of products) {
+      const n = norm(p.name); let score = 0, ok = true;
+      for (const t of toks) { const i = n.indexOf(t); if (i < 0) { ok = false; break; } score += i === 0 ? 3 : (n[i - 1] === ' ' ? 2 : 1); }
+      if (ok) out.push([score, p]);
+    }
+    return out.sort((a, b) => b[0] - a[0]).map(x => x[1]);
   }
-  let renderCart = function () {
-    const ids = Object.keys(cart).map(Number).filter(id => byId(id));
-    const qty = totalQty(), box = $('#cartItems');
-    $('#cartModal').classList.toggle('is-empty', !ids.length);
-    box.innerHTML = ids.length ? ids.map(id => {
-      const p = byId(id);
-      return `<article class="ci" data-id="${id}">
-        <a class="ci-img" href="${link(p)}" target="_blank" rel="noopener"><img src="${IMG + p.img}" alt=""></a>
-        <div class="ci-main"><b>${p.name}</b><small>${fmt(p.price)} за шт.</small>
-          <div class="ci-row">${stepper(id)}<span class="ci-sum">${fmt(p.price * qtyOf(id))}</span></div></div>
-        <button class="ci-del" data-act="del" aria-label="Удалить" title="Удалить">${TRASH}</button>
-      </article>`;
-    }).join('') : `<div class="empty">
-        <span class="e-ico"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></span>
-        <b>В корзине пока пусто</b><p>Добавьте товары, и они появятся здесь</p>
-        <button class="btn" data-close>К покупкам</button></div>`;
-    $('#sumQty').textContent = qty;
-    $('#cartTotal').textContent = fmt(totalSum());
-    $('#cartMeta').textContent = qty ? `${qty} ${plural(qty, 'товар', 'товара', 'товаров')}` : '';
-    const c = $('#cartCount'); c.textContent = qty; c.classList.toggle('on', qty > 0);
-    syncCards();
-  };
-  function bump() { const c = $('#cartCount'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
-
-  const modal = $('#cartModal');
-  const openCart = () => { modal.classList.add('on'); modal.setAttribute('aria-hidden', 'false'); document.body.classList.add('lock'); };
-  const closeCart = () => { modal.classList.remove('on'); modal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('lock'); };
-  $('#openCart').onclick = openCart;
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
-  $('#cartClear').onclick = () => { cart = {}; save(); renderCart(); };
-
-  document.addEventListener('click', e => {
-    if (e.target.closest('[data-close]') && modal.contains(e.target)) { closeCart(); return; }
-    const a = e.target.closest('[data-act]'); if (!a) return;
-    const holder = a.closest('[data-id]'); const id = +(a.dataset.id || holder?.dataset.id);
-    if (!id) return;
-    const act = a.dataset.act;
-    if (act === 'inc') { cart[id] = Math.min(99, qtyOf(id) + 1); bump(); }
-    else if (act === 'dec') { cart[id] = qtyOf(id) - 1; if (cart[id] <= 0) delete cart[id]; }
-    else if (act === 'del') { delete cart[id]; }
-    save(); renderCart();
+  const SORTS = [['pop', 'Популярные'], ['asc', 'Дешевле'], ['desc', 'Дороже'], ['az', 'А–Я']];
+  let CS = null;   // catalog state
+  function showCatalog(route) {
+    home.hidden = true; catalog.hidden = false; document.body.classList.add('in-catalog');
+    hideMega();
+    const isSearch = route.q != null;
+    const slug = route.cat;
+    const base = isSearch ? searchProducts(route.q) : prodsOf(slug);
+    const title = isSearch ? `Поиск: «${route.q}»` : (cats[slug]?.[0] || 'Каталог');
+    const chain = isSearch ? [] : chainOf(slug);
+    const subs = isSearch ? [] : (visKids(slug).length ? visKids(slug) : (cats[slug] && cats[cats[slug][1]] ? visKids(cats[slug][1]) : []));
+    const parentSlug = (!isSearch && !visKids(slug).length && cats[slug] && cats[cats[slug][1]]) ? cats[slug][1] : slug;
+    CS = { base, sort: 'pop', min: '', max: '', shown: PAGE };
+    const ext = isSearch ? `https://jjstore.ru/index.php?route=product/search&search=${encodeURIComponent(route.q)}` : catUrl(slug);
+    catalog.innerHTML = `
+      <nav class="crumbs" aria-label="Навигация"><a href="#/">Главная</a>${isSearch ? '<i>' + ICON.chev + '</i><span>Поиск</span>' : chain.map((c, i) => `<i>${ICON.chev}</i>${i === chain.length - 1 ? `<span>${esc(cats[c][0])}</span>` : `<a href="#/c/${c}">${esc(cats[c][0])}</a>`}`).join('')}</nav>
+      <div class="cat-head"><h1>${esc(title)}<small id="catCount"></small></h1>
+        <a class="ext-link" href="${esc(ext)}" target="_blank" rel="noopener" data-ext>На jjstore.ru ${ICON.ext}</a></div>
+      ${subs.length ? `<div class="chips-row">${!isSearch && parentSlug !== slug ? `<a class="chip2" href="#/c/${parentSlug}">Все ${esc(cats[parentSlug][0])}</a>` : ''}${subs.map(s => `<a class="chip2 ${s === slug ? 'on' : ''}" href="#/c/${s}">${esc(cats[s][0])}<em>${catCount[s] || 0}</em></a>`).join('')}</div>` : ''}
+      <div class="toolbar glass">
+        <div class="seg" id="sortSeg">${SORTS.map(([k, t], i) => `<button data-sort="${k}" class="${i ? '' : 'on'}">${t}</button>`).join('')}</div>
+        <div class="price-f"><label>Цена от<input id="pMin" inputmode="numeric" placeholder="0"></label><label>до<input id="pMax" inputmode="numeric" placeholder="∞"></label><button id="pReset" type="button">Сбросить</button></div>
+      </div>
+      <div class="grid" id="catGrid"></div>
+      <div class="more-wrap"><button class="btn-more" id="catMore">Показать ещё</button></div>`;
+    renderCatGrid(true);
+    document.title = `${title} — JJstore`;
+    scrollTo(0, 0);
+  }
+  function filtered() {
+    const min = parseInt(CS.min.replace(/\D/g, ''), 10) || 0, max = parseInt(CS.max.replace(/\D/g, ''), 10) || Infinity;
+    let list = CS.base.filter(p => p.price >= min && p.price <= max);
+    if (CS.sort === 'asc') list = [...list].sort((a, b) => a.price - b.price);
+    else if (CS.sort === 'desc') list = [...list].sort((a, b) => b.price - a.price);
+    else if (CS.sort === 'az') list = [...list].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+    return list;
+  }
+  function renderCatGrid(reset) {
+    if (reset) CS.shown = PAGE;
+    const list = filtered(), grid = $('#catGrid'), more = $('#catMore');
+    $('#catCount').textContent = `${list.length} ${plural(list.length, 'товар', 'товара', 'товаров')}`;
+    grid.innerHTML = list.length ? list.slice(0, CS.shown).map(p => card(p)).join('') : `<div class="empty wide"><span class="e-ico">${ICON.bag}</span><b>Ничего не найдено</b><p>Попробуйте изменить запрос или фильтры, либо поищите на jjstore.ru</p></div>`;
+    $$('.card', grid).forEach((c, i) => c.style.animationDelay = Math.min(i, 12) * 35 + 'ms');
+    const left = list.length - CS.shown;
+    more.parentElement.hidden = left <= 0; more.textContent = `Показать ещё ${Math.min(left, PAGE)}`;
+    syncSlots();
+  }
+  catalog.addEventListener('click', e => {
+    const s = e.target.closest('[data-sort]');
+    if (s) { CS.sort = s.dataset.sort; $$('#sortSeg button').forEach(b => b.classList.toggle('on', b === s)); renderCatGrid(true); }
+    if (e.target.closest('#catMore')) { CS.shown += PAGE; renderCatGrid(false); }
+    if (e.target.closest('#pReset')) { CS.min = CS.max = ''; $('#pMin').value = $('#pMax').value = ''; renderCatGrid(true); }
   });
+  let ft; catalog.addEventListener('input', e => {
+    if (e.target.id === 'pMin' || e.target.id === 'pMax') { CS.min = $('#pMin').value; CS.max = $('#pMax').value; clearTimeout(ft); ft = setTimeout(() => renderCatGrid(true), 220); }
+  });
+  function showHome() {
+    catalog.hidden = true; home.hidden = false; document.body.classList.remove('in-catalog'); document.title = 'JJstore — оригинальная техника в Воронеже';
+    window.dispatchEvent(new Event('homeshown'));
+  }
+  function route() {
+    const h = decodeURIComponent(location.hash || '');
+    let m;
+    if ((m = h.match(/^#\/c\/([a-z0-9\/-]+)/)) && cats[m[1]]) showCatalog({ cat: m[1] });
+    else if ((m = h.match(/^#\/s\/(.+)/))) showCatalog({ q: m[1] });
+    else showHome();
+  }
+  addEventListener('hashchange', route);
 
-  /* Search */
+  /* ================= MEGA MENU (brands -> subcategories) ================= */
+  const mega = $('#mega'), headEl = $('#head');
+  let megaT, megaFor = '';
+  function hideMega() { clearTimeout(megaT); mega.classList.remove('on'); mega.setAttribute('aria-hidden', 'true'); megaFor = ''; }
+  function showMega(slug) {
+    const subs = visKids(slug); if (!subs.length) { hideMega(); return; }
+    clearTimeout(megaT);
+    if (megaFor !== slug) {
+      mega.innerHTML = `<div class="mega-head"><b>${esc(cats[slug][0])}</b><a href="#/c/${slug}">Показать все · ${catCount[slug] || 0}${ICON.chev}</a></div>
+        <div class="mega-grid">${subs.map(s => `<a href="#/c/${s}"><span>${esc(cats[s][0])}</span><em>${catCount[s] || 0}</em></a>`).join('')}</div>`;
+      megaFor = slug;
+    }
+    mega.classList.add('on'); mega.setAttribute('aria-hidden', 'false');
+  }
+  if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    $$('.brands a').forEach(a => {
+      const path = a.getAttribute('href').replace('https://jjstore.ru/', '').split('/').filter(Boolean).join('/');
+      a.addEventListener('pointerenter', () => showMega(path));
+    });
+    headEl.addEventListener('pointerleave', () => { megaT = setTimeout(hideMega, 180); });
+    mega.addEventListener('pointerenter', () => clearTimeout(megaT));
+    mega.addEventListener('click', () => hideMega());
+  }
+  headEl.addEventListener('click', e => { if (e.target.closest('.brands a')) hideMega(); });
+  /* logo -> home */
+  $('.logo').addEventListener('click', e => { e.preventDefault(); if (location.hash && location.hash !== '#/') location.hash = '#/'; else scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  /* ================= SEARCH (whole catalog) ================= */
   const input = $('#search'), res = $('#results');
+  const sugg = ['iPhone 18', 'iPhone 17', 'AirPods', 'PlayStation', 'Dyson', 'MacBook'];
+  const showSugg = () => { res.innerHTML = '<div class="sugg"><small>Популярные запросы</small>' + sugg.map(s => `<button type="button" data-q="${s}">${s}</button>`).join('') + '</div>'; res.classList.add('on'); };
   input.addEventListener('input', () => {
-    const q = input.value.trim().toLowerCase();
-    if (!q) { res.classList.remove('on'); return; }
-    const found = PRODUCTS.filter(p => p.name.toLowerCase().includes(q));
-    res.innerHTML = found.length
-      ? found.map(p => `<a href="${link(p)}" target="_blank" rel="noopener"><img src="${IMG + p.img}" alt=""><b>${p.name}</b><span>${fmt(p.price)}</span></a>`).join('')
+    const q = input.value.trim();
+    if (!q) { showSugg(); return; }
+    const found = searchProducts(q), top = found.slice(0, 6);
+    res.innerHTML = top.length
+      ? top.map(p => `<button class="sr" data-act="view" data-id="${esc(p.id)}"><img src="${esc(imgSrc(p))}" alt="" loading="lazy"><b>${esc(p.name)}</b><span>${fmt(p.price)}</span></button>`).join('') +
+        `<a class="sr-all" href="#/s/${encodeURIComponent(q)}">Все результаты · ${found.length}${ICON.chev}</a>`
       : '<em>Ничего не найдено</em>';
     res.classList.add('on');
   });
+  input.addEventListener('focus', () => { if (!input.value.trim()) showSugg(); });
+  input.addEventListener('keydown', e => { if (e.key === 'Enter' && input.value.trim()) { location.hash = '#/s/' + encodeURIComponent(input.value.trim()); res.classList.remove('on'); input.blur(); } });
+  res.addEventListener('click', e => {
+    const b = e.target.closest('[data-q]'); if (b) { input.value = b.dataset.q; input.dispatchEvent(new Event('input')); input.focus(); return; }
+    if (e.target.closest('.sr, .sr-all')) res.classList.remove('on');
+  });
   document.addEventListener('click', e => { if (!e.target.closest('.search')) res.classList.remove('on'); });
+  document.addEventListener('keydown', e => { if (e.key === '/' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); input.focus(); } });
 
   /* specular light follows the cursor on glass surfaces */
   if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
@@ -223,23 +452,12 @@
   /* mini cart bar */
   const mini = $('#miniCart');
   function syncMini() {
-    const q = totalQty(); mini.classList.toggle('on', q > 0 && !modal.classList.contains('on'));
+    const q = totalQty(); mini.classList.toggle('on', q > 0 && !cartModal.classList.contains('on'));
     $('#mcQty').textContent = q; $('#mcSum').textContent = fmt(totalSum());
     $('#mcLabel').textContent = `${q} ${plural(q, 'товар', 'товара', 'товаров')}`;
   }
   mini.onclick = openCart;
-  const _render = renderCart; renderCart = function () { _render(); syncMini(); };
-  new MutationObserver(syncMini).observe(modal, { attributes: true, attributeFilter: ['class'] });
-  syncMini();
-
-  /* search: "/" focuses, suggestions on empty focus */
-  (function () {
-    const sugg = ['iPhone 17', 'AirPods', 'PlayStation', 'iPhone 15'];
-    const show = () => { if (input.value.trim()) return; res.innerHTML = '<div class="sugg"><small>Популярные запросы</small>' + sugg.map(s => `<button type="button" data-q="${s}">${s}</button>`).join('') + '</div>'; res.classList.add('on'); };
-    input.addEventListener('focus', show);
-    res.addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; input.value = b.dataset.q; input.dispatchEvent(new Event('input')); input.focus(); });
-    document.addEventListener('keydown', e => { if (e.key === '/' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); input.focus(); } });
-  })();
+  new MutationObserver(syncMini).observe(cartModal, { attributes: true, attributeFilter: ['class'] });
 
   /* cookie notice (remembered) */
   (function () {
@@ -258,5 +476,5 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
   })();
 
-  renderCart();
+  renderCart(); renderWish(); route();
 })();
