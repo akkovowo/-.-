@@ -9,7 +9,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth;color-scheme:light}
-body{font-family:Montserrat,-apple-system,"SF Pro Text","Segoe UI",sans-serif;font-size:14px;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Inter,"Segoe UI",Roboto,sans-serif;letter-spacing:-.011em;font-size:14px;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
@@ -82,7 +82,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
   background:rgba(255,255,255,.7);box-shadow:inset 1px 1px 0 #fff,0 2px 8px rgba(40,50,80,.1);transition:transform .35s var(--ease),background .25s}
 .icons a:hover,.icons button:hover{background:#fff;transform:scale(1.1)}
 .icons a:active,.icons button:active{transform:scale(.92)}
-.badge{position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:var(--accent);color:#fff;font:700 10px/17px Montserrat,sans-serif;text-align:center;font-style:normal;display:none;box-shadow:0 2px 6px rgba(246,71,71,.5)}
+.badge{position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:var(--accent);color:#fff;font-weight:700;font-size:10px;line-height:17px;text-align:center;font-style:normal;display:none;box-shadow:0 2px 6px rgba(246,71,71,.5)}
 .badge.on{display:block}
 .brands{display:flex;justify-content:space-between;gap:4px;overflow-x:auto;padding:2px 0;scrollbar-width:none}
 .brands::-webkit-scrollbar{display:none}
@@ -110,7 +110,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .quick a:hover{transform:translateY(-3px)}
 
 /* ---------- Products ---------- */
-.sec-title{font-size:30px;font-weight:700;letter-spacing:-.02em;margin:64px 0 0}
+.sec-title{font-size:32px;font-weight:700;letter-spacing:-.03em;margin:64px 0 0}
 .products{position:relative;margin:20px 0 80px}
 .track{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:6px 4px 34px;margin:0 -4px -22px}
 .track::-webkit-scrollbar{display:none}
