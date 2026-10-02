@@ -222,3 +222,75 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
   .icons{margin-left:0}
   .sec-title{margin-top:36px}
 }
+
+/* =============== hero banners, promo cards, scroll rows =============== */
+.hero{margin-top:20px}
+.slides{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:6px 0 18px;margin:0 -16px;padding-inline:16px;scroll-padding-inline:16px}
+.slides::-webkit-scrollbar{display:none}
+.slide{flex:0 0 min(1100px,88%);height:300px;scroll-snap-align:center;border-radius:36px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(24px,5vw,64px);
+  opacity:.55;transform:scale(.97);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.slide.active{opacity:1;transform:none}
+.s-red{background:rgba(255,226,223,.75)}.s-blue{background:rgba(224,234,255,.75)}.s-sand{background:rgba(255,236,214,.78)}
+.s-text{max-width:46%;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.s-tag{font-size:12px;font-weight:600;padding:5px 12px;border-radius:99px;background:rgba(255,255,255,.8);box-shadow:inset 1px 1px 0 #fff;color:var(--accent)}
+.slide h2{font-size:clamp(28px,4vw,48px);line-height:1.04;font-weight:700;letter-spacing:-.035em}
+.slide p{font-size:clamp(14px,1.6vw,18px);color:#4a4e59}
+.s-btn{margin-top:10px;padding:12px 26px;border-radius:99px;background:var(--accent);color:#fff;font-weight:600;font-size:14px;
+  box-shadow:inset 1.5px 1.5px 0 rgba(255,255,255,.55),0 8px 20px rgba(246,71,71,.32);transition:transform .35s var(--ease)}
+.slide:hover .s-btn{transform:scale(1.06)}
+.slide img{height:86%;width:auto;max-width:48%;object-fit:contain;filter:drop-shadow(0 22px 24px rgba(30,40,80,.3));transition:transform .7s var(--ease)}
+.slide:hover img{transform:scale(1.05) rotate(-2deg)}
+.hero-ui{display:flex;align-items:center;justify-content:center;gap:16px}
+.nav-btn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:18px;transition:transform .3s var(--ease)}
+.nav-btn:hover{transform:scale(1.1)}
+.dots{display:flex;gap:7px}
+.dots button{width:7px;height:7px;border-radius:99px;background:rgba(40,50,80,.22);transition:width .4s var(--ease),background .3s}
+.dots button.on{width:26px;background:var(--text)}
+
+.row{margin-top:44px}
+.sec-title{display:flex;align-items:center;gap:12px;font-size:30px;margin:0 0 16px}
+.sec-title .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(246,71,71,.16)}
+.scroller{position:relative}
+.scroller .track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding:6px 16px 30px;margin:0 -16px -18px;scroll-padding-inline:16px}
+.scroller .track::-webkit-scrollbar{display:none}
+
+/* promo banners */
+.promo{flex:0 0 232px;height:178px;scroll-snap-align:start;border-radius:28px;padding:20px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;transition:transform .5s var(--ease),box-shadow .5s}
+.promo:hover{transform:translateY(-5px);box-shadow:inset 1.5px 1.5px 0 #fff,0 24px 44px rgba(40,50,80,.16)}
+.p-ico{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;font-size:23px;color:var(--accent);background:rgba(246,71,71,.1);box-shadow:inset 1px 1px 0 rgba(255,255,255,.9);margin-bottom:auto}
+.promo h3{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.promo p{font-size:12.5px;color:var(--muted)}
+.p-go{position:absolute;right:16px;top:18px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:16px;background:rgba(255,255,255,.8);box-shadow:inset 1px 1px 0 #fff;transition:.3s}
+.promo:hover .p-go{background:var(--accent);color:#fff;transform:translateX(3px)}
+
+/* product cards in scrollers: near-opaque, no backdrop-filter (reliable on iOS Safari) */
+.scroller .card{flex:0 0 232px;scroll-snap-align:start;position:relative;background:rgba(255,255,255,.86);backdrop-filter:none;-webkit-backdrop-filter:none;
+  border-radius:28px;padding:14px 14px 18px;text-align:center;display:flex;flex-direction:column;
+  box-shadow:inset 1.5px 1.5px 0 #fff,0 0 0 1px rgba(40,50,80,.05),0 10px 26px rgba(40,50,80,.08);transition:transform .5s var(--ease),box-shadow .5s}
+.scroller .card:hover{transform:translateY(-5px);box-shadow:inset 1.5px 1.5px 0 #fff,0 24px 44px rgba(40,50,80,.16)}
+.badge-new{position:absolute;left:14px;top:14px;z-index:2;font-size:11px;font-weight:600;padding:4px 10px;border-radius:99px;background:var(--accent);color:#fff;box-shadow:inset 1px 1px 0 rgba(255,255,255,.5),0 4px 10px rgba(246,71,71,.3)}
+.scroller .card .img{height:170px}
+.scroller .arrow{position:absolute;top:44%;z-index:3;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;
+  background:rgba(255,255,255,.85);box-shadow:inset 1px 1px 0 #fff,0 8px 22px rgba(40,50,80,.18);transition:.3s var(--ease)}
+.scroller .arrow:hover{transform:scale(1.1);color:var(--accent)}
+.scroller .arrow.off{opacity:0;pointer-events:none}
+.scroller .arrow.prev{left:-18px}.scroller .arrow.next{right:-18px}
+.quick{display:none}
+.products{margin:44px 0 0}
+
+@media(max-width:980px){.slide{height:260px}}
+@media(max-width:760px){
+  .hero{margin-top:14px}
+  .slides{margin:0 -16px;gap:12px}
+  .slide{flex-basis:88%;height:210px;border-radius:28px;padding:0 20px}
+  .slide h2{font-size:24px}.s-text{max-width:56%;gap:6px}.s-btn{padding:9px 18px;font-size:12.5px}
+  .slide img{max-width:46%;height:80%}
+  .row{margin-top:32px}
+  .sec-title{font-size:24px}
+  .scroller .track{display:flex;grid-template-columns:none;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 16px 26px;margin:0 -16px -14px}
+  .scroller .card{flex:0 0 62%;padding:12px 12px 16px}
+  .scroller .card .img{height:150px}
+  .promo{flex-basis:200px;height:160px;padding:16px}
+  .scroller .arrow{display:none}
+  .sec-title{margin-top:0}
+}

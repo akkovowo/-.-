@@ -20,18 +20,51 @@
   const byId = id => PRODUCTS.find(p => p.id === id);
   const link = p => 'https://jjstore.ru/' + p.url;
 
-  /* Products */
-  const track = $('#track');
-  track.innerHTML = PRODUCTS.map(p => `
-    <article class="card glass">
+  /* Product scrollers: Новинки / Популярное */
+  const NEW_IDS = [11, 6, 3, 9];
+  const POP_IDS = [1, 2, 4, 8, 7, 5, 10, 12];
+  const card = (p, isNew) => `
+    <article class="card">
+      ${isNew ? '<span class="badge-new">Новинка</span>' : ''}
       <a class="img" href="${link(p)}" target="_blank" rel="noopener"><img src="${IMG + p.img}" alt="${p.name}" loading="lazy"></a>
       <h4>${p.name}</h4>
       <div class="price">${fmt(p.price)}</div>
       <button class="buy" data-id="${p.id}">В корзину</button>
-    </article>`).join('');
-  const step = () => track.clientWidth + 20;
-  $('#prev').onclick = () => track.scrollBy({ left: -step(), behavior: 'smooth' });
-  $('#next').onclick = () => track.scrollBy({ left: step(), behavior: 'smooth' });
+    </article>`;
+  $('#trackNew').innerHTML = NEW_IDS.map(id => card(byId(id), true)).join('');
+  $('#trackPop').innerHTML = POP_IDS.map(id => card(byId(id), false)).join('');
+  document.querySelectorAll('.scroller').forEach(sc => {
+    const tr = sc.querySelector('.track'), pv = sc.querySelector('.prev'), nx = sc.querySelector('.next');
+    if (!pv) return;
+    const step = () => Math.max(tr.clientWidth * .8, 240);
+    pv.onclick = () => tr.scrollBy({ left: -step(), behavior: 'smooth' });
+    nx.onclick = () => tr.scrollBy({ left: step(), behavior: 'smooth' });
+    const upd = () => { pv.classList.toggle('off', tr.scrollLeft < 8); nx.classList.toggle('off', tr.scrollLeft + tr.clientWidth > tr.scrollWidth - 8); };
+    tr.addEventListener('scroll', upd, { passive: true }); upd();
+  });
+
+  /* Hero banners: snap scroller, dots, arrows, autoplay */
+  (function () {
+    const box = $('#slides'), slides = [...box.children], dots = $('#dots');
+    dots.innerHTML = slides.map((_, i) => `<button aria-label="Слайд ${i + 1}"></button>`).join('');
+    const ds = [...dots.children];
+    let cur = 0, timer;
+    const go = i => { cur = (i + slides.length) % slides.length; box.scrollTo({ left: slides[cur].offsetLeft - box.offsetLeft - (box.clientWidth - slides[cur].clientWidth) / 2, behavior: 'smooth' }); };
+    const mark = () => {
+      const c = box.scrollLeft + box.clientWidth / 2;
+      let best = 0, d = 1e9;
+      slides.forEach((s, i) => { const m = Math.abs(s.offsetLeft - box.offsetLeft + s.clientWidth / 2 - c); if (m < d) { d = m; best = i; } });
+      cur = best; ds.forEach((x, i) => x.classList.toggle('on', i === best)); slides.forEach((s, i) => s.classList.toggle('active', i === best));
+    };
+    box.addEventListener('scroll', mark, { passive: true });
+    ds.forEach((x, i) => x.onclick = () => { go(i); play(); });
+    $('#hPrev').onclick = () => { go(cur - 1); play(); };
+    $('#hNext').onclick = () => { go(cur + 1); play(); };
+    const play = () => { clearInterval(timer); timer = setInterval(() => go(cur + 1), 6000); };
+    ['pointerenter', 'touchstart'].forEach(ev => box.addEventListener(ev, () => clearInterval(timer), { passive: true }));
+    ['pointerleave', 'touchend'].forEach(ev => box.addEventListener(ev, play, { passive: true }));
+    mark(); play();
+  })();
 
   /* Cart */
   let cart = [];
@@ -58,7 +91,7 @@
     const b = e.target.closest('button'); if (!b) return;
     cart.splice(+b.dataset.i, 1); save(); renderCart();
   });
-  track.addEventListener('click', e => {
+  document.addEventListener('click', e => {
     const b = e.target.closest('.buy'); if (!b) return;
     cart.push(+b.dataset.id); save(); renderCart();
     b.classList.add('done'); b.textContent = 'Добавлено';
