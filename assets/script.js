@@ -166,13 +166,29 @@
 
 
   /* ---------- UX polish ---------- */
-  /* reveal on scroll */
-  (function () {
-    const els = [...document.querySelectorAll('[data-reveal], .wall .tile')];
-    document.querySelectorAll('.wall .tile').forEach((t, i) => { t.dataset.reveal = ''; t.style.setProperty('--d', (i % 6) * 45 + 'ms'); });
-    if (!('IntersectionObserver' in window)) { document.documentElement.classList.remove('js'); return; }
+  /* reveal on scroll (starts once the intro is done) */
+  function startReveal() {
+    document.querySelectorAll('.wall .tile').forEach((t, i) => { t.dataset.reveal = ''; t.style.setProperty('--d', (i % 6) * 55 + 'ms'); });
+    const all = document.querySelectorAll('[data-reveal]');
+    if (!('IntersectionObserver' in window)) { all.forEach(e => e.classList.add('in')); return; }
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .08, rootMargin: '0px 0px -4% 0px' });
-    document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+    all.forEach(el => io.observe(el));
+  }
+
+  /* intro loader */
+  (function () {
+    const root = document.documentElement, loader = $('#loader'), t0 = performance.now();
+    let done = false;
+    const finish = () => {
+      if (done) return; done = true;
+      const rm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+      if (loader) { loader.classList.add('done'); setTimeout(() => loader.remove(), rm ? 0 : 900); }
+      root.classList.add('ready'); startReveal();
+    };
+    const go = () => setTimeout(finish, Math.max(0, 1100 - (performance.now() - t0)));
+    if (!loader) { finish(); return; }
+    if (document.readyState === 'complete') go(); else addEventListener('load', go);
+    setTimeout(finish, 3500);
   })();
 
   /* sliding highlight under the brand menu (segmented-control feel) */
@@ -191,7 +207,8 @@
     addEventListener('scroll', () => {
       if (ticking) return; ticking = true;
       requestAnimationFrame(() => {
-        const ny = scrollY, dy = ny - y;
+        const ny = scrollY, dy = ny - y, max = document.documentElement.scrollHeight - innerHeight;
+        if (ny <= 0 || ny >= max - 2) { y = Math.max(0, Math.min(ny, max)); ticking = false; return; }
         if (ny < 120) head.classList.remove('compact'); else if (dy > 6) head.classList.add('compact'); else if (dy < -6) head.classList.remove('compact');
         y = ny; ticking = false;
       });
