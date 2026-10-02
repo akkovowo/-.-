@@ -182,3 +182,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 }
 @media(max-width:560px){.icons a{display:none}.logo span{font-size:13.5px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
+
+.ti{display:inline-flex;align-items:center;gap:7px}
+.ti svg{font-size:16px;color:var(--accent);flex:none}
