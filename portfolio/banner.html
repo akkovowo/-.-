@@ -12,12 +12,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Ro
 .pill b{color:#f64747}
 h1{position:absolute;left:70px;top:150px;font-size:94px;line-height:1;letter-spacing:-.045em;font-weight:800}
 h1 span{color:#f64747}
-.desk{position:absolute;left:70px;top:500px;width:760px;height:470px;border-radius:34px;overflow:hidden;padding:12px}
-.desk img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:24px;display:block}
+.desk{position:absolute;left:70px;top:500px;width:760px;height:470px;border-radius:30px;overflow:hidden;padding:0}
+.desk .bar{height:44px;display:flex;align-items:center;gap:9px;padding:0 20px;background:rgba(255,255,255,.7);border-bottom:1px solid rgba(40,50,80,.08)}
+.desk .bar i{width:14px;height:14px;border-radius:50%;display:block;box-shadow:inset 0 0 0 .8px rgba(0,0,0,.14)}
+.desk .bar i:nth-child(1){background:#ff5f57}.desk .bar i:nth-child(2){background:#febc2e}.desk .bar i:nth-child(3){background:#28c840}
+.desk .view{height:calc(100% - 44px);overflow:hidden}
+.desk img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 .cart{position:absolute;right:44px;top:520px;width:390px;height:270px;border-radius:34px;overflow:hidden;padding:10px;transform:rotate(3deg)}
 .cart img{width:100%;height:100%;object-fit:cover;object-position:center 42%;border-radius:25px;display:block}
-.phone{position:absolute;right:74px;top:690px;width:270px;height:540px;border-radius:52px;background:#14151b;padding:11px;box-shadow:0 40px 80px rgba(30,40,80,.4),inset 0 0 0 2px #2b2d36}
-.phone img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:42px;display:block}
+.phone{position:absolute;right:74px;top:640px;width:276px;height:592px;border-radius:58px;padding:7px;
+background:linear-gradient(145deg,#d9dbe2,#8f929c 30%,#c9ccd4 55%,#7d808a);box-shadow:0 44px 80px rgba(30,40,80,.42),0 0 0 1px rgba(0,0,0,.35),inset 0 0 0 1.5px rgba(255,255,255,.55)}
+.phone .in{position:relative;width:100%;height:100%;border-radius:51px;background:#06070a;padding:4px;overflow:hidden}
+.phone .scr{position:relative;width:100%;height:100%;border-radius:47px;overflow:hidden;background:#f6f7fa}
+.phone .scr img{position:absolute;left:0;right:0;top:46px;width:100%;display:block}
+.phone .sb{position:absolute;left:0;right:0;top:0;height:46px;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:6px 30px 0 34px;font-size:15px;font-weight:700;color:#111}
+.phone .sb .r{display:flex;gap:6px;align-items:center}
+.phone .di{position:absolute;left:50%;top:11px;width:84px;height:25px;margin-left:-42px;border-radius:99px;background:#000;z-index:4}
+.phone .gl{position:absolute;inset:0;z-index:5;border-radius:47px;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.22),rgba(255,255,255,0) 32%)}
+.phone .hb{position:absolute;left:50%;bottom:7px;width:96px;height:4px;margin-left:-48px;border-radius:9px;background:rgba(0,0,0,.55);z-index:5}
+.btn{position:absolute;width:4px;border-radius:3px;background:linear-gradient(90deg,#8c8f99,#cfd2da)}
 .chips{position:absolute;left:70px;top:1010px;display:flex;gap:12px;width:700px}
 .chip{padding:13px 22px;border-radius:99px;font-size:22px;font-weight:700;white-space:nowrap}
 .chip i{font-style:normal;color:#f64747}
@@ -29,9 +42,12 @@ h1 span{color:#f64747}
 <i class="g g1"></i><i class="g g2"></i><i class="g g3"></i>
 <div class="top"><div class="pill glass"><b>●</b>&nbsp; UI / UX · Front-end</div><div class="pill glass">Concept 2026</div></div>
 <h1>Редизайн<br>магазина <span>в&nbsp;стиле<br>Liquid Glass</span></h1>
-<div class="desk glass"><img src="desk.png"></div>
+<div class="desk glass"><div class="bar"><i></i><i></i><i></i></div><div class="view"><img src="desk.png"></div></div>
 <div class="cart glass"><img src="cart.png"></div>
-<div class="phone"><img src="mob.png"></div>
+<div class="phone">
+<i class="btn" style="left:-3px;top:112px;height:30px"></i><i class="btn" style="left:-3px;top:164px;height:52px"></i><i class="btn" style="left:-3px;top:228px;height:52px"></i><i class="btn" style="right:-3px;top:190px;height:82px"></i>
+<div class="in"><div class="scr"><div class="sb"><span>9:41</span><span class="r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#111"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#111"/><rect x="10" y="2.500" width="3" height="9.500" rx="1" fill="#111"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#111"/></svg><svg width="26" height="13" viewBox="0 0 26 13"><rect x=".5" y=".5" width="22" height="12" rx="3.500" fill="none" stroke="#111" opacity=".5"/><rect x="2" y="2" width="19" height="9" rx="2.200" fill="#111"/><rect x="23.500" y="4.500" width="2" height="4" rx="1" fill="#111" opacity=".5"/></svg></span></div><i class="di"></i><img src="mob.png"><div class="gl"></div><div class="hb"></div></div></div>
+</div>
 <div class="chips">
 <div class="chip glass"><i>1200+</i> товаров</div>
 <div class="chip glass">Каталог</div>
