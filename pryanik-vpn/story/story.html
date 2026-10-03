@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Story — PRYANIK NET redesign</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+.story{position:relative;width:1080px;height:1920px;overflow:hidden}
+.story::before{content:"";position:absolute;inset:-60px;background:url(../assets/bg.webp) center/cover;opacity:.5;filter:contrast(1.03) brightness(.5) grayscale(.6)}
+.story::after{content:"";position:absolute;inset:0;background:radial-gradient(90% 40% at 50% 0%,rgba(251,113,133,.16),transparent 70%),linear-gradient(180deg,transparent 60%,rgba(0,0,0,.45))}
+.in{position:absolute;inset:0;z-index:1;padding:230px 72px 0}
+.tag{display:inline-flex;align-items:center;gap:12px;font-family:var(--font-mono);font-weight:700;font-size:26px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.tag i{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent)}
+h1{margin:26px 0 0;font-family:var(--font-display);font-weight:650;font-size:104px;line-height:.94;letter-spacing:-.055em}
+h1 em{font-style:normal;color:var(--accent)}
+.sub{margin-top:26px;font-size:34px;line-height:1.35;color:var(--muted);max-width:760px}
+.mock{position:absolute;left:0;right:0;top:690px;height:760px}
+.win{position:absolute;left:72px;top:0;width:900px;border-radius:26px;padding:0;transform:rotate(-2.2deg);transform-origin:left top}
+.win .top{display:flex;gap:9px;padding:15px 20px;border-bottom:1px solid rgba(255,255,255,.09)}
+.win .top i{width:13px;height:13px;border-radius:50%;background:rgba(255,255,255,.2)}
+.win img{display:block;width:100%}
+.phone{position:absolute;right:56px;top:120px;width:330px;border-radius:52px;padding:12px;transform:rotate(3deg);background:linear-gradient(145deg,rgba(255,255,255,.2),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.22);box-shadow:0 40px 90px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.3)}
+.phone img{display:block;width:100%;border-radius:42px}
+.foot{position:absolute;left:72px;right:72px;bottom:250px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
+.chips{display:flex;flex-wrap:wrap;gap:12px;max-width:560px}
+.chip{padding:12px 22px;border-radius:999px;font-size:25px;font-weight:600;color:var(--muted);border:1px solid var(--lg-line-soft);background:rgba(255,255,255,.06);backdrop-filter:blur(12px)}
+.me{text-align:right;font-family:var(--font-mono)}
+.me b{display:block;font-size:44px;font-weight:900;color:var(--accent);line-height:1}
+.me span{display:block;margin-top:10px;font-size:24px;color:var(--muted)}
+</style></head><body>
+<div class="story"><div class="in">
+  <div class="tag"><i></i>Portfolio · Redesign</div>
+  <h1>PRYANIK<br><em>NET</em> VPN</h1>
+  <p class="sub">Лендинг в стиле личного кабинета: стекло, анимации, адаптив.</p>
+  <div class="mock">
+    <div class="card win"><div class="top"><i></i><i></i><i></i></div><img src="shot-desktop.png" alt=""></div>
+    <div class="phone"><img src="shot-mobile.png" alt=""></div>
+  </div>
+  <div class="foot">
+    <div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">Анимации</span><span class="chip">Mobile first</span></div>
+    <div class="me"><b>estk</b><span>t.me/riskybenefit</span></div>
+  </div>
+</div></div>
+</body></html>
