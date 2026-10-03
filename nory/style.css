@@ -192,3 +192,11 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
   .oses{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.js .reveal{opacity:1;transform:none}}
+
+.stage-win{padding:0;background:#141415}
+.shot{position:absolute;inset:0;overflow:hidden;transition:opacity .5s}
+.shot img{display:block;width:100%;height:auto;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.shot.hide{opacity:0}
+.panel.solo{top:0;left:0;right:0;bottom:0;padding:20px;background:#1b1b1d}
+.panel.solo .win-title{margin-top:0}
+.shot img{filter:grayscale(1)}

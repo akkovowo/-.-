@@ -26,9 +26,12 @@
 
   /* ---------- sticky story steps ---------- */
   const steps = $$(".step"), panels = $$(".panel"), dots = $$(".dots i"), glow = $(".stage-glow");
+  const shot = $("#shot"), OFF = [0, -170, 0, -185];
   const setStep = i => {
+    shot.style.transform = `translateY(${OFF[i]}px)`;
+    $(".shot").classList.toggle("hide", i === 2);
     steps.forEach((s, k) => s.classList.toggle("act", k === i));
-    panels.forEach((p, k) => p.classList.toggle("on", k === i));
+    panels.forEach(p => p.classList.toggle("on", +p.dataset.i === i));
     dots.forEach((d, k) => d.classList.toggle("on", k === i));
     glow.style.transform = `translate(${(i - 1.5) * 24}px,${(i - 1.5) * 18}px) scale(${1 + i * .06})`;
   };
