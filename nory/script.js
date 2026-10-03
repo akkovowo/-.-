@@ -34,7 +34,7 @@
   };
   const so = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) setStep(+e.target.dataset.i);
-  }), { rootMargin: "-45% 0px -45% 0px" });
+  }), { rootMargin: matchMedia("(max-width:900px)").matches ? "-60% 0px -30% 0px" : "-45% 0px -45% 0px" });
   steps.forEach(s => so.observe(s)); setStep(0);
 
   const win = $("#win-main"), power = $("#power"), st = $("#state-text"), tm = $("#timer"),
