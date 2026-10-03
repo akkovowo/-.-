@@ -1,25 +1,25 @@
 (() => {
   const services = [
-    ["Sites", "One strong frame, or a longer story. Picture, type, and pace. A page that does not look like a template."],
-    ["Products", "Web apps people actually use. States, speed, and logic without the extra noise."],
-    ["Interface", "Type, composition, animation. The interface behaves like a cut: a pause, an accent, a transition."],
-    ["Systems", "Backend, automation, deploy. You get a repository and a running environment, not a folder of pictures."],
+    ["Сайты", "Один сильный кадр или длинная история. Картинка, шрифт, темп. Страница, которая не похожа на шаблон."],
+    ["Продукты", "Веб-приложения, которыми реально пользуются. Состояния, скорость и логика без лишнего шума."],
+    ["Интерфейсы", "Шрифт, композиция, анимация. Интерфейс ведёт себя как монтаж: пауза, акцент, переход."],
+    ["Бэкенд", "Серверная часть, автоматизация, деплой. Вы получаете репозиторий и работающий проект, а не папку с картинками."],
   ];
-  const skills = ["Any API", "Databases", "Vue", "PHP", "Layout", "Landings", "Stores", "Lua", "C#", "Payments", "Python", "Messengers", "Parsers"];
+  const skills = ["Любые API", "Базы данных", "Vue", "PHP", "Вёрстка", "Лендинги", "Интернет-магазины", "Lua", "C#", "Приём платежей", "Python", "Боты и мессенджеры", "Парсеры"];
   const approach = [
-    ["Frame", "The feeling first. What stays after three seconds, and how the page breathes in motion."],
-    ["Precision", "Then the grid, the states, the speed. If you cannot use it, it is not finished."],
-    ["Handoff", "Repository, hosting, a short note. The work can continue with me, or without."],
+    ["Образ", "Сначала ощущение: что остаётся через три секунды и как страница дышит в движении."],
+    ["Точность", "Потом сетка, состояния и скорость. Если сайтом нельзя пользоваться, работа не закончена."],
+    ["Сдача", "Репозиторий, хостинг и короткая инструкция. Дальше проект живёт со мной или без меня."],
   ];
   const works = [
-    ["pre77", "https://pre77.to", "Marketplace. Secure messenger and storefront in one."],
-    ["pre77 bot", "https://t.me/pre77ccbot", "Telegram messenger for the marketplace."],
-    ["Amnesia", "https://amnesia.plus", "Product site. Landing, accounts, and delivery."],
-    ["Amnesia bot", "https://t.me/amnesiaplus_robot", "Telegram bot for the same product."],
-    ["Void", "https://vo1d.cc", "Forum styling."],
-    ["Hell Hours", "https://hellhours.ru", "Service site for Steam hours."],
-    ["Hell Points", "https://hellpoints.ru", "Shop for Steam awards."],
-    ["Bless", "https://t.me/blesschatmanager_bot", "Telegram chat manager."],
+    ["pre77", "https://pre77.to", "Маркетплейс. Защищённый мессенджер и витрина в одном месте."],
+    ["pre77 bot", "https://t.me/pre77ccbot", "Telegram-мессенджер для маркетплейса."],
+    ["Amnesia", "https://amnesia.plus", "Сайт продукта: лендинг, личные кабинеты и выдача."],
+    ["Amnesia bot", "https://t.me/amnesiaplus_robot", "Telegram-бот для того же продукта."],
+    ["Void", "https://vo1d.cc", "Оформление для форума."],
+    ["Hell Hours", "https://hellhours.ru", "Сервис для набора часов в Steam."],
+    ["Hell Points", "https://hellpoints.ru", "Магазин наград для Steam."],
+    ["Bless", "https://t.me/blesschatmanager_bot", "Telegram-бот для управления чатами."],
   ];
 
   const $ = (s, r = document) => r.querySelector(s);
@@ -60,7 +60,7 @@
     const playing = soundOn && !audio.paused;
     $("#icoPause").hidden = !playing;
     $("#icoPlay").hidden = playing;
-    player.setAttribute("aria-label", playing ? "Mute" : "Play sound");
+    player.setAttribute("aria-label", playing ? "Выключить звук" : "Включить звук");
   }
   function playAudio() {
     audio.volume = 0;
@@ -101,7 +101,8 @@
     body.classList.toggle("light", s.dataset.theme === "light");
     body.classList.toggle("deep", cur > 0);
     if (s.dataset.film != null) setFilm(+s.dataset.film);
-    $("#idx").textContent = num(Math.min(cur, 4));
+    $("#idx").textContent = num(cur);
+    $("#idxName").textContent = s.dataset.name || "";
   }
 
   // ---------- scroll-driven ----------

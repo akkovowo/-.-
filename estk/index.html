@@ -1,13 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#000000">
-  <meta name="description" content="estk.lol — esoterik. Sites, products, and systems.">
-  <title>estk — Development</title>
+  <meta name="description" content="estk — разработчик. Сайты, сервисы и системы под ключ: от первого экрана до сдачи проекта.">
+  <title>estk — разработка сайтов и систем</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="preload" href="monument-extended-bold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="locked">
@@ -26,11 +28,11 @@
   <a href="#hero" class="top__logo" aria-label="estk">
     <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M40 8.5 29.2 30.2h8.4L26.4 56"/></svg>estk
   </a>
-  <span class="top__idx"><b id="idx">01</b> / 05</span>
-  <a class="top__tg" href="https://t.me/riskybenefit" target="_blank" rel="noopener noreferrer">Telegram ↗</a>
+  <span class="top__idx"><b id="idx">01</b> <span id="idxName">Главная</span></span>
+  <a class="top__tg" href="https://t.me/riskybenefit" target="_blank" rel="noopener noreferrer">Написать ↗</a>
 </header>
 
-<button class="player" id="player" aria-label="Sound">
+<button class="player" id="player" aria-label="Звук">
   <svg viewBox="0 0 44 44" aria-hidden="true">
     <circle class="player__track" cx="22" cy="22" r="16"/>
     <circle class="player__prog" id="prog" cx="22" cy="22" r="16"/>
@@ -42,52 +44,52 @@
 
 <main>
   <!-- 01 -->
-  <section class="sec hero" id="hero" data-theme="dark" data-film="0">
+  <section class="sec hero" id="hero" data-name="Главная" data-theme="dark" data-film="0">
     <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M40 8.5 29.2 30.2h8.4L26.4 56"/></svg>
     <h1 class="mega"><span class="rise">estk</span></h1>
-    <p class="hero__sub rise" style="--d:.25s">esoterik. Sites, products, and systems.</p>
-    <div class="scroll rise" style="--d:.5s"><span>Scroll</span><i></i></div>
+    <p class="hero__sub rise" style="--d:.25s">Сайты, сервисы и системы. Делаю один, от идеи до запуска.</p>
+    <div class="scroll rise" style="--d:.5s"><span>Листайте</span><i></i></div>
   </section>
 
   <!-- 02 -->
-  <section class="sec statement" id="about" data-theme="dark" data-film="1">
-    <p class="kicker rise">About</p>
-    <p class="scrub big" data-scrub>estk is esoterik. I design and build. One person, from the first screen through delivery.</p>
+  <section class="sec statement" id="about" data-name="Обо мне" data-theme="dark" data-film="1">
+    <p class="kicker rise">Обо мне</p>
+    <p class="scrub big" data-scrub>estk — это esoterik. Я придумываю и делаю сам. Один человек, от первого экрана до сдачи проекта.</p>
   </section>
 
   <!-- 03 -->
-  <section class="sec services" id="services" data-theme="light">
-    <p class="kicker rise">Services</p>
-    <h2 class="huge"><span class="rise">Sites and products.</span><span class="rise">From the frame to a working system.</span></h2>
+  <section class="sec services" id="services" data-name="Услуги" data-theme="light">
+    <p class="kicker rise">Услуги</p>
+    <h2 class="huge"><span class="rise">Сайты и продукты.</span><span class="rise">От первого кадра до работающей системы.</span></h2>
     <div class="list" id="serviceList"></div>
     <div class="cloud" id="skills"></div>
   </section>
 
   <!-- 04 -->
-  <section class="sec approach" id="approach" data-theme="dark" data-film="2">
-    <p class="kicker rise">Approach</p>
+  <section class="sec approach" id="approach" data-name="Как я работаю" data-theme="dark" data-film="2">
+    <p class="kicker rise">Как я работаю</p>
     <div class="steps" id="steps"></div>
   </section>
 
   <!-- 05 -->
-  <section class="sec portfolio" id="portfolio" data-theme="light">
-    <p class="kicker rise">Portfolio</p>
-    <h2 class="huge"><span class="rise">Work that's live.</span></h2>
+  <section class="sec portfolio" id="portfolio" data-name="Портфолио" data-theme="light">
+    <p class="kicker rise">Портфолио</p>
+    <h2 class="huge"><span class="rise">Проекты, которые уже работают.</span></h2>
     <ul class="works" id="works"></ul>
   </section>
 
   <!-- contact -->
-  <section class="sec contact" id="contact" data-theme="dark" data-film="0">
-    <p class="kicker rise">Contact</p>
-    <h2 class="huge"><span class="rise">Telegram. I answer myself.</span></h2>
+  <section class="sec contact" id="contact" data-name="Контакты" data-theme="dark" data-film="0">
+    <p class="kicker rise">Контакты</p>
+    <h2 class="huge"><span class="rise">Пишите в Telegram. Отвечаю лично.</span></h2>
     <a class="mail rise" href="https://t.me/riskybenefit" target="_blank" rel="noopener noreferrer">t.me/riskybenefit<span>↗</span></a>
     <p class="domain rise">estk.lol</p>
   </section>
 </main>
 
-<button class="gate" id="gate" aria-label="Enter">
+<button class="gate" id="gate" aria-label="Войти">
   <svg class="gate__mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M40 8.5 29.2 30.2h8.4L26.4 56"/></svg>
-  <span class="gate__hint">Enter</span>
+  <span class="gate__hint">Войти</span>
 </button>
 <script src="script.js"></script>
 </body>
