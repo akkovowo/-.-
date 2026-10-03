@@ -2,7 +2,7 @@ name: Deploy Nory to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [claude/website-liquid-glass-redesign-uzijqi]
     paths: [nory/**, .github/workflows/pages.yml]
   workflow_dispatch:
 
