@@ -302,3 +302,51 @@ footer{padding:28px 0 48px}
 .heart{width:13px;height:13px;fill:var(--accent);filter:drop-shadow(0 0 4px color-mix(in srgb,var(--accent) 60%,transparent));transform-origin:center;animation:beat 1.6s ease-in-out infinite}
 @keyframes beat{0%,100%{transform:scale(1)}14%{transform:scale(1.28)}28%{transform:scale(1)}42%{transform:scale(1.2)}70%{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.heart{animation:none}}
+
+@media (max-width:640px){
+  section{padding:34px 0}
+  .hero{padding:36px 0 12px}
+  .hero-mark{width:132px;height:132px;margin-bottom:12px}
+  .hero .lead{margin-top:14px;font-size:15px}
+  .hero-actions{margin-top:20px;gap:8px}
+  .hero-actions .btn{min-height:44px}
+  .hero-note{display:none}
+  .providers{margin-top:22px}
+  .head{margin-bottom:20px}
+  .head p{margin-top:8px;font-size:14.5px}
+  .eyebrow{margin-bottom:8px}
+
+  .grid-3{grid-template-columns:1fr 1fr;gap:10px}
+  .feature{padding:16px}
+  .feature .ico{width:36px;height:36px;margin-bottom:12px;border-radius:12px}
+  .feature .ico svg{width:18px;height:18px}
+  .feature h3{font-size:14.5px;line-height:1.25}
+  .feature p{display:none}
+
+  .steps{gap:10px}
+  .step{display:grid;grid-template-columns:44px 1fr;column-gap:12px;padding:16px}
+  .step .n{grid-row:1/3;font-size:26px;margin:0}
+  .step p{margin-top:4px;font-size:14px}
+
+  .devices{grid-template-columns:repeat(3,1fr);gap:10px}
+  .device{padding:14px 6px}
+  .device svg{width:24px;height:24px;margin-bottom:8px}
+  .device h3{font-size:13px}
+  .device span{display:none}
+
+  .plans{gap:10px}
+  .plan{padding:18px;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:14px}
+  .plan .tag{grid-column:1/3;justify-self:start;margin-bottom:10px}
+  .plan h3{grid-column:1}
+  .plan .price{grid-column:1;font-size:30px;margin:2px 0 0}
+  .plan .per{grid-column:1}
+  .plan ul{display:none}
+  .plan .btn{grid-column:2;grid-row:2/5;width:auto;min-height:44px;padding:0 20px}
+
+  .faq{gap:8px}
+  .faq summary{padding:14px 16px;font-size:15px}
+  .faq details p{padding:0 16px 16px;font-size:14px}
+  .cta{padding:28px 18px}
+  footer{padding:8px 0 28px}
+  .foot{padding:14px 16px}
+}
