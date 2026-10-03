@@ -102,10 +102,10 @@
 
   const RX = {
     mac: /\.(dmg|pkg)$|mac|darwin|osx/i,
-    win: /\.(exe|msi)$|win/i,
+    win: /\.(exe|msi)$|windows|win(32|64)/i,
     linux: /\.(appimage|deb|rpm|tar\.gz|tgz)$|linux/i
   };
-  const EXT_PREF = { mac: ["dmg", "pkg", "zip", "gz"], win: ["exe", "msi", "zip"], linux: ["appimage", "deb", "rpm", "gz", "tgz", "zip"] };
+  const EXT_PREF = { mac: ["pkg", "dmg", "zip", "gz"], win: ["exe", "msi", "zip"], linux: ["appimage", "deb", "rpm", "gz", "tgz", "zip"] };
   const junk = /\.(sig|sha256|sha512|blockmap|yml|yaml|txt|json|asc|minisig|sbom)$|checksums?/i;
   const archOf = n => /arm64|aarch64|apple-?silicon/i.test(n) ? "arm" : /x64|x86_64|amd64|intel|x86/i.test(n) ? "x64" : null;
   const pick = (assets, o, wantArch) => {
@@ -131,27 +131,33 @@
 
   const human = b => b > 1048576 ? (b / 1048576).toFixed(1) + " МБ" : Math.round(b / 1024) + " КБ";
 
+  const findIn = (releases, o, wantArch) => {
+    for (const rel of releases) {
+      if (rel.draft || rel.prerelease) continue;
+      const f = pick(rel.assets || [], o, wantArch);
+      if (f) return { rel, f };
+    }
+    return null;
+  };
   Promise.all([
-    fetch(`https://api.github.com/repos/${REPO}/releases/latest`, { headers: { Accept: "application/vnd.github+json" } }).then(r => { if (!r.ok) throw 0; return r.json(); }),
+    fetch(`https://api.github.com/repos/${REPO}/releases?per_page=15`, { headers: { Accept: "application/vnd.github+json" } }).then(r => { if (!r.ok) throw 0; return r.json(); }),
     archReady
-  ]).then(([rel]) => {
-    const ver = rel.tag_name || rel.name || "";
-    const assets = rel.assets || [];
-    heroVer.textContent = `Версия ${ver}`;
+  ]).then(([rels]) => {
+    const newest = rels.find(r => !r.draft && !r.prerelease) || rels[0];
+    heroVer.textContent = `Версия ${newest.tag_name}`;
     $$(".os").forEach(a => {
-      const o = a.dataset.os, f = pick(assets, o, o === "mac" ? (os === "mac" ? arch : null) : null);
-      const small = $("small", a);
-      if (f) { a.href = f.browser_download_url; small.textContent = `${ver} · ${human(f.size)}`; a.title = f.name; }
-      else { a.href = rel.html_url || RELEASES; small.textContent = "на GitHub"; }
+      const o = a.dataset.os, small = $("small", a);
+      const hit = findIn(rels, o, o === os ? arch : null);
+      if (hit) { a.href = hit.f.browser_download_url; small.textContent = `${hit.rel.tag_name} · ${human(hit.f.size)}`; a.title = hit.f.name; }
+      else small.textContent = o === "linux" ? "бета · инструкция" : "на GitHub";
     });
-    const mine = os && pick(assets, os, arch);
+    const mine = os && findIn(rels, os, arch);
     if (mine) {
-      mainDl.href = mine.browser_download_url; mainDl.setAttribute("download", mine.name);
-      heroDl.href = mine.browser_download_url; heroDl.setAttribute("download", mine.name);
-      meta.textContent = `${ver} · ${mine.name} · ${human(mine.size)}`;
+      for (const el of [mainDl, heroDl]) { el.href = mine.f.browser_download_url; el.setAttribute("download", mine.f.name); }
+      meta.textContent = `${mine.rel.tag_name} · ${mine.f.name} · ${human(mine.f.size)}`;
     } else {
-      mainDl.href = rel.html_url || RELEASES;
-      meta.textContent = os ? `${ver} · файл для ${NAMES[os]} не найден — откроем страницу релиза` : `Последняя версия ${ver}`;
+      mainDl.href = os === "linux" ? "https://github.com/wasteprince/nory/blob/main/INSTALL.md" : RELEASES;
+      meta.textContent = os === "linux" ? "Для Linux пока бета-версия — смотрите инструкцию" : "Откроется страница релизов на GitHub";
     }
   }).catch(() => {
     $$(".os small").forEach(s => s.textContent = "на GitHub");
