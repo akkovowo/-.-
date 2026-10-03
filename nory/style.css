@@ -221,3 +221,27 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .heart{width:13px;height:13px;fill:#fff;filter:drop-shadow(0 0 4px rgba(255,255,255,.6));transform-origin:center;animation:beat 1.6s ease-in-out infinite}
 @keyframes beat{0%,100%{transform:scale(1)}14%{transform:scale(1.28)}28%{transform:scale(1)}42%{transform:scale(1.2)}70%{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.heart{animation:none}}
+html,body{overflow-x:clip;max-width:100%}
+.hero>*,.story-in>*,.bypass>*,.rust-card>*{min-width:0}
+@media(max-width:900px){
+  .wrap{width:calc(100% - 32px)}
+  .nav{top:8px}.nav-in{padding:8px 8px 8px 14px;gap:12px}
+  h1{font-size:clamp(32px,9.5vw,48px)}
+  h2{font-size:clamp(25px,7vw,34px)}
+  .hero-visual{overflow:hidden;padding:20px 0 30px;margin:0 -16px}
+  .float::before{left:-40px}
+  .p1{left:8px;top:21%}.p2{right:8px;bottom:12%}
+  .win{width:min(340px,100%)}
+  .step{min-height:38vh;opacity:.4;transform:none}
+  .step.act{opacity:1}
+  .story-stage{margin:0 -16px;padding:8px 0 4px;top:64px}
+  .stage-sticky{zoom:.5;transform:none;margin:0;height:auto;padding:0}
+  .story-stage{background:linear-gradient(#66666b 88%,rgba(102,102,107,0))}
+  .p1,.p2{display:none}
+  .stage-sticky::before{display:none}
+  .rust-card{padding:24px 18px}
+  .bypass{padding:50px 0}
+  .win.add{width:min(360px,100%)}
+  .dl-card{padding:44px 16px}
+  .foot{justify-content:center;text-align:center}
+}
