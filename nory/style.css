@@ -229,7 +229,7 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 
 .credit{flex-basis:100%;display:flex;align-items:center;justify-content:center;gap:5px;margin-top:14px;font-family:"JetBrains Mono","Fira Code",ui-monospace,monospace;font-size:11px;letter-spacing:.02em;color:rgba(255,255,255,.55)}
 .credit a{color:rgba(255,255,255,.8);text-decoration:underline;text-decoration-color:rgba(255,255,255,.25);text-underline-offset:3px;transition:color .2s,text-decoration-color .2s}
-.credit a:hover{color:#fb7185;text-decoration-color:#fb7185}
-.heart{width:13px;height:13px;fill:#fb7185;filter:drop-shadow(0 0 4px rgba(251,113,133,.6));transform-origin:center;animation:beat 1.6s ease-in-out infinite}
+.credit a:hover{color:#fff;text-decoration-color:#fff}
+.heart{width:13px;height:13px;fill:#fff;filter:drop-shadow(0 0 4px rgba(255,255,255,.6));transform-origin:center;animation:beat 1.6s ease-in-out infinite}
 @keyframes beat{0%,100%{transform:scale(1)}14%{transform:scale(1.28)}28%{transform:scale(1)}42%{transform:scale(1.2)}70%{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.heart{animation:none}}
