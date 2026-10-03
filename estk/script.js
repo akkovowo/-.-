@@ -107,7 +107,9 @@
     let cur = 0;
     sections.forEach((s, i) => { if (s.getBoundingClientRect().top <= mid) cur = i; });
     if (cur === idx) return;
+    const prev = idx;
     idx = cur;
+    if (prev >= 0 && entered) sectionSound(cur > prev);
     const s = sections[cur];
     body.style.setProperty("--py", scrollY >= lastThemeY ? "100%" : "0%");
     body.style.setProperty("--px", "50%");
@@ -215,15 +217,41 @@
     ng.gain.setValueAtTime(0.0001, t0); ng.gain.exponentialRampToValueAtTime(0.02, t0 + 0.9); ng.gain.exponentialRampToValueAtTime(0.0001, t0 + 2.1);
     n.connect(bp); bp.connect(ng); ng.connect(master); n.start(t0); n.stop(t0 + 2.2);
   }
-  function enterSound() {
-    try {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return;
-      const ctx = new AC();
-      const go = () => { chime(ctx, ctx.destination, ctx.currentTime + 0.05); setTimeout(() => ctx.close && ctx.close(), 6000); };
-      ctx.state === "suspended" ? ctx.resume().then(go, go) : go();
-    } catch (_) {}
+  // one shared audio context for every effect (created on the first tap, so browsers allow it)
+  let actx = null, lastSwipe = 0;
+  function getCtx() {
+    if (actx) return actx;
+    try { const AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); } catch (_) {}
+    return actx;
   }
+  function enterSound() {
+    const ctx = getCtx();
+    if (!ctx) return;
+    const go = () => { try { chime(ctx, ctx.destination, ctx.currentTime + 0.05); } catch (_) {} };
+    ctx.state === "suspended" ? ctx.resume().then(go, go) : go();
+  }
+  // soft swipe for a section change: a short breath of filtered air that sweeps up when you go down and down when you go up
+  function swipe(ctx, out, t0, down) {
+    const dur = 0.5, len = Math.floor(ctx.sampleRate * dur), buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    const n = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
+    n.buffer = buf; bp.type = "bandpass"; bp.Q.value = 1.1; lp.type = "lowpass"; lp.frequency.value = 4200;
+    const [f0, f1] = down ? [650, 2400] : [2400, 650];
+    bp.frequency.setValueAtTime(f0, t0); bp.frequency.exponentialRampToValueAtTime(f1, t0 + dur * 0.9);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.06, t0 + dur * 0.38);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    n.connect(bp); bp.connect(lp); lp.connect(g); g.connect(out);
+    n.start(t0); n.stop(t0 + dur + 0.05);
+  }
+  function sectionSound(down) {
+    const ctx = actx, now = performance.now();
+    if (!ctx || !soundOn || now - lastSwipe < 350) return;
+    lastSwipe = now;
+    const go = () => { try { swipe(ctx, ctx.destination, ctx.currentTime + 0.02, down); } catch (_) {} };
+    ctx.state === "suspended" ? ctx.resume().then(go, go) : go();
+  }
+
 
   // circle of light opens from the centre of the gate; plain fade where clip-path path() is unsupported
   function openGate() {
