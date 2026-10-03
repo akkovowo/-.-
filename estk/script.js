@@ -44,35 +44,46 @@
   });
 
   // ---------- sound ----------
-  const audio = $("#audio"), player = $("#player"), prog = $("#prog");
-  let soundOn = true, fade = 0;
+  const audio = $("#audio"), player = $("#player"), prog = $("#prog"), plState = $("#plState");
+  const RING = 141.37;
+  let soundOn = true, fade = 0, failTimer = 0;
   function volTo(target, ms, done) {
     cancelAnimationFrame(fade);
     const from = audio.volume, t0 = performance.now();
     const step = (t) => {
       const k = clamp((t - t0) / ms), e = k * k * (3 - 2 * k);
-      audio.volume = from + (target - from) * e;
+      try { audio.volume = from + (target - from) * e; } catch (_) {}
       k < 1 ? (fade = requestAnimationFrame(step)) : done && done();
     };
     fade = requestAnimationFrame(step);
   }
   function syncIcon() {
-    const playing = soundOn && !audio.paused;
-    $("#icoPause").hidden = !playing;
-    $("#icoPlay").hidden = playing;
-    player.setAttribute("aria-label", playing ? "Выключить звук" : "Включить звук");
+    const live = !audio.paused;
+    player.classList.toggle("is-live", live);
+    player.setAttribute("aria-pressed", String(live));
+    player.setAttribute("aria-label", live ? "Выключить звук" : "Включить звук");
+    if (!failTimer) plState.textContent = live ? "Звук вкл" : "Звук выкл";
   }
   function playAudio() {
-    audio.volume = 0;
-    return audio.play().then(() => { volTo(0.18, 1600); syncIcon(); }).catch(() => { soundOn = false; syncIcon(); });
+    try { audio.volume = 0; } catch (_) {}
+    const p = audio.play();
+    return (p && p.then ? p : Promise.resolve()).then(() => { volTo(0.22, 1400); syncIcon(); }).catch(() => {
+      soundOn = false; syncIcon();
+      plState.textContent = "Не удалось, ещё раз";
+      clearTimeout(failTimer);
+      failTimer = setTimeout(() => { failTimer = 0; syncIcon(); }, 2600);
+    });
   }
-  player.addEventListener("click", () => {
-    if (soundOn && !audio.paused) { soundOn = false; volTo(0, 900, () => audio.pause()); syncIcon(); }
-    else { soundOn = true; playAudio(); }
-  });
+  function toggleSound() {
+    if (!audio.paused) { soundOn = false; volTo(0, 500, () => { audio.pause(); syncIcon(); }); plState.textContent = "Звук выкл"; }
+    else { soundOn = true; audio.preload = "auto"; playAudio(); }
+  }
+  player.addEventListener("click", toggleSound);
+  ["play", "pause", "ended"].forEach((e) => audio.addEventListener(e, syncIcon));
   audio.addEventListener("timeupdate", () => {
-    if (audio.duration) prog.style.strokeDashoffset = 100.531 * (1 - audio.currentTime / audio.duration);
+    if (audio.duration) prog.style.strokeDashoffset = RING * (1 - audio.currentTime / audio.duration);
   });
+  syncIcon();
 
   // ---------- film / theme ----------
   const vids = $$(".film");
