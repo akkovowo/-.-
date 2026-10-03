@@ -350,3 +350,8 @@ footer{padding:28px 0 48px}
   footer{padding:8px 0 28px}
   .foot{padding:14px 16px}
 }
+
+.head{margin-inline:auto;text-align:center}
+.faq{margin-inline:auto}
+.faq summary{text-align:left}
+.faq details p{text-align:left}
