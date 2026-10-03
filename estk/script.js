@@ -187,6 +187,44 @@
   $$(".rise").forEach((el) => io.observe(el));
 
   // ---------- gate ----------
+  // a very quiet glass chime + a breath of air under the circle opening (synthesised, no file)
+  function chime(ctx, out, t0) {
+    const master = ctx.createGain();
+    master.gain.value = 0.9;
+    // soft echo tail
+    const delay = ctx.createDelay(0.5), fb = ctx.createGain(), lp = ctx.createBiquadFilter();
+    delay.delayTime.value = 0.21; fb.gain.value = 0.34; lp.type = "lowpass"; lp.frequency.value = 2800;
+    master.connect(out); master.connect(delay); delay.connect(lp); lp.connect(fb); fb.connect(delay); lp.connect(out);
+    // three bell notes, rising
+    [[880, 0, 0.032], [1318.51, 0.11, 0.026], [1975.53, 0.23, 0.02]].forEach(([f, dt, peak]) => {
+      [[1, 1], [2.01, 0.28], [3.97, 0.08]].forEach(([mul, amp]) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(), t = t0 + dt;
+        o.type = "sine"; o.frequency.value = f * mul;
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(peak * amp, t + 0.018);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 1.5 / mul + 0.5);
+        o.connect(g); g.connect(master); o.start(t); o.stop(t + 2.2);
+      });
+    });
+    // airy swell
+    const len = Math.floor(ctx.sampleRate * 2.2), buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    const n = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), ng = ctx.createGain();
+    n.buffer = buf; bp.type = "bandpass"; bp.Q.value = 0.9;
+    bp.frequency.setValueAtTime(500, t0); bp.frequency.exponentialRampToValueAtTime(3600, t0 + 1.7);
+    ng.gain.setValueAtTime(0.0001, t0); ng.gain.exponentialRampToValueAtTime(0.02, t0 + 0.9); ng.gain.exponentialRampToValueAtTime(0.0001, t0 + 2.1);
+    n.connect(bp); bp.connect(ng); ng.connect(master); n.start(t0); n.stop(t0 + 2.2);
+  }
+  function enterSound() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      const ctx = new AC();
+      const go = () => { chime(ctx, ctx.destination, ctx.currentTime + 0.05); setTimeout(() => ctx.close && ctx.close(), 6000); };
+      ctx.state === "suspended" ? ctx.resume().then(go, go) : go();
+    } catch (_) {}
+  }
+
   // circle of light opens from the centre of the gate; plain fade where clip-path path() is unsupported
   function openGate() {
     const ok = !reduce && window.CSS && CSS.supports && CSS.supports("clip-path", 'path("M0 0L1 1Z")');
@@ -208,6 +246,7 @@
   function enter() {
     if (entered) return;
     entered = true;
+    enterSound();
     openGate();
     gate.classList.add("is-gone");
     gate.setAttribute("aria-hidden", "true");
