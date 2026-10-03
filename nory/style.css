@@ -224,3 +224,4 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .grid{opacity:.35!important}
 .btn-ghost{background:rgba(255,255,255,.16)}
 .links{color:#e6eaee}.links a:hover{color:#fff}
+.tl i:nth-child(1){background:#ff5f57}.tl i:nth-child(2){background:#febc2e}.tl i:nth-child(3){background:#28c840}
