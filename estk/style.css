@@ -290,7 +290,7 @@ body.on .player{opacity:1;transform:none;pointer-events:auto}
 /* ---------- intro: what happens when you press "Войти" ---------- */
 @property --r{syntax:'<length>';inherits:false;initial-value:0px}
 /* 1. the bolt on the gate bursts, a circle of light opens from it and the site shows through */
-.gate{--r:0px;-webkit-mask-image:radial-gradient(circle at 50% 50%,transparent var(--r),#000 calc(var(--r) + 3px));mask-image:radial-gradient(circle at 50% 50%,transparent var(--r),#000 calc(var(--r) + 3px));
+.gate{--r:0px;-webkit-mask-image:radial-gradient(circle at 50% 50%,transparent calc(var(--r) - 4px),#000 var(--r));mask-image:radial-gradient(circle at 50% 50%,transparent calc(var(--r) - 4px),#000 var(--r));
   transition:--r 2.1s .25s cubic-bezier(.7,0,.2,1),opacity .4s 2.3s linear,visibility 0s 2.7s}
 .gate.is-gone{--r:150vmax;opacity:0;visibility:hidden;transition:--r 2.1s .25s cubic-bezier(.7,0,.2,1),opacity .4s 2.3s linear,visibility 0s 2.7s}
 .gate.is-gone .gate__mark{animation:none;opacity:0;filter:blur(18px);transform:scale(2.2);transition:opacity .55s .1s ease-in,filter .6s var(--ease),transform .7s var(--ease)}
