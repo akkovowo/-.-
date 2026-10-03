@@ -195,10 +195,14 @@ body.light .paper::after{clip-path:circle(160% at var(--px,50%) var(--py,100%))}
 /* about: rings spread from the centre */
 .rings,.dots{position:absolute;inset:0;opacity:0;transition:opacity 1.4s var(--ease)}
 .rings i{position:absolute;left:50%;top:50%;width:60vmin;height:60vmin;margin:-30vmin 0 0 -30vmin;border-radius:50%;
-  border:1px solid color-mix(in srgb,var(--ink) 38%,transparent);opacity:0;animation:ring 9s linear infinite}
-.rings i:nth-child(2){animation-delay:-2.25s}.rings i:nth-child(3){animation-delay:-4.5s}.rings i:nth-child(4){animation-delay:-6.75s}
+  border:1px solid color-mix(in srgb,var(--ink) 38%,transparent);opacity:0}
+body[data-scene="about"] .rings i{animation:ring 9s linear infinite}
+body[data-scene="about"] .rings i:nth-child(1){animation-delay:1.1s}
+body[data-scene="about"] .rings i:nth-child(2){animation-delay:3.35s}
+body[data-scene="about"] .rings i:nth-child(3){animation-delay:5.6s}
+body[data-scene="about"] .rings i:nth-child(4){animation-delay:7.85s}
 @keyframes ring{0%{transform:scale(.15);opacity:0}15%{opacity:1}100%{transform:scale(3);opacity:0}}
-body[data-scene="about"] .rings{opacity:1}
+body[data-scene="about"] .rings{opacity:1;transition:opacity .6s .9s var(--ease)}
 
 /* approach: a field of dots that drifts */
 .dots{background-image:radial-gradient(color-mix(in srgb,var(--ink) 38%,transparent) 1.6px,transparent 2px);background-size:56px 56px;
@@ -218,7 +222,7 @@ body[data-scene="contact"] .bolt2 path{stroke-dashoffset:0;transition:stroke-das
 
 /* ---------- hero bolt: alive. energy runs along the outline, the whole thing floats ---------- */
 .boltwrap{position:absolute;left:50%;top:50%;height:150vh;aspect-ratio:1;margin:-75vh 0 0 -75vh;
-  transition:transform 1.6s var(--ease),opacity .7s 1.1s var(--ease),filter 1.2s var(--ease)}
+  transition:transform 1s var(--ease),opacity 1.2s .2s var(--ease),filter 1s var(--ease)}
 .bolt{display:block;width:100%;height:100%;overflow:visible;fill:none;stroke-linejoin:miter;stroke-linecap:square;animation:float 9s ease-in-out infinite}
 .bolt .b1{stroke:color-mix(in srgb,var(--ink) 24%,transparent);stroke-width:1.5px;vector-effect:non-scaling-stroke}
 .bolt .b2{stroke:var(--ink);stroke-width:.16;stroke-linecap:butt;stroke-dasharray:14 86;animation:run 3.4s cubic-bezier(.6,0,.3,1) infinite;
@@ -226,7 +230,8 @@ body[data-scene="contact"] .bolt2 path{stroke-dashoffset:0;transition:stroke-das
 @keyframes run{from{stroke-dashoffset:14}to{stroke-dashoffset:-86}}
 @keyframes float{0%,100%{transform:translateY(-1.4vh) rotate(-1.2deg)}50%{transform:translateY(1.4vh) rotate(1.2deg)}}
 /* it lies down and dissolves when you leave the hero, and stays gone */
-body:not([data-scene="hero"]) .boltwrap{transform:rotate(90deg);opacity:0;filter:blur(14px)}
+body:not([data-scene="hero"]) .boltwrap{transform:rotate(90deg) scale(.12);opacity:0;filter:blur(10px);
+  transition:transform 2s cubic-bezier(.65,0,.25,1),opacity .9s .85s var(--ease),filter 1.2s .5s var(--ease)}
 
 /* services: a drafting grid with a scanner sweeping across it */
 .grid,.frames{position:absolute;inset:0;opacity:0;transition:opacity 1.4s var(--ease)}
