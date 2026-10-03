@@ -288,11 +288,10 @@ body.on .player{opacity:1;transform:none;pointer-events:auto}
 @media (width<=900px){.player{right:16px;bottom:calc(22px + env(safe-area-inset-bottom,0px));gap:12px;padding-right:18px}}
 
 /* ---------- intro: what happens when you press "Войти" ---------- */
-@property --r{syntax:'<length>';inherits:false;initial-value:0px}
 /* 1. the bolt on the gate bursts, a circle of light opens from it and the site shows through */
-.gate{--r:0px;-webkit-mask-image:radial-gradient(circle at 50% 50%,transparent calc(var(--r) - 4px),#000 var(--r));mask-image:radial-gradient(circle at 50% 50%,transparent calc(var(--r) - 4px),#000 var(--r));
-  transition:--r 2.1s .25s cubic-bezier(.7,0,.2,1),opacity .4s 2.3s linear,visibility 0s 2.7s}
-.gate.is-gone{--r:150vmax;opacity:0;visibility:hidden;transition:--r 2.1s .25s cubic-bezier(.7,0,.2,1),opacity .4s 2.3s linear,visibility 0s 2.7s}
+.gate{transition:opacity .4s 2.4s linear,visibility 0s 2.8s}
+.gate.is-gone{opacity:0;visibility:hidden;transition:opacity .4s 2.4s linear,visibility 0s 2.8s}
+.gate.no-clip.is-gone{transition:opacity .9s .5s linear,visibility 0s 1.4s}
 .gate.is-gone .gate__mark{animation:none;opacity:0;filter:blur(18px);transform:scale(2.2);transition:opacity .55s .1s ease-in,filter .6s var(--ease),transform .7s var(--ease)}
 .gate.is-gone .gate__hint{animation:none;opacity:0;filter:blur(12px);transition:opacity .3s,filter .4s}
 .flash{position:fixed;inset:0;z-index:45;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 50%,#fff,#ffffffcc 30%,#fff0 70%)}

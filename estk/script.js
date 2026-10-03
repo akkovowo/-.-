@@ -187,10 +187,28 @@
   $$(".rise").forEach((el) => io.observe(el));
 
   // ---------- gate ----------
+  // circle of light opens from the centre of the gate; plain fade where clip-path path() is unsupported
+  function openGate() {
+    const ok = !reduce && window.CSS && CSS.supports && CSS.supports("clip-path", 'path("M0 0L1 1Z")');
+    if (!ok) { gate.classList.add("no-clip"); return; }
+    const w = innerWidth, h = innerHeight, cx = w / 2, cy = h / 2, max = Math.hypot(cx, cy) + 12;
+    const t0 = performance.now() + 250, dur = 2100;
+    const ease = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+    const step = (t) => {
+      const k = clamp((t - t0) / dur);
+      if (k > 0) {
+        const r = max * ease(k);
+        gate.style.clipPath = `path(evenodd,"M0 0H${w}V${h}H0Z M${cx - r} ${cy}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0Z")`;
+      }
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
   const gate = $("#gate");
   function enter() {
     if (entered) return;
     entered = true;
+    openGate();
     gate.classList.add("is-gone");
     gate.setAttribute("aria-hidden", "true");
     body.classList.remove("locked");
