@@ -13,7 +13,6 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .kicker{display:inline-block;color:var(--ac);font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
 .meta{color:var(--mut);font-size:14px}.meta a{color:var(--ac)}
 
-/* bg */
 .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:linear-gradient(180deg,#6c6c71,#5c5c61)}
 .bg i{position:absolute;border-radius:50%;filter:blur(110px);opacity:.5}
 .b1{width:560px;height:560px;opacity:.7!important;background:#b9b9bf;top:-120px;right:-80px;animation:drift 18s ease-in-out infinite alternate}
@@ -22,7 +21,6 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 @keyframes drift{to{transform:translate(60px,40px) scale(1.15)}}
 .progress{position:fixed;top:0;left:0;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:#fff;z-index:60}
 
-/* nav */
 .nav{position:fixed;top:12px;left:0;right:0;z-index:50;transition:transform .4s}
 .nav-in{display:flex;align-items:center;gap:24px;padding:10px 12px 10px 18px;border-radius:999px;background:rgba(80,80,85,.55);border:1px solid var(--line);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4)}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.3em;font-size:14px}
@@ -30,7 +28,6 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .links{display:flex;gap:26px;margin-left:auto;color:var(--mut);font-size:15px}
 .links a{transition:color .2s}.links a:hover{color:var(--tx)}
 
-/* buttons */
 .btn{display:inline-flex;align-items:center;gap:10px;justify-content:center;padding:12px 22px;border-radius:999px;font-weight:600;color:#0b0b0c;background:#f2f4f6;box-shadow:0 8px 30px -8px rgba(255,255,255,.6),inset 0 1px 0 rgba(255,255,255,.5);transition:transform .25s,box-shadow .25s}
 .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(255,255,255,.7),inset 0 1px 0 rgba(255,255,255,.5)}
 .btn svg{width:20px;height:20px}
@@ -39,13 +36,11 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .btn-ghost{background:rgba(255,255,255,.07);color:var(--tx);box-shadow:inset 0 0 0 1px var(--line)}
 .btn-ghost:hover{background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
 
-/* reveal */
 .js .reveal{opacity:0;transform:translateY(40px) scale(.98);transition:opacity .9s cubic-bezier(.2,.7,.2,1) var(--d,0s),transform .9s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
 .js .reveal.in{opacity:1;transform:none}
 .rise{animation:rise .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s)}
 @keyframes rise{from{opacity:0;transform:translateY(28px)}}
 
-/* hero */
 .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;min-height:100vh;padding:120px 0 60px}
 .hero-text{display:flex;flex-direction:column;gap:24px;align-items:flex-start}
 .chip{display:inline-flex;align-items:center;gap:10px;padding:6px 16px 6px 6px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;font-weight:500;transition:border-color .2s}
@@ -57,7 +52,6 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .hero-visual{display:flex;justify-content:center}
 .float{position:relative;transition:transform .2s linear;will-change:transform}
 
-/* app window */
 .win{position:relative;width:340px;max-width:100%;border-radius:20px;padding:20px 20px 22px;background:linear-gradient(180deg,#223344,#1a2631);border:1px solid rgba(255,255,255,.1);box-shadow:0 40px 90px -20px rgba(0,0,0,.65),0 0 0 1px rgba(0,0,0,.4);text-align:center;overflow:hidden}
 .tl{display:flex;gap:7px;position:absolute;left:14px;top:14px}
 .tl i{width:11px;height:11px;border-radius:50%;background:#4a4a4e}
@@ -91,7 +85,6 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .p1{left:-60px;top:28%;animation:bob 6s ease-in-out infinite}.p2{right:-40px;bottom:22%;animation:bob 7s ease-in-out infinite reverse}
 @keyframes bob{50%{transform:translateY(-14px)}}
 
-/* rust */
 .rust{padding:80px 0}
 .rust-card{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;padding:44px;border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--line);position:relative;overflow:hidden}
 .rust-logo{width:170px;height:170px;border-radius:44px;background:linear-gradient(160deg,#1d1d1f,#111112);border:1px solid rgba(255,255,255,.18);color:#f2f4f6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 20px 60px -20px rgba(255,255,255,.12)}
@@ -104,7 +97,6 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .card svg{width:32px;height:32px;color:var(--ac);margin-bottom:18px}
 .card h3{font-size:22px;margin-bottom:8px}.card p{color:var(--mut);font-size:15px}
 
-/* story */
 .story{padding:60px 0 40px}
 .story-in{display:grid;grid-template-columns:1fr 1fr;gap:60px}
 .step{min-height:80vh;display:flex;flex-direction:column;justify-content:center;opacity:.28;transition:opacity .5s,transform .5s;transform:translateX(-14px)}
@@ -142,7 +134,6 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .legend svg{width:20px;height:20px;color:var(--ac);flex:none}
 .dots{display:flex;gap:8px}.dots i{width:8px;height:8px;border-radius:8px;background:rgba(255,255,255,.2);transition:width .4s,background .4s}.dots i.on{width:26px;background:var(--ac)}
 
-/* bypass */
 .bypass{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;padding:100px 0}
 .bp-text p{color:var(--mut);margin:18px 0 22px;font-size:18px}
 .ticks{list-style:none;display:flex;flex-direction:column;gap:12px}
@@ -165,7 +156,6 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .item{padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.045);border:1px solid var(--line);animation:rise .5s both}
 .item b{display:block;font-size:14px}.item small{color:var(--mut);font-size:12px}
 
-/* download */
 .dl{padding:60px 0 100px}
 .dl-card{text-align:center;padding:64px 28px;border-radius:36px;background:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.18),transparent 60%),var(--card);border:1px solid var(--line)}
 .dl-card h2{margin-bottom:12px}
@@ -200,7 +190,6 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .panel.solo{top:0;left:0;right:0;bottom:0;padding:20px;background:linear-gradient(180deg,#223344,#1a2631)}
 .panel.solo .win-title{margin-top:0}
 
-/* liquid glass внутри окон приложения */
 .win .power,.win .pillbtn,.win .dd-btn,.win .plus,.win .box,.win .srvs li.on{backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5)}
 .win .power,.win .pillbtn,.win .dd-btn{background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.07));border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 30px -10px rgba(0,0,0,.6)}
 .win .power{background:radial-gradient(circle at 35% 30%,rgba(120,160,180,.6),rgba(55,90,110,.55))}
@@ -211,7 +200,6 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .win .dot{background:#6fc4a4;box-shadow:0 0 10px #6fc4a4}.win.off .dot{background:#6b7b88;box-shadow:none}
 .win .srvs li.on .rd{background:#6fc4a4;border-color:#6fc4a4}
 
-/* светлые пятна позади стекла, чтобы блюр читался */
 .float::before,.stage-sticky::before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,#f4f4f7,rgba(244,244,247,0) 68%);opacity:.9;z-index:-1;filter:blur(6px);animation:bob 9s ease-in-out infinite}
 .float::before{left:-90px;top:24%}
 .stage-sticky::before{right:-60px;top:6%}

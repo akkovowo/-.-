@@ -4,7 +4,6 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-  /* ---------- scroll progress + parallax ---------- */
   const bar = $("#progress"), par = $$("[data-parallax]");
   let tick = false;
   const onScroll = () => {
@@ -18,13 +17,11 @@
   };
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
-  /* ---------- reveal on scroll ---------- */
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
   }), { threshold: .15 });
   $$(".reveal").forEach(el => io.observe(el));
 
-  /* ---------- sticky story steps ---------- */
   const steps = $$(".step"), panels = $$(".panel"), dots = $$(".dots i"), glow = $(".stage-glow");
   const shot = $("#shot"), OFF = [0, -170, 0, -185];
   const setStep = i => {
@@ -40,7 +37,6 @@
   }), { rootMargin: "-45% 0px -45% 0px" });
   steps.forEach(s => so.observe(s)); setStep(0);
 
-  /* ---------- hero mock: live connect demo ---------- */
   const win = $("#win-main"), power = $("#power"), st = $("#state-text"), tm = $("#timer"),
         dn = $("#dn"), up = $("#up"), srvName = $("#state-srv");
   let secs = 44 * 60 + 8, down = 186, upl = 14, on = true;
@@ -60,7 +56,6 @@
   }));
   render();
 
-  /* ---------- dropdown preview ---------- */
   const dd = $("#dd"), ddBtn = $("#dd-btn"), ddVal = $("#dd-val"), ddList = $("#dd-list");
   const DATA = {
     "Приложения": [["Telegram", "Приложение"], ["Steam", "Приложение"], ["Сбербанк Онлайн", "Приложение"]],
@@ -74,16 +69,14 @@
     ddVal.textContent = o.dataset.v;
     ddList.innerHTML = DATA[o.dataset.v].map(([a, b], i) => `<div class="item" style="animation-delay:${i * .07}s"><b>${a}</b><small>${b}</small></div>`).join("");
   }));
-  // авто-демо: один раз показать меню, когда блок попадёт в экран
   new IntersectionObserver((es, ob) => es.forEach(e => {
     if (e.isIntersecting) { setTimeout(() => dd.classList.add("open"), 700); setTimeout(() => dd.classList.remove("open"), 3200); ob.disconnect(); }
   }), { threshold: .6 }).observe($(".win.add"));
 
-  /* ---------- OS detection + GitHub latest release ---------- */
   const NAMES = { mac: "macOS", win: "Windows", linux: "Linux" };
   const ua = navigator.userAgent, plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
   const detectOS = () => {
-    if (/android|iphone|ipad|ipod/i.test(ua)) return null; // мобильных клиентов нет
+    if (/android|iphone|ipad|ipod/i.test(ua)) return null;
     if (/mac/i.test(plat) || /Macintosh|Mac OS X/i.test(ua)) return "mac";
     if (/win/i.test(plat) || /Windows/i.test(ua)) return "win";
     if (/linux|x11|cros/i.test(plat + ua)) return "linux";
@@ -94,7 +87,6 @@
   const archReady = (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues)
     ? navigator.userAgentData.getHighEntropyValues(["architecture"]).then(v => { arch = /arm/i.test(v.architecture) ? "arm" : "x64"; }).catch(() => {})
     : Promise.resolve();
-  // Safari на Apple Silicon не раскрывает архитектуру — пробуем через WebGL
   if (os === "mac" && !arch) {
     try {
       const gl = document.createElement("canvas").getContext("webgl");
