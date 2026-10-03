@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="estk.lol — esoterik. Sites, products, and systems.">
+  <title>estk — Development</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preload" href="monument-extended-bold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="stage" id="stage">
+
+  <div class="films" aria-hidden="true">
+    <video class="film" muted playsinline preload="auto" poster="poster.jpg" src="main.webm"></video>
+    <video class="film" muted playsinline preload="none" src="second.webm"></video>
+    <video class="film" muted playsinline preload="none" src="third.webm"></video>
+  </div>
+  <div class="veil" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M40 8.5 29.2 30.2h8.4L26.4 56"/></svg>
+
+  <nav class="nav" aria-label="Sections">
+    <div class="nav__group">
+      <button data-open="services">Services</button>
+      <button data-open="approach">Approach</button>
+      <button data-open="portfolio">Portfolio</button>
+    </div>
+    <button data-open="contact">Contact</button>
+  </nav>
+
+  <footer class="stage-foot">
+    <div class="swipe">Swipe</div>
+    <div class="reel" id="reel"></div>
+    <b class="brand">estk — esoterik</b>
+  </footer>
+
+  <button class="player" id="player" aria-label="Sound">
+    <svg viewBox="0 0 44 44" aria-hidden="true">
+      <circle class="player__track" cx="22" cy="22" r="16"/>
+      <circle class="player__prog" id="prog" cx="22" cy="22" r="16"/>
+      <g id="icoPause"><rect x="17.5" y="16" width="3" height="12"/><rect x="23.5" y="16" width="3" height="12"/></g>
+      <path id="icoPlay" d="M19 15.2v13.6l11.2-6.8Z" hidden/>
+    </svg>
+  </button>
+  <audio id="audio" src="infinity.mp3" loop preload="none"></audio>
+
+  <section class="panel" id="panel" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="panel__inner">
+      <header class="panel__nav">
+        <span id="panelTitle">Services</span>
+        <button class="close" id="close" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
+      </header>
+      <div id="panelBody"></div>
+    </div>
+  </section>
+
+  <button class="gate" id="gate" aria-label="Enter">
+    <svg class="gate__mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M40 8.5 29.2 30.2h8.4L26.4 56"/></svg>
+    <span class="gate__hint">Enter</span>
+  </button>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
