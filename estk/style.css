@@ -26,9 +26,7 @@ body.light ::selection{background:#000;color:#fff}
 
 /* ---------- fixed layers ---------- */
 .paper{position:fixed;inset:0;z-index:-3;background:#000}
-.paper::after{content:"";position:absolute;inset:0;background:#fff;
-  clip-path:circle(0% at 50% 50%);transition:clip-path var(--flip) var(--ease)}
-body.light .paper::after{clip-path:circle(150% at 50% 50%)}
+.paper::after{content:"";position:absolute;inset:0;background:#fff;transition:clip-path var(--flip) var(--ease)}
 
 .films{position:fixed;inset:-8%;z-index:-2;transition:opacity var(--flip) var(--ease)}
 body.light .films{opacity:0}
@@ -58,7 +56,10 @@ body.on .top{opacity:1;filter:none}
 .top__logo svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:5;stroke-linejoin:miter;stroke-linecap:square}
 .top__idx{opacity:.7;display:inline-flex;gap:.8em}
 .top__idx b{font-weight:700}
-.top__tg{justify-self:end;transition:opacity .3s var(--ease)}
+.arr{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:5;stroke-linejoin:miter;stroke-linecap:square;overflow:visible;transition:transform .5s var(--ease)}
+.top__tg{justify-self:end;display:inline-flex;align-items:center;gap:.5em;transition:opacity .3s var(--ease)}
+.top__tg .arr{width:1.1em;height:1.1em}
+.top__tg:hover .arr{transform:translate(2px,-2px)}
 .top__tg:hover{opacity:.5}
 
 .player{position:fixed;z-index:20;right:var(--pad);bottom:30px;width:46px;height:46px;color:#fff;mix-blend-mode:difference;
@@ -136,15 +137,16 @@ body.on .mark{opacity:1;filter:blur(0) drop-shadow(0 0 36px #ffffff40)}
 .works .n{font-size:12px;letter-spacing:.06em;opacity:.55}
 .works b{font-size:clamp(28px,6vw,100px);line-height:.95;letter-spacing:-.05em;transition:transform .8s var(--ease)}
 .works em{font-style:normal;font-size:clamp(11px,.95vw,14px);line-height:1.4;color:color-mix(in srgb,var(--ink) 60%,transparent)}
-.works .go{font-size:clamp(18px,2vw,32px);text-align:right;transition:transform .6s var(--ease)}
+.works .go{display:flex;justify-content:flex-end;font-size:clamp(20px,2.4vw,40px);transition:transform .6s var(--ease)}
 .works a:hover b{transform:translateX(1.5vw)}
-.works a:hover .go{transform:translate(4px,-4px)}
+.works a:hover .go{transform:translate(6px,-6px)}
 
 /* contact */
 .contact{display:flex;flex-direction:column;justify-content:center;padding-bottom:16vh}
-.mail{display:inline-flex;align-self:flex-start;align-items:baseline;gap:.2em;margin-top:8vh;font-size:clamp(20px,6.2vw,110px);line-height:.95;letter-spacing:-.05em;max-width:100%;transition:opacity .35s var(--ease),filter .5s var(--ease)}
+.mail{display:inline-flex;align-self:flex-start;align-items:center;gap:.2em;margin-top:8vh;font-size:clamp(20px,6.2vw,110px);line-height:.95;letter-spacing:-.05em;max-width:100%;transition:opacity .35s var(--ease),filter .5s var(--ease)}
 .mail.in:hover{opacity:.5;filter:blur(3px)}
-.mail span{font-size:.6em}
+.mail span{display:inline-flex;font-size:.62em;transition:transform .6s var(--ease)}
+.mail:hover span{transform:translate(.12em,-.12em)}
 .domain{margin:8vh 0 0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb,var(--ink) 40%,transparent)}
 
 /* ---------- gate ---------- */
@@ -187,3 +189,19 @@ body.on .mark{opacity:1;filter:blur(0) drop-shadow(0 0 36px #ffffff40)}
   *,::before,::after{transition:none!important;animation:none!important}
   .rise{opacity:1;filter:none;transform:none}.scrub .w{opacity:1;filter:none;transform:none}
 }
+
+/* ---------- living background ---------- */
+.fx{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.spot{position:absolute;left:0;top:0;width:70vmax;height:70vmax;margin:-35vmax 0 0 -35vmax;border-radius:50%;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--ink) 15%,transparent),transparent);will-change:transform}
+.bolt{position:absolute;left:50%;top:50%;height:150vh;width:auto;aspect-ratio:1;margin:-75vh 0 0 -75vh;overflow:visible;
+  fill:none;stroke:var(--ink);stroke-width:1.5px;stroke-linejoin:miter;stroke-linecap:square;vector-effect:non-scaling-stroke;opacity:.2;will-change:transform}
+.bolt path{vector-effect:non-scaling-stroke}
+.ghost{position:absolute;left:0;white-space:nowrap;font-size:24vw;line-height:1;letter-spacing:-.05em;text-transform:uppercase;
+  color:color-mix(in srgb,var(--ink) 7%,transparent);will-change:transform}
+.g1{top:6%}
+.g2{bottom:2%;font-size:16vw}
+@media (width<=900px){.ghost{font-size:44vw}.g2{font-size:30vw}.spot{width:120vmax;height:120vmax;margin:-60vmax 0 0 -60vmax}.bolt{height:110vh;margin:-55vh 0 0 -55vh}}
+/* the white sheet opens from where you are scrolling to */
+.paper::after{clip-path:circle(0% at var(--px,50%) var(--py,100%))}
+body.light .paper::after{clip-path:circle(160% at var(--px,50%) var(--py,100%))}

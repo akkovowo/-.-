@@ -14,6 +14,7 @@
 </head>
 <body class="locked">
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="arr" viewBox="0 0 64 64"><path d="M12 52 30 34h-7.5L50 14M30 12h22v22"/></symbol></svg>
 <div class="paper" aria-hidden="true"></div>
 <div class="films" aria-hidden="true">
   <video class="film" muted playsinline preload="auto" poster="poster.jpg" src="main.webm" loop></video>
@@ -21,6 +22,12 @@
   <video class="film" muted playsinline preload="none" src="third.webm" loop></video>
 </div>
 <div class="veil" aria-hidden="true"></div>
+<div class="fx" aria-hidden="true">
+  <div class="spot" id="spot"></div>
+  <svg class="bolt" id="bolt" viewBox="0 0 64 64"><path d="M40 8.5 29.2 30.2h8.4L26.4 56"/></svg>
+  <div class="ghost g1" id="g1"><span>estk — esoterik — estk — esoterik —</span></div>
+  <div class="ghost g2" id="g2"><span>сайты — сервисы — системы — сайты — сервисы —</span></div>
+</div>
 <div class="grain" aria-hidden="true"></div>
 <div class="bar" aria-hidden="true"><i id="bar"></i></div>
 
@@ -29,7 +36,7 @@
     <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M40 8.5 29.2 30.2h8.4L26.4 56"/></svg>estk
   </a>
   <span class="top__idx"><b id="idx">01</b> <span id="idxName">Главная</span></span>
-  <a class="top__tg" href="https://t.me/riskybenefit" target="_blank" rel="noopener noreferrer">Написать ↗</a>
+  <a class="top__tg" href="https://t.me/riskybenefit" target="_blank" rel="noopener noreferrer">Написать <svg class="arr" viewBox="0 0 64 64" aria-hidden="true"><use href="#arr"/></svg></a>
 </header>
 
 <button class="player" id="player" aria-label="Звук">
@@ -82,7 +89,7 @@
   <section class="sec contact" id="contact" data-name="Контакты" data-theme="dark" data-film="0">
     <p class="kicker rise">Контакты</p>
     <h2 class="huge"><span class="rise">Пишите в Telegram. Отвечаю лично.</span></h2>
-    <a class="mail rise" href="https://t.me/riskybenefit" target="_blank" rel="noopener noreferrer">t.me/riskybenefit<span>↗</span></a>
+    <a class="mail rise" href="https://t.me/riskybenefit" target="_blank" rel="noopener noreferrer">t.me/riskybenefit<span><svg class="arr" viewBox="0 0 64 64" aria-hidden="true"><use href="#arr"/></svg></span></a>
     <p class="domain rise">estk.lol</p>
   </section>
 </main>
