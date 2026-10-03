@@ -151,8 +151,8 @@
   // ---------- living background: everything here reacts to scroll position and speed ----------
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const hoverDevice = matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const spot = $("#spot"), g1 = $("#g1"), g2 = $("#g2"), filmsEl = $(".films");
-  let lastY = scrollY, vel = 0, svel = 0, sp = 0, mx = innerWidth / 2, my = innerHeight / 2, sx = mx, sy = my, fxOn = false;
+  const spot = $("#spot"), filmsEl = $(".films");
+  let lastY = scrollY, vel = 0, sp = 0, mx = innerWidth / 2, my = innerHeight / 2, sx = mx, sy = my, fxOn = false;
   addEventListener("pointermove", (e) => { mx = e.clientX; my = e.clientY; }, { passive: true });
   function fxLoop() {
     if (!fxOn) return;
@@ -160,14 +160,10 @@
     const y = scrollY, dy = y - lastY;
     lastY = y;
     vel += (Math.min(Math.abs(dy), 90) - vel) * 0.12;
-    svel += (clamp(dy, -90, 90) - svel) * 0.12;
-    sp += (clamp(y / max) - sp) * 0.07;
+        sp += (clamp(y / max) - sp) * 0.07;
     if (!hoverDevice) { mx = innerWidth * (0.5 + 0.38 * Math.sin(sp * 11)); my = innerHeight * (0.5 + 0.32 * Math.cos(sp * 8)); }
     sx += (mx - sx) * 0.06; sy += (my - sy) * 0.06;
     spot.style.transform = `translate3d(${sx.toFixed(1)}px,${sy.toFixed(1)}px,0)`;
-    const sk = clamp(-svel * 0.22, -14, 14).toFixed(2);
-    g1.style.transform = `translate3d(${(-sp * 60).toFixed(2)}vw,0,0) skewX(${sk}deg)`;
-    g2.style.transform = `translate3d(${(sp * 60 - 60).toFixed(2)}vw,0,0) skewX(${sk}deg)`;
     filmsEl.style.transform = `translate3d(0,${(-sp * 5).toFixed(2)}%,0) scale(${(1 + sp * 0.1 + vel * 0.0025).toFixed(4)})`;
     requestAnimationFrame(fxLoop);
   }

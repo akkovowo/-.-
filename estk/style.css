@@ -194,22 +194,12 @@ body.on .mark{opacity:1;filter:blur(0) drop-shadow(0 0 36px #ffffff40)}
 .fx{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
 .spot{position:absolute;left:0;top:0;width:70vmax;height:70vmax;margin:-35vmax 0 0 -35vmax;border-radius:50%;
   background:radial-gradient(closest-side,color-mix(in srgb,var(--ink) 15%,transparent),transparent);will-change:transform}
-.bolt{position:absolute;left:50%;top:50%;height:150vh;width:auto;aspect-ratio:1;margin:-75vh 0 0 -75vh;overflow:visible;
-  fill:none;stroke:var(--ink);stroke-width:1.5px;stroke-linejoin:miter;stroke-linecap:square;vector-effect:non-scaling-stroke;opacity:.2;transform:rotate(0);transition:transform 1.5s var(--ease),opacity .7s 1s var(--ease),filter 1.2s var(--ease)}
-.bolt path{vector-effect:non-scaling-stroke}
-.ghost{position:absolute;left:0;white-space:nowrap;font-size:24vw;line-height:1;letter-spacing:-.05em;text-transform:uppercase;
-  color:color-mix(in srgb,var(--ink) 7%,transparent);will-change:transform}
-.g1{top:6%}
-.g2{bottom:2%;font-size:16vw}
-@media (width<=900px){.ghost{font-size:44vw}.g2{font-size:30vw}.spot{width:120vmax;height:120vmax;margin:-60vmax 0 0 -60vmax}.bolt{height:110vh;margin:-55vh 0 0 -55vh}}
 /* the white sheet opens from where you are scrolling to */
 .paper::after{clip-path:circle(0% at var(--px,50%) var(--py,100%))}
 body.light .paper::after{clip-path:circle(160% at var(--px,50%) var(--py,100%))}
 
 /* ---------- scenes: one per section, switched once on entry (no scroll scrubbing) ---------- */
 /* hero: the bolt stands. leaving it, the bolt lays down horizontal, then dissolves for good */
-body:not([data-scene="hero"]):not([data-scene="contact"]) .bolt{transform:rotate(90deg);opacity:0;filter:blur(14px)}
-body[data-scene="contact"] .bolt{transform:rotate(90deg);opacity:0}
 
 /* about: rings spread from the centre */
 .rings,.dots{position:absolute;inset:0;opacity:0;transition:opacity 1.4s var(--ease)}
@@ -226,9 +216,6 @@ body[data-scene="about"] .rings{opacity:1}
 @keyframes drift-dots{to{background-position:560px 280px}}
 body[data-scene="approach"] .dots{opacity:1}
 
-/* services, portfolio, contact: the slow words */
-.ghost{opacity:0;transition:opacity 1.4s var(--ease)}
-body[data-scene="services"] .ghost,body[data-scene="portfolio"] .ghost,body[data-scene="contact"] .ghost{opacity:1}
 
 /* contact: the bolt comes back, drawn in one stroke */
 .bolt2{position:absolute;left:50%;top:50%;height:120vh;aspect-ratio:1;margin:-60vh 0 0 -60vh;overflow:visible;fill:none;
@@ -237,3 +224,42 @@ body[data-scene="services"] .ghost,body[data-scene="portfolio"] .ghost,body[data
 body[data-scene="contact"] .bolt2{opacity:.3}
 body[data-scene="contact"] .bolt2 path{stroke-dashoffset:0;transition:stroke-dashoffset 2.6s var(--ease)}
 @media (width<=900px){.bolt2{transform:none;height:90vh;margin:-45vh 0 0 -45vh}.rings i{width:90vmin;height:90vmin;margin:-45vmin 0 0 -45vmin}.dots{background-size:44px 44px}}
+
+/* ---------- hero bolt: alive. energy runs along the outline, the whole thing floats ---------- */
+.boltwrap{position:absolute;left:50%;top:50%;height:150vh;aspect-ratio:1;margin:-75vh 0 0 -75vh;
+  transition:transform 1.6s var(--ease),opacity .7s 1.1s var(--ease),filter 1.2s var(--ease)}
+.bolt{display:block;width:100%;height:100%;overflow:visible;fill:none;stroke-linejoin:miter;stroke-linecap:square;animation:float 9s ease-in-out infinite}
+.bolt .b1{stroke:color-mix(in srgb,var(--ink) 24%,transparent);stroke-width:1.5px;vector-effect:non-scaling-stroke}
+.bolt .b2{stroke:var(--ink);stroke-width:.16;stroke-linecap:butt;stroke-dasharray:14 86;animation:run 3.4s cubic-bezier(.6,0,.3,1) infinite;
+  filter:drop-shadow(0 0 .5px var(--ink)) drop-shadow(0 0 3px var(--ink))}
+@keyframes run{from{stroke-dashoffset:14}to{stroke-dashoffset:-86}}
+@keyframes float{0%,100%{transform:translateY(-1.4vh) rotate(-1.2deg)}50%{transform:translateY(1.4vh) rotate(1.2deg)}}
+/* it lies down and dissolves when you leave the hero, and stays gone */
+body:not([data-scene="hero"]) .boltwrap{transform:rotate(90deg);opacity:0;filter:blur(14px)}
+
+/* services: a drafting grid with a scanner sweeping across it */
+.grid,.frames{position:absolute;inset:0;opacity:0;transition:opacity 1.4s var(--ease)}
+.grid{background-image:linear-gradient(color-mix(in srgb,var(--ink) 16%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ink) 16%,transparent) 1px,transparent 1px);
+  background-size:96px 96px;background-position:center;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 25%,transparent 78%);mask-image:radial-gradient(ellipse at center,#000 25%,transparent 78%)}
+.grid::after{content:"";position:absolute;top:0;bottom:0;left:-30vw;width:30vw;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ink) 14%,transparent) 85%,color-mix(in srgb,var(--ink) 40%,transparent));
+  border-right:1px solid color-mix(in srgb,var(--ink) 55%,transparent);animation:sweep 7s cubic-bezier(.5,0,.2,1) infinite}
+@keyframes sweep{0%{transform:translateX(0)}70%,100%{transform:translateX(130vw)}}
+body[data-scene="services"] .grid{opacity:1}
+
+/* portfolio: outlined browser windows drift upward */
+.frames i{position:absolute;display:block;border:1px solid color-mix(in srgb,var(--ink) 34%,transparent);border-radius:10px;
+  animation:rise-win linear infinite;animation-duration:var(--t);animation-delay:var(--dl);left:var(--x);width:var(--w);height:var(--h);top:0}
+.frames i::before{content:"";position:absolute;left:0;right:0;top:0;height:26px;border-bottom:1px solid color-mix(in srgb,var(--ink) 34%,transparent);
+  background:radial-gradient(circle at 14px 13px,color-mix(in srgb,var(--ink) 45%,transparent) 3px,transparent 3.5px),radial-gradient(circle at 28px 13px,color-mix(in srgb,var(--ink) 45%,transparent) 3px,transparent 3.5px),radial-gradient(circle at 42px 13px,color-mix(in srgb,var(--ink) 45%,transparent) 3px,transparent 3.5px)}
+.frames i::after{content:"";position:absolute;inset:44px 16px 16px;background:repeating-linear-gradient(transparent 0 16px,color-mix(in srgb,var(--ink) 16%,transparent) 16px 17px);
+  -webkit-mask-image:linear-gradient(90deg,#000 55%,transparent);mask-image:linear-gradient(90deg,#000 55%,transparent)}
+.frames i:nth-child(1){--x:6%;--w:26vw;--h:30vh;--t:38s;--dl:-4s}
+.frames i:nth-child(2){--x:62%;--w:30vw;--h:36vh;--t:46s;--dl:-20s}
+.frames i:nth-child(3){--x:34%;--w:20vw;--h:24vh;--t:34s;--dl:-14s}
+.frames i:nth-child(4){--x:74%;--w:18vw;--h:22vh;--t:30s;--dl:-2s}
+.frames i:nth-child(5){--x:14%;--w:22vw;--h:28vh;--t:42s;--dl:-30s}
+.frames i:nth-child(6){--x:48%;--w:24vw;--h:30vh;--t:50s;--dl:-36s}
+@keyframes rise-win{from{transform:translateY(112vh)}to{transform:translateY(-60vh)}}
+body[data-scene="portfolio"] .frames{opacity:1}
+@media (width<=900px){.boltwrap{height:110vh;margin:-55vh 0 0 -55vh}.grid{background-size:64px 64px}.frames i{width:60vw!important;height:26vh!important}.frames i:nth-child(odd){--x:-6%}.frames i:nth-child(even){--x:44%}}
