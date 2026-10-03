@@ -1,5 +1,5 @@
 (function () {
-  var groups = ['.head', '.feature', '.step', '.device', '.plan', '.faq details', '.cta'];
+  var groups = ['.head', '.feature', '.step', '.device', '.faq details', '.cta'];
   var els = [];
   groups.forEach(function (sel) {
     document.querySelectorAll(sel).forEach(function (el, i) {
