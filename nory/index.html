@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Nory — быстрый VPN-клиент на Rust</title>
+<meta name="description" content="Nory — технологичный, быстрый и лёгкий VPN-клиент. Написан на Rust: VLESS Reality, подписки, обход VPN для приложений и сайтов.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="grid"></i></div>
+<div class="progress" id="progress"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top"><svg class="mark" viewBox="0 0 32 32"><use href="#ico-mark"/></svg><span>NORY</span></a>
+    <nav class="links">
+      <a href="#rust">Rust</a>
+      <a href="#features">Возможности</a>
+      <a href="#bypass">Обход VPN</a>
+      <a href="#download">Скачать</a>
+    </nav>
+    <a class="btn btn-sm" href="#download" data-dl-label>Скачать</a>
+  </div>
+</header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero wrap">
+  <div class="hero-text">
+    <a class="chip rise" href="#rust"><span class="rust-dot"><svg viewBox="0 0 32 32"><use href="#ico-rust"/></svg></span>Написан на Rust</a>
+    <h1 class="rise" style="--d:.08s">Быстрый VPN&nbsp;без&nbsp;лишнего&nbsp;веса</h1>
+    <p class="lead rise" style="--d:.16s">Nory — технологичный клиент, который запускается мгновенно и почти не чувствуется в системе. Rust даёт скорость, малый размер и надёжность.</p>
+    <div class="cta rise" style="--d:.24s">
+      <a class="btn btn-lg" id="hero-dl" href="#download"><svg viewBox="0 0 24 24"><use href="#ico-dl"/></svg><span data-dl-label>Скачать</span></a>
+      <a class="btn btn-ghost btn-lg" href="https://github.com/wasteprince/nory" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#ico-gh"/></svg>GitHub</a>
+    </div>
+    <p class="meta rise" style="--d:.32s"><span id="hero-ver">Последняя версия с GitHub</span> · <a href="#download">все платформы</a></p>
+  </div>
+
+  <div class="hero-visual rise" style="--d:.2s">
+    <div class="float" data-parallax="0.06">
+      <div class="win" id="win-main">
+        <div class="tl"><i></i><i></i><i></i></div>
+        <div class="win-title">NORY</div>
+        <button class="power" id="power" aria-label="Подключить"><svg viewBox="0 0 24 24"><use href="#ico-power"/></svg></button>
+        <div class="state"><i class="dot"></i><b id="state-text">Подключено</b></div>
+        <div class="sub"><span id="state-srv">Амстердам</span> · <span id="timer">0:44:08</span></div>
+        <div class="traffic"><span>↓ <em id="dn">186</em> МБ</span><span>↑ <em id="up">14</em> МБ</span></div>
+        <div class="srv-h">Серверы</div>
+        <ul class="srvs" id="srvs">
+          <li class="on" data-n="Амстердам"><img alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Cpath fill='%23ae1c28' d='M0 0h3v1H0z'/%3E%3Cpath fill='%23fff' d='M0 .66h3v.68H0z'/%3E%3Cpath fill='%2321468b' d='M0 1.33h3V2H0z'/%3E%3C/svg%3E"><div><b>Амстердам</b><small>VLESS · Reality</small></div><span>42 мс</span><i class="rd"></i></li>
+          <li data-n="Франкфурт"><img alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 3'%3E%3Cpath d='M0 0h5v1H0z'/%3E%3Cpath fill='%23d00' d='M0 1h5v1H0z'/%3E%3Cpath fill='%23ffce00' d='M0 2h5v1H0z'/%3E%3C/svg%3E"><div><b>Франкфурт</b><small>VLESS · Reality</small></div><span>56 мс</span><i class="rd"></i></li>
+          <li data-n="Хельсинки"><img alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 11'%3E%3Cpath fill='%23fff' d='M0 0h18v11H0z'/%3E%3Cpath fill='%23003580' d='M5 0h3v11H5z'/%3E%3Cpath fill='%23003580' d='M0 4h18v3H0z'/%3E%3C/svg%3E"><div><b>Хельсинки</b><small>VLESS · Reality</small></div><span>37 мс</span><i class="rd"></i></li>
+        </ul>
+      </div>
+      <div class="pill-float p1"><svg viewBox="0 0 24 24"><use href="#ico-bolt"/></svg>Rust&nbsp;core</div>
+      <div class="pill-float p2"><svg viewBox="0 0 24 24"><use href="#ico-lock"/></svg>VLESS&nbsp;Reality</div>
+    </div>
+  </div>
+</section>
+
+<!-- RUST -->
+<section class="rust wrap" id="rust">
+  <div class="rust-card reveal">
+    <div class="rust-logo"><svg viewBox="0 0 32 32"><use href="#ico-rust"/></svg><b>Rust</b></div>
+    <div class="rust-body">
+      <h2>Технологичный, быстрый и лёгкий — благодаря&nbsp;Rust</h2>
+      <p>Никакого тяжёлого рантайма и браузерного движка внутри. Нативный код, который работает быстро, занимает мало места и бережёт ресурсы вашего компьютера.</p>
+    </div>
+  </div>
+  <div class="trio">
+    <article class="card reveal" style="--d:.0s"><svg viewBox="0 0 24 24"><use href="#ico-bolt"/></svg><h3>Быстрый</h3><p>Нативная скорость без сборщика мусора: мгновенный старт и отзывчивый интерфейс.</p></article>
+    <article class="card reveal" style="--d:.1s"><svg viewBox="0 0 24 24"><use href="#ico-feather"/></svg><h3>Лёгкий</h3><p>Компактное приложение, которое почти не потребляет память и батарею.</p></article>
+    <article class="card reveal" style="--d:.2s"><svg viewBox="0 0 24 24"><use href="#ico-shield"/></svg><h3>Надёжный</h3><p>Безопасность памяти на уровне языка — меньше ошибок там, где важна приватность.</p></article>
+  </div>
+</section>
+
+<!-- FEATURES: sticky scroll -->
+<section class="story" id="features">
+  <div class="wrap story-in">
+    <div class="story-steps">
+      <div class="step" data-i="0">
+        <span class="kicker">01 · Подключение</span>
+        <h2>Одна кнопка — и вы под защитой</h2>
+        <p>Включайте VPN одним нажатием. Скорость соединения, время сессии и трафик всегда перед глазами.</p>
+      </div>
+      <div class="step" data-i="1">
+        <span class="kicker">02 · Подписки и серверы</span>
+        <h2>Все серверы подписки в одном списке</h2>
+        <p>Добавьте подписку по ссылке — серверы подтянутся сами. Видно пинг каждой локации, остаток трафика и срок действия. Поддерживаются VLESS Reality и XHTTP&nbsp;TLS.</p>
+      </div>
+      <div class="step" data-i="2">
+        <span class="kicker">03 · Умный обход</span>
+        <h2>Российские сайты — напрямую</h2>
+        <p>Включите одну опцию, и российские сайты и IP будут открываться без VPN. Исключения для приложений и отдельных сайтов — в пару кликов.</p>
+      </div>
+      <div class="step" data-i="3">
+        <span class="kicker">04 · Под рукой</span>
+        <h2>Всё нужное — в нижней панели</h2>
+        <p>VPN, маршрутизация, логи и настройки — навигация без лишних экранов.</p>
+      </div>
+    </div>
+
+    <div class="story-stage">
+      <div class="stage-sticky">
+        <div class="stage-glow"></div>
+        <div class="win stage-win">
+          <div class="tl"><i></i><i></i><i></i></div>
+          <div class="win-title">NORY</div>
+
+          <!-- panel 0 -->
+          <div class="panel on" data-i="0">
+            <button class="power big on"><svg viewBox="0 0 24 24"><use href="#ico-power"/></svg></button>
+            <div class="state"><i class="dot"></i><b>Подключено</b></div>
+            <div class="sub">Амстердам · 0:44:08</div>
+            <div class="traffic"><span>↓ 186 МБ</span><span>↑ 14 МБ</span></div>
+          </div>
+
+          <!-- panel 1 -->
+          <div class="panel" data-i="1">
+            <div class="srv-h">Серверы</div>
+            <div class="subs">
+              <div class="subs-t"><b>Личная подписка</b><small>Обновлено 2.10, 00:40</small></div>
+              <div class="quota"><i style="--w:7%"></i></div>
+              <div class="quota-t"><span>Действует до 1.12, 03:00</span><span>36 ГБ / 500 ГБ</span></div>
+            </div>
+            <ul class="srvs full">
+              <li class="on"><span class="fl">🇳🇱</span><div><b>Амстердам</b><small>VLESS · Reality</small></div><span>42 мс</span><i class="rd"></i></li>
+              <li><span class="fl">🇩🇪</span><div><b>Франкфурт</b><small>VLESS · Reality</small></div><span>56 мс</span><i class="rd"></i></li>
+              <li><span class="fl">🇫🇷</span><div><b>Париж</b><small>VLESS · XHTTP · TLS</small></div><span>68 мс</span><i class="rd"></i></li>
+              <li><span class="fl">🇫🇮</span><div><b>Хельсинки</b><small>VLESS · Reality</small></div><span>37 мс</span><i class="rd"></i></li>
+            </ul>
+          </div>
+
+          <!-- panel 2 -->
+          <div class="panel" data-i="2">
+            <div class="srv-h">Обход VPN</div>
+            <div class="box">
+              <div class="row"><span>Российские сайты и IP</span><i class="sw on"></i></div>
+              <div class="row"><button class="pillbtn">+ Добавить приложение</button></div>
+            </div>
+            <p class="hint">Изменение правил переподключит активный VPN.</p>
+            <div class="srv-h sm">Сайты без VPN</div>
+            <div class="box"><div class="row"><button class="pillbtn">+ Добавить сайт</button></div></div>
+            <p class="hint">Сайт и его поддомены будут открываться напрямую.</p>
+          </div>
+
+          <!-- panel 3 -->
+          <div class="panel" data-i="3">
+            <div class="dock-demo">
+              <div class="dock"><span class="act"><svg viewBox="0 0 24 24"><use href="#ico-globe"/></svg>VPN</span><svg viewBox="0 0 24 24"><use href="#ico-route"/></svg><svg viewBox="0 0 24 24"><use href="#ico-logs"/></svg><svg viewBox="0 0 24 24"><use href="#ico-sliders"/></svg></div>
+              <div class="plus">+</div>
+            </div>
+            <ul class="legend">
+              <li><svg viewBox="0 0 24 24"><use href="#ico-globe"/></svg>VPN — подключение и серверы</li>
+              <li><svg viewBox="0 0 24 24"><use href="#ico-route"/></svg>Маршрутизация и обход</li>
+              <li><svg viewBox="0 0 24 24"><use href="#ico-logs"/></svg>Логи</li>
+              <li><svg viewBox="0 0 24 24"><use href="#ico-sliders"/></svg>Настройки</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BYPASS preview -->
+<section class="bypass wrap" id="bypass">
+  <div class="bp-text reveal">
+    <span class="kicker">Обход VPN</span>
+    <h2>Приложения или процессы — решаете вы</h2>
+    <p>Добавляйте в исключения целые приложения или конкретные процессы. Банковский клиент, игра или рабочий мессенджер — будут ходить в сеть напрямую, а всё остальное — через VPN.</p>
+    <ul class="ticks">
+      <li>Российские сайты и IP — одним переключателем</li>
+      <li>Исключения для приложений и процессов</li>
+      <li>Отдельные сайты вместе с поддоменами</li>
+    </ul>
+  </div>
+  <div class="bp-visual reveal" style="--d:.12s">
+    <div class="win add">
+      <h3>Добавить обход</h3>
+      <div class="dd" id="dd">
+        <button class="dd-btn" id="dd-btn"><span id="dd-val">Приложения</span><svg viewBox="0 0 24 24"><use href="#ico-chev"/></svg></button>
+        <div class="dd-menu" id="dd-menu">
+          <button class="opt on" data-v="Приложения"><i>✓</i>Приложения</button>
+          <button class="opt" data-v="Процессы"><i></i>Процессы</button>
+        </div>
+      </div>
+      <div class="dd-list" id="dd-list">
+        <div class="item"><b>Telegram</b><small>Приложение</small></div>
+        <div class="item"><b>Steam</b><small>Приложение</small></div>
+        <div class="item"><b>Сбербанк Онлайн</b><small>Приложение</small></div>
+      </div>
+      <p class="hint small">Нажмите на «Приложения» — это интерактивное превью.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section class="dl wrap" id="download">
+  <div class="dl-card reveal">
+    <svg class="mark xl" viewBox="0 0 32 32"><use href="#ico-mark"/></svg>
+    <h2>Скачайте Nory</h2>
+    <p class="lead">Мы определили вашу систему — <b id="os-name">…</b>.</p>
+    <a class="btn btn-lg" id="main-dl" href="https://github.com/wasteprince/nory/releases/latest"><svg viewBox="0 0 24 24"><use href="#ico-dl"/></svg><span data-dl-label>Скачать</span></a>
+    <p class="meta" id="dl-meta">Загружаем информацию о последней версии…</p>
+
+    <div class="oses" id="oses">
+      <a class="os" data-os="mac" href="https://github.com/wasteprince/nory/releases/latest"><svg viewBox="0 0 24 24"><use href="#ico-apple"/></svg><b>macOS</b><small>—</small></a>
+      <a class="os" data-os="win" href="https://github.com/wasteprince/nory/releases/latest"><svg viewBox="0 0 24 24"><use href="#ico-win"/></svg><b>Windows</b><small>—</small></a>
+      <a class="os" data-os="linux" href="https://github.com/wasteprince/nory/releases/latest"><svg viewBox="0 0 24 24"><use href="#ico-linux"/></svg><b>Linux</b><small>—</small></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot wrap">
+  <a class="brand" href="#top"><svg class="mark" viewBox="0 0 32 32"><use href="#ico-mark"/></svg><span>NORY</span></a>
+  <span>VPN-клиент на Rust · <a href="https://github.com/wasteprince/nory" target="_blank" rel="noopener">исходный код на GitHub</a></span>
+</footer>
+
+<!-- sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ico-mark" viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="#2c4a58"/><path d="M16 6v8" stroke="#bfeadb" stroke-width="2.6" stroke-linecap="round" fill="none"/><path d="M10.5 10.6a8.5 8.5 0 1 0 11 0" stroke="#bfeadb" stroke-width="2.6" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="ico-rust" viewBox="0 0 32 32"><path d="M14.13 4.96 L14.81 1.85 L17.19 1.85 L17.87 4.96 L19.90 5.50 L22.05 3.15 L24.10 4.34 L23.14 7.37 L24.63 8.86 L27.66 7.90 L28.85 9.95 L26.50 12.10 L27.04 14.13 L30.15 14.81 L30.15 17.19 L27.04 17.87 L26.50 19.90 L28.85 22.05 L27.66 24.10 L24.63 23.14 L23.14 24.63 L24.10 27.66 L22.05 28.85 L19.90 26.50 L17.87 27.04 L17.19 30.15 L14.81 30.15 L14.13 27.04 L12.10 26.50 L9.95 28.85 L7.90 27.66 L8.86 24.63 L7.37 23.14 L4.34 24.10 L3.15 22.05 L5.50 19.90 L4.96 17.87 L1.85 17.19 L1.85 14.81 L4.96 14.13 L5.50 12.10 L3.15 9.95 L4.34 7.90 L7.37 8.86 L8.86 7.37 L7.90 4.34 L9.95 3.15 L12.10 5.50Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="16" cy="16" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M13 21v-10h4.2c1.8 0 2.8 1 2.8 2.500 0 1.400-.9 2.300-2.100 2.500L20.200 21M13 16h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="ico-power" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v8"/><path d="M7 6.2a8 8 0 1 0 10 0"/></g></symbol>
+    <symbol id="ico-dl" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></g></symbol>
+    <symbol id="ico-gh" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></symbol>
+    <symbol id="ico-bolt" viewBox="0 0 24 24"><path d="M13 3L5 13.500h6L10 21l8-10.500h-6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="ico-feather" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4c-8 0-13 4-13 10v3l-3 3M7 17h5c5 0 8-4 8-13zM9 14l6-6"/></g></symbol>
+    <symbol id="ico-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></g></symbol>
+    <symbol id="ico-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></g></symbol>
+    <symbol id="ico-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></g></symbol>
+    <symbol id="ico-route" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l7 8v8M19 4l-7 8"/></g></symbol>
+    <symbol id="ico-logs" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h11M4 17h16"/></g></symbol>
+    <symbol id="ico-sliders" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="15" cy="7" r="2" fill="#26333d"/><circle cx="8" cy="12" r="2" fill="#26333d"/><circle cx="16" cy="17" r="2" fill="#26333d"/></g></symbol>
+    <symbol id="ico-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="ico-apple" viewBox="0 0 24 24"><path fill="currentColor" d="M16.4 12.600c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.8-.8-3-.8c-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7 2-1.1 2.8-2.200c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.900zM14.1 5.700c.6-.8 1.1-1.8.9-2.9-.9 0-2 .6-2.6 1.4-.6.7-1.1 1.8-.9 2.8 1 .1 2-.5 2.6-1.300z"/></symbol>
+    <symbol id="ico-win" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5.500l7.5-1v7H3zM11.5 4.400L21 3v8.500h-9.500zM3 12.500h7.500v7L3 18.500zM11.5 12.500H21V21l-9.5-1.300z"/></symbol>
+    <symbol id="ico-linux" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3c-2 0-3 1.7-3 4 0 1.5-.5 2.5-1.5 4C6.5 12.5 5 14.5 5 17c0 2 1.5 3 3 3 1 0 1.5-.5 4-.5s3 .5 4 .5c1.5 0 3-1 3-3 0-2.5-1.5-4.5-2.5-6-1-1.5-1.5-2.5-1.5-4 0-2.3-1-4-3-4z"/><circle cx="10.5" cy="7" r=".6" fill="currentColor"/><circle cx="13.5" cy="7" r=".6" fill="currentColor"/></g></symbol>
+  </defs>
+</svg>
+<script src="script.js"></script>
+</body>
+</html>
