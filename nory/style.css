@@ -51,7 +51,7 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .chip{display:inline-flex;align-items:center;gap:10px;padding:6px 16px 6px 6px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;font-weight:500;transition:border-color .2s}
 .chip:hover{border-color:var(--ac)}
 .rust-dot{width:28px;height:28px;border-radius:50%;background:#222224;color:#f2f4f6;display:grid;place-items:center}
-.rust-dot svg{width:20px;height:20px}
+.rust-dot svg{width:20px;height:20px;animation:spin 14s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .cta{display:flex;gap:12px;flex-wrap:wrap}
 .hero-visual{display:flex;justify-content:center}
@@ -95,7 +95,7 @@ h2{font-size:clamp(28px,4vw,44px);font-weight:700}
 .rust{padding:80px 0}
 .rust-card{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;padding:44px;border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--line);position:relative;overflow:hidden}
 .rust-logo{width:170px;height:170px;border-radius:44px;background:linear-gradient(160deg,#1d1d1f,#111112);border:1px solid rgba(255,255,255,.18);color:#f2f4f6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 20px 60px -20px rgba(255,255,255,.12)}
-.rust-logo svg{width:92px;height:92px}
+.rust-logo svg{width:92px;height:92px;animation:spin 24s linear infinite}
 .rust-logo b{font-size:20px;letter-spacing:.04em;color:#fff}
 .rust-body p{color:var(--mut);margin-top:16px;max-width:38em;font-size:18px}
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
