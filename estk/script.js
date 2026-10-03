@@ -62,7 +62,7 @@
     player.classList.toggle("is-live", live);
     player.setAttribute("aria-pressed", String(live));
     player.setAttribute("aria-label", live ? "Выключить звук" : "Включить звук");
-    if (!failTimer) plState.textContent = live ? "Звук вкл" : "Звук выкл";
+    if (!failTimer) plState.textContent = live ? "Включён" : "Выключен";
   }
   function playAudio() {
     try { audio.volume = 0; } catch (_) {}
@@ -75,7 +75,7 @@
     });
   }
   function toggleSound() {
-    if (!audio.paused) { soundOn = false; volTo(0, 500, () => { audio.pause(); syncIcon(); }); plState.textContent = "Звук выкл"; }
+    if (!audio.paused) { soundOn = false; volTo(0, 500, () => { audio.pause(); syncIcon(); }); plState.textContent = "Выключен"; }
     else { soundOn = true; audio.preload = "auto"; playAudio(); }
   }
   player.addEventListener("click", toggleSound);
