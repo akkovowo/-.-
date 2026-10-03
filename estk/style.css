@@ -195,7 +195,7 @@ body.on .mark{opacity:1;filter:blur(0) drop-shadow(0 0 36px #ffffff40)}
 .spot{position:absolute;left:0;top:0;width:70vmax;height:70vmax;margin:-35vmax 0 0 -35vmax;border-radius:50%;
   background:radial-gradient(closest-side,color-mix(in srgb,var(--ink) 15%,transparent),transparent);will-change:transform}
 .bolt{position:absolute;left:50%;top:50%;height:150vh;width:auto;aspect-ratio:1;margin:-75vh 0 0 -75vh;overflow:visible;
-  fill:none;stroke:var(--ink);stroke-width:1.5px;stroke-linejoin:miter;stroke-linecap:square;vector-effect:non-scaling-stroke;opacity:.2;will-change:transform}
+  fill:none;stroke:var(--ink);stroke-width:1.5px;stroke-linejoin:miter;stroke-linecap:square;vector-effect:non-scaling-stroke;opacity:.2;transform:rotate(0);transition:transform 1.5s var(--ease),opacity .7s 1s var(--ease),filter 1.2s var(--ease)}
 .bolt path{vector-effect:non-scaling-stroke}
 .ghost{position:absolute;left:0;white-space:nowrap;font-size:24vw;line-height:1;letter-spacing:-.05em;text-transform:uppercase;
   color:color-mix(in srgb,var(--ink) 7%,transparent);will-change:transform}
@@ -205,3 +205,35 @@ body.on .mark{opacity:1;filter:blur(0) drop-shadow(0 0 36px #ffffff40)}
 /* the white sheet opens from where you are scrolling to */
 .paper::after{clip-path:circle(0% at var(--px,50%) var(--py,100%))}
 body.light .paper::after{clip-path:circle(160% at var(--px,50%) var(--py,100%))}
+
+/* ---------- scenes: one per section, switched once on entry (no scroll scrubbing) ---------- */
+/* hero: the bolt stands. leaving it, the bolt lays down horizontal, then dissolves for good */
+body:not([data-scene="hero"]):not([data-scene="contact"]) .bolt{transform:rotate(90deg);opacity:0;filter:blur(14px)}
+body[data-scene="contact"] .bolt{transform:rotate(90deg);opacity:0}
+
+/* about: rings spread from the centre */
+.rings,.dots{position:absolute;inset:0;opacity:0;transition:opacity 1.4s var(--ease)}
+.rings i{position:absolute;left:50%;top:50%;width:60vmin;height:60vmin;margin:-30vmin 0 0 -30vmin;border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--ink) 38%,transparent);opacity:0;animation:ring 9s linear infinite}
+.rings i:nth-child(2){animation-delay:-2.25s}.rings i:nth-child(3){animation-delay:-4.5s}.rings i:nth-child(4){animation-delay:-6.75s}
+@keyframes ring{0%{transform:scale(.15);opacity:0}15%{opacity:1}100%{transform:scale(3);opacity:0}}
+body[data-scene="about"] .rings{opacity:1}
+
+/* approach: a field of dots that drifts */
+.dots{background-image:radial-gradient(color-mix(in srgb,var(--ink) 38%,transparent) 1.6px,transparent 2px);background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 20%,transparent 72%);mask-image:radial-gradient(ellipse at center,#000 20%,transparent 72%);
+  animation:drift-dots 40s linear infinite}
+@keyframes drift-dots{to{background-position:560px 280px}}
+body[data-scene="approach"] .dots{opacity:1}
+
+/* services, portfolio, contact: the slow words */
+.ghost{opacity:0;transition:opacity 1.4s var(--ease)}
+body[data-scene="services"] .ghost,body[data-scene="portfolio"] .ghost,body[data-scene="contact"] .ghost{opacity:1}
+
+/* contact: the bolt comes back, drawn in one stroke */
+.bolt2{position:absolute;left:50%;top:50%;height:120vh;aspect-ratio:1;margin:-60vh 0 0 -60vh;overflow:visible;fill:none;
+  stroke:var(--ink);stroke-width:.11;stroke-linejoin:miter;stroke-linecap:butt;opacity:0;transform:translateX(34vw);transition:opacity .4s var(--ease)}
+.bolt2 path{stroke-dasharray:100 100;stroke-dashoffset:100;transition:stroke-dashoffset .1s}
+body[data-scene="contact"] .bolt2{opacity:.3}
+body[data-scene="contact"] .bolt2 path{stroke-dashoffset:0;transition:stroke-dashoffset 2.6s var(--ease)}
+@media (width<=900px){.bolt2{transform:none;height:90vh;margin:-45vh 0 0 -45vh}.rings i{width:90vmin;height:90vmin;margin:-45vmin 0 0 -45vmin}.dots{background-size:44px 44px}}
